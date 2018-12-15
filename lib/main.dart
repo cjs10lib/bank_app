@@ -1,4 +1,4 @@
-import 'package:bank_app/pages/load_order_page.dart';
+import 'package:bank_app/pages/sign_up_wizard_page.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bank_app/pages/home_page.dart';
@@ -6,6 +6,7 @@ import 'package:bank_app/pages/auth_page.dart';
 import 'package:bank_app/pages/tabs_page.dart';
 import 'package:bank_app/pages/profile_page.dart';
 import 'package:bank_app/pages/wallet_page.dart';
+import 'package:bank_app/pages/loan_order_page.dart';
 
 main() => runApp(MyApp());
 
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
         '/home': (BuildContext context) => HomePage(),
         '/profile': (BuildContext context) => ProfilePage(),
         '/wallet': (BuildContext context) => WalletPage(),
-        '/loan-order': (BuildContext context) => LoadOrderPage(),
+        '/loan-order': (BuildContext context) => LoanOrderPage(),
+        '/sign-up': (BuildContext context) => SignUpWizardPage()
       },
     );
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class LoadOrderPage extends StatefulWidget {
+class LoanOrderPage extends StatefulWidget {
   @override
-  _LoadOrderPageState createState() => _LoadOrderPageState();
+  _LoanOrderPageState createState() => _LoanOrderPageState();
 }
 
-class _LoadOrderPageState extends State<LoadOrderPage> {
+class _LoanOrderPageState extends State<LoanOrderPage> {
   String _payBackDate = '';
 
   Future _buildConfrimBottomSheetModal(BuildContext context) {

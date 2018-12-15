@@ -53,8 +53,13 @@ class _AuthPageState extends State<AuthPage> {
         borderRadius: BorderRadius.circular(10.0),
         child: GestureDetector(
           onTap: () {
-            print('Navigating to tabs page');
-            Navigator.of(context).pushReplacementNamed('/tabs');
+            if (_authMode == AuthMode.Login) {
+              Navigator.of(context).pushReplacementNamed('/tabs');
+              print('Navigating to tabs page');
+            } else {
+              Navigator.of(context).pushReplacementNamed('/sign-up');
+              print('Navigating to sign-up page');
+            }
           },
           child: Container(
             height: 40.0,
@@ -97,7 +102,8 @@ class _AuthPageState extends State<AuthPage> {
             SizedBox(width: 10.0),
             GestureDetector(
                 child: Text(_authMode == AuthMode.Login ? 'Sign Up' : 'Login',
-                    style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
+                    style:
+                        TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold)),
                 onTap: () {
                   setState(() {
                     _authMode == AuthMode.Login
