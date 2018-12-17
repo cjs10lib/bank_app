@@ -103,15 +103,15 @@ class _LoanOrderPageState extends State<LoanOrderPage> {
 
   Future _selectLoanPaybackDate() async {
     DateTime pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now().add(new Duration(days: 1)),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(new Duration(days: 35)),
-      initialDatePickerMode: DatePickerMode.day
-    );
+        context: context,
+        initialDate: DateTime.now().add(new Duration(days: 1)),
+        firstDate: DateTime.now(),
+        lastDate: DateTime.now().add(new Duration(days: 35)),
+        initialDatePickerMode: DatePickerMode.day);
     if (pickedDate != null) {
       setState(() {
-        _payBackDate = '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
+        _payBackDate =
+            '${pickedDate.day}/${pickedDate.month}/${pickedDate.year}';
       });
     }
   }
@@ -119,154 +119,167 @@ class _LoanOrderPageState extends State<LoanOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: <Widget>[
-          Column(
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: ListView(
             children: <Widget>[
-              Stack(
+              Column(
                 children: <Widget>[
-                  Container(
-                    height: 150.0,
-                    width: double.infinity,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                  Positioned(
-                    bottom: 50.0,
-                    right: 100.0,
-                    child: Container(
-                      height: 400.0,
-                      width: 400.0,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(0, 25, 45, .40),
-                          borderRadius: BorderRadius.circular(200.0)),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 100.0,
-                    left: 200.0,
-                    child: Container(
-                      height: 400.0,
-                      width: 400.0,
-                      decoration: BoxDecoration(
-                          color: Color.fromRGBO(0, 25, 45, .40),
-                          borderRadius: BorderRadius.circular(200.0)),
-                    ),
-                  ),
-                  Container(
-                    padding:
-                        EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
+                  Stack(
+                    children: <Widget>[
+                      Container(
+                        height: 150.0,
+                        width: double.infinity,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      Positioned(
+                        bottom: 50.0,
+                        right: 100.0,
+                        child: Container(
+                          height: 400.0,
+                          width: 400.0,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 25, 45, .40),
+                              borderRadius: BorderRadius.circular(200.0)),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 100.0,
+                        left: 200.0,
+                        child: Container(
+                          height: 400.0,
+                          width: 400.0,
+                          decoration: BoxDecoration(
+                              color: Color.fromRGBO(0, 25, 45, .40),
+                              borderRadius: BorderRadius.circular(200.0)),
+                        ),
+                      ),
+                      Container(
+                        padding:
+                            EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
+                        child: Column(
                           children: <Widget>[
-                            Container(
-                              height: 50.0,
-                              width: 50.0,
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(25.0),
-                                  border: Border.all(
-                                      color: Colors.white, width: 2.0)),
-                              child: Hero(
-                                tag: 'profile-image',
-                                child: CircleAvatar(
-                                    backgroundImage:
-                                        AssetImage('assets/avatar/avatar.png')),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: <Widget>[
+                                Container(
+                                  height: 50.0,
+                                  width: 50.0,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(25.0),
+                                      border: Border.all(
+                                          color: Colors.white, width: 2.0)),
+                                  child: Hero(
+                                    tag: 'profile-image',
+                                    child: CircleAvatar(
+                                        backgroundImage: AssetImage(
+                                            'assets/avatar/avatar.png')),
+                                  ),
+                                )
+                              ],
+                            ),
+                            SizedBox(height: 40.0),
+                            Material(
+                              elevation: 2.0,
+                              borderRadius: BorderRadius.circular(5.0),
+                              child: TextField(
+                                keyboardType: TextInputType.number,
+                                style: TextStyle(
+                                    fontSize: 30.0,
+                                    color: Color.fromRGBO(59, 70, 80, 1)),
+                                decoration: InputDecoration(
+                                    filled: true,
+                                    fillColor: Colors.white,
+                                    labelText: 'Amount',
+                                    prefix: Text('GHC ')),
                               ),
-                            )
+                            ),
                           ],
                         ),
-                        SizedBox(height: 40.0),
-                        Material(
-                          elevation: 2.0,
-                          borderRadius: BorderRadius.circular(5.0),
-                          child: TextField(
-                            keyboardType: TextInputType.number,
-                            style: TextStyle(
-                                fontSize: 30.0,
-                                color: Color.fromRGBO(59, 70, 80, 1)),
-                            decoration: InputDecoration(
-                                filled: true,
-                                fillColor: Colors.white,
-                                labelText: 'Amount',
-                                prefix: Text('GHC ')),
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              SizedBox(height: 50.0),
-              Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(5.0),
-                child: Container(
-                  // height: 130.0,
-                  color: Colors.white,
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    children: <Widget>[
-                      Text('WHEN TO PAY BACK?',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.grey)),
-                      SizedBox(height: 5.0),
-                      FlatButton(
-                          child: Text(_payBackDate != '' ? _payBackDate : 'Select Date',
-                              style: TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold)),
-                          onPressed: _selectLoanPaybackDate),
-                      SizedBox(height: 30.0),
-                      Text('Terms & Conditions',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, color: Colors.grey)),
-                      SizedBox(height: 30.0),
-                      Text(
-                          'Every loan issued, to our clients, is governed by 1999 constitutional laws',
-                          style: TextStyle(color: Colors.grey)),
-                      SizedBox(height: 30.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          Container(
-                            height: 40.0,
-                            width: 80.0,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5.0, horizontal: 5.0),
-                            color: Theme.of(context).errorColor,
-                            alignment: Alignment.center,
-                            child: Text('Cancel',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.bold)),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              _buildConfrimBottomSheetModal(context);
-                            },
-                            child: Container(
-                              height: 40.0,
-                              width: 150.0,
-                              // color: Color.fromRGBO(59, 70, 80, 1),
-                              color: Theme.of(context).primaryColor,
-                              alignment: Alignment.center,
-                              child: Text('Submit Request',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
                       )
                     ],
                   ),
-                ),
-              ),
+                  SizedBox(height: 50.0),
+                  Material(
+                    elevation: 2.0,
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Container(
+                      // height: 130.0,
+                      color: Colors.white,
+                      padding: EdgeInsets.all(20.0),
+                      child: Column(
+                        children: <Widget>[
+                          Text('WHEN TO PAY BACK?',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey)),
+                          SizedBox(height: 5.0),
+                          FlatButton(
+                              child: Text(
+                                  _payBackDate != ''
+                                      ? _payBackDate
+                                      : 'Select Date',
+                                  style: TextStyle(
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold)),
+                              onPressed: _selectLoanPaybackDate),
+                          SizedBox(height: 30.0),
+                          Text('Terms & Conditions',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey)),
+                          SizedBox(height: 30.0),
+                          Text(
+                              'Every loan issued, to our clients, is governed by 1999 constitutional laws',
+                              style: TextStyle(color: Colors.grey)),
+                          SizedBox(height: 30.0),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Container(
+                                height: 40.0,
+                                width: 80.0,
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 5.0, horizontal: 5.0),
+                                color: Theme.of(context).errorColor,
+                                alignment: Alignment.center,
+                                child: Text('Cancel',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  _buildConfrimBottomSheetModal(context);
+                                },
+                                child: Container(
+                                  height: 40.0,
+                                  width: 150.0,
+                                  // color: Color.fromRGBO(59, 70, 80, 1),
+                                  color: Theme.of(context).primaryColor,
+                                  alignment: Alignment.center,
+                                  child: Text('Submit Request',
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16.0,
+                                          fontWeight: FontWeight.bold)),
+                                ),
+                              ),
+                            ],
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              )
             ],
-          )
-        ],
+          ),
+        ),
       ),
     );
   }
