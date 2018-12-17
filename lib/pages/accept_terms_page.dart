@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AcceptTermsPage extends StatelessWidget {
-  final Function _navigateForward;
   final Function _navigateBackwards;
 
-  AcceptTermsPage(this._navigateForward, this._navigateBackwards);
+  AcceptTermsPage(this._navigateBackwards);
 
   @override
   Widget build(BuildContext context) {

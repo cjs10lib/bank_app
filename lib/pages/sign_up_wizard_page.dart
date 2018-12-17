@@ -48,7 +48,7 @@ class _SignUpWizardPageState extends State<SignUpWizardPage>
           children: <Widget>[
             ProfileEditPage(_navigateForward),
             ProfileImageUploadPage(_navigateForward, _navigateBackwards),
-            AcceptTermsPage(_navigateForward, _navigateBackwards)
+            AcceptTermsPage(_navigateBackwards)
           ],
         ),
       ),
