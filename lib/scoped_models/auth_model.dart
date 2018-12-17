@@ -4,7 +4,7 @@ import 'package:bank_app/scoped_models/general_model.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 
-mixin AccountModel implements GeneralModel {
+mixin AuthModel implements GeneralModel {
   Future<Null> getAuthenticatedUser() async {
     FirebaseUser user = await authService.authenticatedUser();
     authenticatedUser = User(uid: user.uid, email: user.email);

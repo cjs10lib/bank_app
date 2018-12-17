@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:bank_app/services/profile_image_service.dart';
 
 import 'package:bank_app/scoped_models/general_model.dart';
 
 mixin ProfileImageModel implements GeneralModel {
   File _profileImage;
+
+  final profileImageService = ProfileImageService();
 
   File get profileImage => _profileImage;
 
@@ -18,21 +21,12 @@ mixin ProfileImageModel implements GeneralModel {
       isLoading = true;
       notifyListeners();
 
-      final String fileName = '${authenticatedUser.uid}.jpg';
-      final StorageReference ref =
-          FirebaseStorage.instance.ref().child(fileName);
-      final StorageUploadTask uploadTask = ref.putFile(
-        profileImage,
-        StorageMetadata(
-          contentLanguage: 'en',
-          customMetadata: <String, String>{'activity': 'Bank-App'},
-        ),
-      );
-      final String downloadUrl =
-          await (await uploadTask.onComplete).ref.getDownloadURL();
+      Map<String, dynamic> downloadUrl = await profileImageService
+          .saveProfileImage(authenticatedUser.uid, _profileImage);
+
       isLoading = false;
       notifyListeners();
-      print('Upload Completed and successful');
+      print('Upload Completed and successful $downloadUrl');
       return {'success': true, 'downloadUrl': downloadUrl};
     } catch (error) {
       isLoading = false;
