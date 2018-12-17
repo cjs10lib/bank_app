@@ -31,4 +31,8 @@ mixin AccountModel implements GeneralModel {
       return {'success': false, 'message': error.message};
     }
   }
+
+  // Future<Null> signOut() async {
+  //   return await authService.signout();
+  // }
 }
