@@ -1,3 +1,4 @@
+import 'package:bank_app/models/user.dart';
 import 'package:bank_app/pages/accept_terms_page.dart';
 import 'package:bank_app/pages/profile_edit_page.dart';
 import 'package:bank_app/pages/profile_image_upload_page.dart';
@@ -11,6 +12,7 @@ class SignUpWizardPage extends StatefulWidget {
 class _SignUpWizardPageState extends State<SignUpWizardPage>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  User authenticatedUser;
 
   @override
   void initState() {
@@ -44,7 +46,7 @@ class _SignUpWizardPageState extends State<SignUpWizardPage>
                 image: AssetImage('assets/login/login-background.jpg'))),
         child: TabBarView(
           controller: _tabController,
-          physics: NeverScrollableScrollPhysics(),
+          // physics: NeverScrollableScrollPhysics(),
           children: <Widget>[
             ProfileEditPage(_navigateForward),
             ProfileImageUploadPage(_navigateForward, _navigateBackwards),

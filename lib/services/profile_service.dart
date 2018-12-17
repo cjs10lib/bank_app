@@ -6,7 +6,7 @@ class ProfileService {
 
   Future<void> createProfile(String uid, String firstname, String lastname,
       String mobilePhone, String otherPhone) {
-    return _db.collection('accounts').document(uid).setData({
+    return _db.collection('people').document(uid).setData({
       'firstname': firstname,
       'lastname': lastname,
       'mobilePhone': mobilePhone,

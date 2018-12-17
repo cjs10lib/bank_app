@@ -15,8 +15,10 @@ main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    MainModel _model = MainModel();
+
     return ScopedModel<MainModel>(
-      model: MainModel(),
+      model: _model,
       child: MaterialApp(
         title: 'Bank Application',
         theme: ThemeData(
@@ -26,6 +28,7 @@ class MyApp extends StatelessWidget {
             errorColor: Colors.red),
         routes: <String, WidgetBuilder>{
           '/': (BuildContext context) => AuthPage(),
+          // '/': (BuildContext context) => SignUpWizardPage(),
           '/tabs': (BuildContext context) => TabsPage(),
           '/home': (BuildContext context) => HomePage(),
           '/profile': (BuildContext context) => ProfilePage(),
