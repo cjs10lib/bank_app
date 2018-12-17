@@ -2,7 +2,7 @@ import 'package:bank_app/scoped_models/user_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-enum AuthMode { Signup, Login }
+import 'package:bank_app/models/auth_mode.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -49,7 +49,6 @@ class _AuthPageState extends State<AuthPage> {
       },
       onSaved: (String value) {
         _formData['password'] = value;
-        _passwordController.text = value;
       },
     );
   }
@@ -80,27 +79,31 @@ class _AuthPageState extends State<AuthPage> {
   Widget _buildLoginControl(BuildContext context) {
     return ScopedModelDescendant<UserModel>(
       builder: (BuildContext context, Widget child, UserModel model) {
-        return Expanded(
-          child: Material(
-            elevation: 2,
-            borderRadius: BorderRadius.circular(10.0),
-            child: GestureDetector(
-              onTap: () => _submitForm(model),
-              child: Container(
-                height: 40.0,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10.0),
+        return model.isLoading
+            ? CircularProgressIndicator()
+            : Expanded(
+                child: Material(
+                  elevation: 2,
+                  borderRadius: BorderRadius.circular(10.0),
+                  child: GestureDetector(
+                    onTap: () => _submitForm(model),
+                    child: Container(
+                      height: 40.0,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(10.0),
+                        ),
+                      ),
+                      child: Text(
+                          _authMode == AuthMode.Login ? 'Login' : 'Sign Up',
+                          style:
+                              TextStyle(color: Colors.white, fontSize: 16.0)),
+                    ),
                   ),
                 ),
-                child: Text(_authMode == AuthMode.Login ? 'Login' : 'Sign Up',
-                    style: TextStyle(color: Colors.white, fontSize: 16.0)),
-              ),
-            ),
-          ),
-        );
+              );
       },
     );
   }
@@ -111,13 +114,10 @@ class _AuthPageState extends State<AuthPage> {
     }
     _formKey.currentState.save();
 
-    if (_authMode == AuthMode.Login) {
-      print('Navigating to tabs page');
-    } else {
-      Map<String, dynamic> successInformation =
-          await model.authenticate(_formData['email'], _formData['password']);
-      _returnAuthMessage(successInformation);
-    }
+    Map<String, dynamic> successInformation = await model.authenticate(
+        _formData['email'], _formData['password'], _authMode);
+        
+    _returnAuthMessage(successInformation);
   }
 
   void _returnAuthMessage(Map<String, dynamic> successInformation) {
@@ -213,7 +213,7 @@ class _AuthPageState extends State<AuthPage> {
                       Image.asset('assets/logo/cua-logo-white.png'),
                       SizedBox(height: 20.0),
                       Container(
-                        height: _authMode == AuthMode.Login ? 400.0 : 470.0,
+                        // height: _authMode == AuthMode.Login ? 400.0 : 470.0,
                         width: 350.0,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.all(
@@ -254,6 +254,7 @@ class _AuthPageState extends State<AuthPage> {
                                     : Container(),
                                 SizedBox(height: 20.0),
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: <Widget>[
                                     _buildLoginControl(context),
                                   ],
