@@ -1,5 +1,5 @@
 import 'package:bank_app/pages/sign_up_wizard_page.dart';
-import 'package:bank_app/scoped_models/user_model.dart';
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bank_app/pages/home_page.dart';
@@ -15,8 +15,8 @@ main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ScopedModel<UserModel>(
-      model: UserModel(),
+    return ScopedModel<MainModel>(
+      model: MainModel(),
       child: MaterialApp(
         title: 'Bank Application',
         theme: ThemeData(

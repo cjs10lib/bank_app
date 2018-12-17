@@ -1,8 +1,9 @@
-import 'package:bank_app/scoped_models/user_model.dart';
+
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 import 'package:bank_app/models/auth_mode.dart';
+import 'package:bank_app/scoped_models/main_model.dart';
 
 class AuthPage extends StatefulWidget {
   @override
@@ -77,8 +78,8 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildLoginControl(BuildContext context) {
-    return ScopedModelDescendant<UserModel>(
-      builder: (BuildContext context, Widget child, UserModel model) {
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
         return model.isLoading
             ? CircularProgressIndicator()
             : Expanded(
@@ -108,7 +109,7 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  Future _submitForm(UserModel model) async {
+  Future _submitForm(MainModel model) async {
     if (!_formKey.currentState.validate()) {
       return;
     }
