@@ -1,4 +1,6 @@
+import 'package:bank_app/scoped_models/user_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 enum AuthMode { Signup, Login }
 
@@ -8,32 +10,61 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends State<AuthPage> {
+  Map<String, dynamic> _formData = {'email': null, 'password': null};
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final TextEditingController _passwordController = TextEditingController();
   AuthMode _authMode = AuthMode.Login;
 
   Widget _buildEmailTextField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.emailAddress,
       decoration: InputDecoration(
         labelText: 'E-Mail',
         hintText: 'Enter username',
       ),
+      validator: (String value) {
+        if (value.isEmpty ||
+            !RegExp(r"[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?")
+                .hasMatch(value)) {
+          return 'Enter a valid email';
+        }
+      },
+      onSaved: (String value) {
+        _formData['email'] = value;
+      },
     );
   }
 
   Widget _buildPasswordTextField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
       decoration:
           InputDecoration(labelText: 'Password', hintText: 'Enter password'),
+      controller: _passwordController,
+      validator: (String value) {
+        if (value.isEmpty || value.length < 6) {
+          return 'Password should be 6+ characters';
+        }
+      },
+      onSaved: (String value) {
+        _formData['password'] = value;
+        _passwordController.text = value;
+      },
     );
   }
 
   Widget _buildConfirmPasswordTextField() {
-    return TextField(
+    return TextFormField(
       obscureText: true,
       decoration: InputDecoration(
           labelText: 'Confirm Password',
           hintText: 'Enter password confirmation'),
+      validator: (String value) {
+        if (_passwordController.text != value) {
+          return 'Passwords do not match!';
+        }
+      },
     );
   }
 
@@ -47,35 +78,71 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _buildLoginControl(BuildContext context) {
-    return Expanded(
-      child: Material(
-        elevation: 2,
-        borderRadius: BorderRadius.circular(10.0),
-        child: GestureDetector(
-          onTap: () {
-            if (_authMode == AuthMode.Login) {
-              Navigator.of(context).pushReplacementNamed('/tabs');
-              print('Navigating to tabs page');
-            } else {
-              Navigator.of(context).pushReplacementNamed('/sign-up');
-              print('Navigating to sign-up page');
-            }
-          },
-          child: Container(
-            height: 40.0,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              color: Theme.of(context).primaryColor,
-              borderRadius: BorderRadius.all(
-                Radius.circular(10.0),
+    return ScopedModelDescendant<UserModel>(
+      builder: (BuildContext context, Widget child, UserModel model) {
+        return Expanded(
+          child: Material(
+            elevation: 2,
+            borderRadius: BorderRadius.circular(10.0),
+            child: GestureDetector(
+              onTap: () => _submitForm(model),
+              child: Container(
+                height: 40.0,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: Theme.of(context).primaryColor,
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(10.0),
+                  ),
+                ),
+                child: Text(_authMode == AuthMode.Login ? 'Login' : 'Sign Up',
+                    style: TextStyle(color: Colors.white, fontSize: 16.0)),
               ),
             ),
-            child: Text(_authMode == AuthMode.Login ? 'Login' : 'Sign Up',
-                style: TextStyle(color: Colors.white, fontSize: 16.0)),
           ),
-        ),
-      ),
+        );
+      },
     );
+  }
+
+  Future _submitForm(UserModel model) async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    if (_authMode == AuthMode.Login) {
+      print('Navigating to tabs page');
+    } else {
+      Map<String, dynamic> successInformation =
+          await model.authenticate(_formData['email'], _formData['password']);
+      _returnAuthMessage(successInformation);
+    }
+  }
+
+  void _returnAuthMessage(Map<String, dynamic> successInformation) {
+    if (successInformation['success']) {
+      _authMode == AuthMode.Login
+          ? Navigator.of(context).pushReplacementNamed('/tabs')
+          : Navigator.of(context).pushReplacementNamed('/sign-up');
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Oops! Something went wrong'),
+              content: Text(successInformation['message']),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
   }
 
   Widget _buildAuthModeControl(BuildContext context) {
@@ -109,6 +176,8 @@ class _AuthPageState extends State<AuthPage> {
                     _authMode == AuthMode.Login
                         ? _authMode = AuthMode.Signup
                         : _authMode = AuthMode.Login;
+
+                    _formKey.currentState.reset();
                   });
                 })
           ],
@@ -137,63 +206,66 @@ class _AuthPageState extends State<AuthPage> {
             ),
             child: Center(
               child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[
-                    Image.asset('assets/logo/cua-logo-white.png'),
-                    SizedBox(height: 20.0),
-                    Container(
-                      height: _authMode == AuthMode.Login ? 390.0 : 430.0,
-                      width: 350.0,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(10.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      Image.asset('assets/logo/cua-logo-white.png'),
+                      SizedBox(height: 20.0),
+                      Container(
+                        height: _authMode == AuthMode.Login ? 400.0 : 470.0,
+                        width: 350.0,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(10.0),
+                          ),
                         ),
-                      ),
-                      child: Card(
-                        child: Container(
-                          padding: EdgeInsets.all(20.0),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10.0),
+                        child: Card(
+                          child: Container(
+                            padding: EdgeInsets.all(20.0),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10.0),
+                              ),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  _authMode == AuthMode.Login
+                                      ? 'Login'
+                                      : 'Sign Up',
+                                  style: TextStyle(
+                                    fontSize: 40.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(height: 10.0),
+                                _buildEmailTextField(),
+                                SizedBox(height: 15.0),
+                                _buildPasswordTextField(),
+                                SizedBox(height: 15.0),
+                                _authMode == AuthMode.Signup
+                                    ? _buildConfirmPasswordTextField()
+                                    : Container(),
+                                SizedBox(height: 15.0),
+                                _authMode == AuthMode.Login
+                                    ? _buildForgotPasswordControl()
+                                    : Container(),
+                                SizedBox(height: 20.0),
+                                Row(
+                                  children: <Widget>[
+                                    _buildLoginControl(context),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                _authMode == AuthMode.Login
-                                    ? 'Login'
-                                    : 'Sign Up',
-                                style: TextStyle(
-                                  fontSize: 40.0,
-                                  // fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(height: 10.0),
-                              _buildEmailTextField(),
-                              SizedBox(height: 20.0),
-                              _buildPasswordTextField(),
-                              SizedBox(height: 20.0),
-                              _authMode == AuthMode.Signup
-                                  ? _buildConfirmPasswordTextField()
-                                  : Container(),
-                              SizedBox(height: 20.0),
-                              _authMode == AuthMode.Login
-                                  ? _buildForgotPasswordControl()
-                                  : Container(),
-                              SizedBox(height: 30.0),
-                              Row(
-                                children: <Widget>[
-                                  _buildLoginControl(context),
-                                ],
-                              ),
-                            ],
-                          ),
                         ),
                       ),
-                    ),
-                    _buildAuthModeControl(context),
-                  ],
+                      _buildAuthModeControl(context),
+                    ],
+                  ),
                 ),
               ),
             ),

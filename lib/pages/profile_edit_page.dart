@@ -59,18 +59,23 @@ class ProfileEditPage extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Container(
-                    height: 40.0,
-                    width: 80.0,
-                    padding:
-                        EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-                    color: Theme.of(context).primaryColor,
-                    alignment: Alignment.center,
-                    child: Text('Cancel',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold)),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pushReplacementNamed('/');
+                    },
+                    child: Container(
+                      height: 40.0,
+                      width: 80.0,
+                      padding:
+                          EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                      color: Theme.of(context).primaryColor,
+                      alignment: Alignment.center,
+                      child: Text('Cancel',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold)),
+                    ),
                   ),
                   GestureDetector(
                     onTap: () {
