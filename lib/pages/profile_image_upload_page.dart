@@ -138,7 +138,13 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
         ScopedModelDescendant(
             builder: (BuildContext context, Widget child, MainModel model) {
           return model.isLoading
-              ? CircularProgressIndicator()
+              ? Container(
+                  height: 40.0,
+                  width: 120.0,
+                  padding: EdgeInsets.all(5.0),
+                  color: Color.fromRGBO(59, 70, 80, 1),
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator())
               : GestureDetector(
                   onTap: () => _submitForm(model),
                   child: Container(

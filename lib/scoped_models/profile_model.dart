@@ -8,6 +8,9 @@ mixin ProfileModel implements GeneralModel {
   Future<Map<String, dynamic>> createProfile(String firstname, String lastname,
       String mobilePhone, String otherPhone) async {
     try {
+      isLoading = true;
+      notifyListeners();
+
       await profileService.createProfile(
           authenticatedUser.uid, firstname, lastname, mobilePhone, otherPhone);
 
@@ -19,8 +22,13 @@ mixin ProfileModel implements GeneralModel {
           otherPhone: otherPhone,
           email: authenticatedUser.email);
 
+      isLoading = false;
+      notifyListeners();
+
       return {'success': true, 'message': 'Profile successfully created'};
     } catch (error) {
+      isLoading = false;
+      notifyListeners();
       return {'success': false, 'message': error.message};
     }
   }

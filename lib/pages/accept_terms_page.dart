@@ -43,24 +43,32 @@ class AcceptTermsPage extends StatelessWidget {
                       fontWeight: FontWeight.bold)),
             ),
           ),
-          GestureDetector(
-            onTap: () {
-              _submitForm(model, context);
-              Navigator.of(context).pushReplacementNamed('/tabs');
-            },
-            child: Container(
-              height: 40.0,
-              width: 230.0,
-              // color: Color.fromRGBO(0, 25, 45, .40),
-              color: Color.fromRGBO(59, 70, 80, 1),
-              alignment: Alignment.center,
-              child: Text('Accept Terms & Conditions',
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 16.0,
-                      fontWeight: FontWeight.bold)),
-            ),
-          ),
+          model.isLoading
+              ? Container(
+                  height: 40.0,
+                  width: 230.0,
+                  padding: EdgeInsets.all(5.0),
+                  color: Color.fromRGBO(59, 70, 80, 1),
+                  alignment: Alignment.center,
+                  child: CircularProgressIndicator())
+              : GestureDetector(
+                  onTap: () {
+                    _submitForm(model, context);
+                    Navigator.of(context).pushReplacementNamed('/tabs');
+                  },
+                  child: Container(
+                    height: 40.0,
+                    width: 230.0,
+                    // color: Color.fromRGBO(0, 25, 45, .40),
+                    color: Color.fromRGBO(59, 70, 80, 1),
+                    alignment: Alignment.center,
+                    child: Text('Accept Terms & Conditions',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.bold)),
+                  ),
+                ),
         ],
       );
     });
@@ -71,7 +79,8 @@ class AcceptTermsPage extends StatelessWidget {
     _returnMessage(successInformation, context);
   }
 
-  void _returnMessage(Map<String, dynamic> successInformation, BuildContext context) {
+  void _returnMessage(
+      Map<String, dynamic> successInformation, BuildContext context) {
     if (successInformation['success']) {
       Navigator.of(context).pushReplacementNamed('/');
     } else {

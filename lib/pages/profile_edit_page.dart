@@ -117,20 +117,28 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         ),
         ScopedModelDescendant<MainModel>(
           builder: (BuildContext context, Widget child, MainModel model) {
-            return GestureDetector(
-              onTap: () => _submitForm(model),
-              child: Container(
-                height: 40.0,
-                width: 120.0,
-                color: Color.fromRGBO(59, 70, 80, 1),
-                alignment: Alignment.center,
-                child: Text('Continue',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold)),
-              ),
-            );
+            return model.isLoading
+                ? Container(
+                    height: 40.0,
+                    width: 120.0,
+                    padding: EdgeInsets.all(5.0),
+                    color: Color.fromRGBO(59, 70, 80, 1),
+                    alignment: Alignment.center,
+                    child: CircularProgressIndicator())
+                : GestureDetector(
+                    onTap: () => _submitForm(model),
+                    child: Container(
+                      height: 40.0,
+                      width: 120.0,
+                      color: Color.fromRGBO(59, 70, 80, 1),
+                      alignment: Alignment.center,
+                      child: Text('Continue',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.bold)),
+                    ),
+                  );
           },
         )
       ],
@@ -138,7 +146,6 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
   }
 
   Future _submitForm(MainModel model) async {
-    
     if (!_formKey.currentState.validate()) {
       return;
     }
