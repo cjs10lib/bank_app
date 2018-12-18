@@ -9,7 +9,7 @@ class ProfileImageService {
       String uid, File profileImage) async {
     final String fileName = '$uid.jpg';
 
-    final StorageReference ref = FirebaseStorage.instance.ref().child(fileName);
+    final StorageReference ref = _storage.ref().child(fileName);
 
     final StorageUploadTask uploadTask = ref.putFile(
       profileImage,
