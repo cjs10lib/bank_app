@@ -8,7 +8,7 @@ mixin ProfileModel implements GeneralModel {
 
   Profile get profile => _profile;
 
-  fetchProfile() async {
+  Future<void> fetchProfile() async {
     try {
       DocumentSnapshot doc =
           await profileService.fetchProfile(authenticatedUser.uid);

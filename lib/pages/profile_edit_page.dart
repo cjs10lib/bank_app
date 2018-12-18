@@ -1,3 +1,4 @@
+import 'package:bank_app/models/profile.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -21,13 +22,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  Widget _buildFirstNameTextField() {
+  Widget _buildFirstNameTextField(Profile profile) {
     return TextFormField(
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         labelText: 'First Name',
       ),
+      initialValue: profile != null ? profile.firstname : null,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Firstname is required!';
@@ -39,13 +41,14 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget _buildLastNameTextField() {
+  Widget _buildLastNameTextField(Profile profile) {
     return TextFormField(
       decoration: InputDecoration(
         filled: true,
         fillColor: Colors.white,
         labelText: 'Last Name',
       ),
+      initialValue: profile != null ? profile.lastname : null,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Lastname is required!';
@@ -57,7 +60,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget _buildMobilePhoneTextField() {
+  Widget _buildMobilePhoneTextField(Profile profile) {
     return TextFormField(
       keyboardType: TextInputType.phone,
       maxLength: 9,
@@ -67,6 +70,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           labelText: 'Mobile Phone',
           prefixText: '+233 ',
           suffixIcon: Icon(Icons.phone_android)),
+      initialValue: profile != null ? profile.mobilePhone : null,
       validator: (String value) {
         if (value.isEmpty) {
           return 'Mobile phone number is required!';
@@ -78,7 +82,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget _buildOtherPhoneTextField() {
+  Widget _buildOtherPhoneTextField(Profile profile) {
     return TextFormField(
       keyboardType: TextInputType.phone,
       maxLength: 9,
@@ -88,6 +92,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           labelText: 'Other Phone',
           prefixText: '+233 ',
           suffixIcon: Icon(Icons.local_phone)),
+      initialValue: profile != null ? profile.otherPhone : null,
       onSaved: (String value) {
         _formData['otherPhone'] = value;
       },
@@ -198,6 +203,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
 
     return ScopedModelDescendant<MainModel>(
         builder: (BuildContext context, Widget child, MainModel model) {
+      final _profile = model.profile;
+
       return Container(
           child: Center(
         child: SingleChildScrollView(
@@ -221,12 +228,12 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                       'Complete the registration process by navigate through the signup wizard to activate your account',
                       style: TextStyle(color: Colors.white, fontSize: 16.0)),
                   SizedBox(height: 40),
-                  _buildFirstNameTextField(),
+                  _buildFirstNameTextField(_profile),
                   SizedBox(height: 20.0),
-                  _buildLastNameTextField(),
+                  _buildLastNameTextField(_profile),
                   SizedBox(height: 20.0),
-                  _buildMobilePhoneTextField(),
-                  _buildOtherPhoneTextField(),
+                  _buildMobilePhoneTextField(_profile),
+                  _buildOtherPhoneTextField(_profile),
                   SizedBox(height: 30),
                   _buildFormControls(context, model),
                   SizedBox(height: 20),
