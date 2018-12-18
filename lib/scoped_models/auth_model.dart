@@ -5,9 +5,18 @@ import 'package:bank_app/scoped_models/general_model.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 mixin AuthModel implements GeneralModel {
-  Future<Null> getAuthenticatedUser() async {
-    FirebaseUser user = await authService.authenticatedUser();
-    authenticatedUser = User(uid: user.uid, email: user.email);
+  User get authUser => authenticatedUser;
+
+  Future<void> getAuthenticatedUser() async {
+    try {
+      FirebaseUser user = await authService.authenticatedUser();
+      if (user != null) {
+        authenticatedUser = User(uid: user.uid, email: user.email);
+      }
+      notifyListeners();
+    } catch (error) {
+      print(error.message);
+    }
   }
 
   Future<Map<String, dynamic>> authenticate(

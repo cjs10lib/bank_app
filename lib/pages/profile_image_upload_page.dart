@@ -97,24 +97,26 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
     });
   }
 
-  Widget _buildImagePlaceHolder() {
+  Widget _buildImagePlaceHolder(MainModel model) {
     return Container(
-      height: 250.0,
-      width: 250.0,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(125.0),
-          border: Border.all(color: Colors.white, width: 2.0)),
-      child: CircleAvatar(
-        radius: 125.0,
-        backgroundImage: _imageFile == null
-            ? AssetImage('assets/avatar/avatar.png')
-            : FileImage(_imageFile),
-      ),
-    );
+        height: 250.0,
+        width: 250.0,
+        alignment: Alignment.center,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(125.0),
+            border: Border.all(color: Colors.white, width: 2.0)),
+        child: model.profileImage != null
+            ? CircleAvatar(
+                radius: 125.0,
+                backgroundImage: NetworkImage(model.profileImage))
+            : CircleAvatar(
+                radius: 125.0,
+                backgroundImage: _imageFile == null
+                    ? AssetImage('assets/avatar/avatar.png')
+                    : FileImage(_imageFile)));
   }
 
-  Widget _buildFormcontrols() {
+  Widget _buildFormcontrols(MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
@@ -135,32 +137,29 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
                     fontWeight: FontWeight.bold)),
           ),
         ),
-        ScopedModelDescendant(
-            builder: (BuildContext context, Widget child, MainModel model) {
-          return model.isLoading
-              ? Container(
+        model.isLoading
+            ? Container(
+                height: 40.0,
+                width: 120.0,
+                padding: EdgeInsets.all(5.0),
+                color: Color.fromRGBO(59, 70, 80, 1),
+                alignment: Alignment.center,
+                child: CircularProgressIndicator())
+            : GestureDetector(
+                onTap: () => _submitForm(model),
+                child: Container(
                   height: 40.0,
-                  width: 120.0,
-                  padding: EdgeInsets.all(5.0),
+                  width: 160.0,
+                  // color: Color.fromRGBO(0, 25, 45, .40),
                   color: Color.fromRGBO(59, 70, 80, 1),
                   alignment: Alignment.center,
-                  child: CircularProgressIndicator())
-              : GestureDetector(
-                  onTap: () => _submitForm(model),
-                  child: Container(
-                    height: 40.0,
-                    width: 120.0,
-                    // color: Color.fromRGBO(0, 25, 45, .40),
-                    color: Color.fromRGBO(59, 70, 80, 1),
-                    alignment: Alignment.center,
-                    child: Text('Continue',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16.0,
-                            fontWeight: FontWeight.bold)),
-                  ),
-                );
-        })
+                  child: Text('Save & Continue',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold)),
+                ),
+              )
       ],
     );
   }
@@ -199,28 +198,45 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
     }
   }
 
+  Widget _buildSkipControl() {
+    return Row(mainAxisAlignment: MainAxisAlignment.center, children: <Widget>[
+      FlatButton(
+        child: Text(
+          'Skip profile image upload',
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
+        ),
+        onPressed: () => widget._navigateForward(),
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-        child: Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            _buildImagePlaceHolder(),
-            SizedBox(height: 10),
-            FlatButton(
-              child: Text('Select Image',
-                  style: TextStyle(fontSize: 20.0, color: Colors.white)),
-              onPressed: () {
-                print('Select Image');
-                _openImagePicker(context);
-              },
-            ),
-            SizedBox(height: 50),
-            _buildFormcontrols()
-          ],
+    return ScopedModelDescendant(
+        builder: (BuildContext context, Widget child, MainModel model) {
+      return Container(
+          child: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              _buildImagePlaceHolder(model),
+              SizedBox(height: 10),
+              FlatButton(
+                child: Text('Select Image',
+                    style: TextStyle(fontSize: 20.0, color: Colors.white)),
+                onPressed: () {
+                  print('Select Image');
+                  _openImagePicker(context);
+                },
+              ),
+              SizedBox(height: 50.0),
+              _buildFormcontrols(model),
+              SizedBox(height: 50.0),
+              model.profileImage == null ? Container() : _buildSkipControl()
+            ],
+          ),
         ),
-      ),
-    ));
+      ));
+    });
   }
 }

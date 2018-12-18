@@ -1,6 +1,4 @@
 
-import 'dart:io';
-
 import 'package:scoped_model/scoped_model.dart';
 
 import 'package:bank_app/models/user.dart';
@@ -10,7 +8,7 @@ import 'package:bank_app/services/profile_service.dart';
 
 mixin GeneralModel implements Model {
   bool isLoading = false;
-  User authenticatedUser;
+  User authenticatedUser; 
   
 
   final authService = AuthService();

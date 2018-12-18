@@ -1,19 +1,31 @@
 import 'dart:io';
 
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:bank_app/scoped_models/general_model.dart';
 import 'package:bank_app/services/profile_image_service.dart';
 
-import 'package:bank_app/scoped_models/general_model.dart';
-
 mixin ProfileImageModel implements GeneralModel {
-  File _profileImage;
+  String _profileImageUrl;
+  File _tempProfileImage;
 
   final profileImageService = ProfileImageService();
 
-  File get profileImage => _profileImage;
+  String get profileImage => _profileImageUrl;
 
   selectProfileImage(File image) {
-    _profileImage = image;
+    _tempProfileImage = image;
+  }
+
+  fetchProfileImage() async {
+    try {
+      _profileImageUrl =
+          await profileImageService.fetchProfileImage(authenticatedUser.uid);
+
+      print('Profile image url $_profileImageUrl');
+      return {'success': true, 'downloadUrl': _profileImageUrl};
+    } catch (error) {
+      print('Error ${error.message}');
+      return {'success': false, 'downloadUrl': error.message};
+    }
   }
 
   Future<Map<String, dynamic>> uploadProfileImage() async {
@@ -21,13 +33,13 @@ mixin ProfileImageModel implements GeneralModel {
       isLoading = true;
       notifyListeners();
 
-      Map<String, dynamic> downloadUrl = await profileImageService
-          .saveProfileImage(authenticatedUser.uid, _profileImage);
+      _profileImageUrl = await profileImageService.saveProfileImage(
+          authenticatedUser.uid, _tempProfileImage);
 
       isLoading = false;
       notifyListeners();
-      print('Upload Completed and successful $downloadUrl');
-      return {'success': true, 'downloadUrl': downloadUrl};
+      print('Upload Completed and successful $_profileImageUrl');
+      return {'success': true, 'downloadUrl': _profileImageUrl};
     } catch (error) {
       isLoading = false;
       notifyListeners();

@@ -113,7 +113,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
             padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
             color: Theme.of(context).primaryColor,
             alignment: Alignment.center,
-            child: Text('Cancel',
+            child: Text('Signout',
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.0,
@@ -215,7 +215,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 80.0),
+                  SizedBox(height: 50.0),
                   Text(
                     'Your account is not yet activated!',
                     style: TextStyle(

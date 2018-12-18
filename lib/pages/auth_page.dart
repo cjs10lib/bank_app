@@ -125,7 +125,7 @@ class _AuthPageState extends State<AuthPage> {
     if (successInformation['success']) {
 
       // fetch authenticatedUser details
-      await model.fetchProfile();
+      await model.fetchProfile();      
       await model.fetchAccount();
 
       if (_authMode == AuthMode.Login && model.profile == null) {
