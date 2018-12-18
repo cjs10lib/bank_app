@@ -13,10 +13,10 @@ import 'package:scoped_model/scoped_model.dart';
 main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
+  final MainModel _model = MainModel();
+
   @override
   Widget build(BuildContext context) {
-    MainModel _model = MainModel();
-
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(

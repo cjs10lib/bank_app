@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -117,15 +116,33 @@ class _AuthPageState extends State<AuthPage> {
 
     Map<String, dynamic> successInformation = await model.authenticate(
         _formData['email'], _formData['password'], _authMode);
-        
-    _returnAuthMessage(successInformation);
+    
+
+    _returnAuthMessage(successInformation, model);
   }
 
-  void _returnAuthMessage(Map<String, dynamic> successInformation) {
+  void _returnAuthMessage(
+      Map<String, dynamic> successInformation, MainModel model) {
     if (successInformation['success']) {
-      _authMode == AuthMode.Login
-          ? Navigator.of(context).pushReplacementNamed('/tabs')
-          : Navigator.of(context).pushReplacementNamed('/sign-up');
+
+      // fetch authenticatedUser profile
+      model.fetchProfile();
+
+      if (_authMode == AuthMode.Login && model.profile == null) {
+        Navigator.of(context).pushReplacementNamed('/sign-up');
+      } else if (_authMode == AuthMode.Login &&
+          model.profile != null &&
+          !model.accountStatus.isActivated) {
+        Navigator.of(context).pushReplacementNamed('/sign-up');
+      } else if (_authMode == AuthMode.Signup) {
+        Navigator.of(context).pushReplacementNamed('/sign-up');
+      } else {
+        Navigator.of(context).pushReplacementNamed('/tabs');
+      }
+
+      // _authMode == AuthMode.Login
+      //     ? Navigator.of(context).pushReplacementNamed('/tabs')
+      //     : Navigator.of(context).pushReplacementNamed('/sign-up');
     } else {
       showDialog(
           context: context,

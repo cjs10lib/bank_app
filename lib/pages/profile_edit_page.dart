@@ -94,7 +94,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     );
   }
 
-  Widget _buildFormControls(BuildContext context) {
+  Widget _buildFormControls(BuildContext context, MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -115,32 +115,28 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                     fontWeight: FontWeight.bold)),
           ),
         ),
-        ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
-            return model.isLoading
-                ? Container(
-                    height: 40.0,
-                    width: 120.0,
-                    padding: EdgeInsets.all(5.0),
-                    color: Color.fromRGBO(59, 70, 80, 1),
-                    alignment: Alignment.center,
-                    child: CircularProgressIndicator())
-                : GestureDetector(
-                    onTap: () => _submitForm(model),
-                    child: Container(
-                      height: 40.0,
-                      width: 120.0,
-                      color: Color.fromRGBO(59, 70, 80, 1),
-                      alignment: Alignment.center,
-                      child: Text('Continue',
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                              fontWeight: FontWeight.bold)),
-                    ),
-                  );
-          },
-        )
+        model.isLoading
+            ? Container(
+                height: 40.0,
+                width: 120.0,
+                padding: EdgeInsets.all(5.0),
+                color: Color.fromRGBO(59, 70, 80, 1),
+                alignment: Alignment.center,
+                child: CircularProgressIndicator())
+            : GestureDetector(
+                onTap: () => _submitForm(model),
+                child: Container(
+                  height: 40.0,
+                  width: 160.0,
+                  color: Color.fromRGBO(59, 70, 80, 1),
+                  alignment: Alignment.center,
+                  child: Text('Save & Continue',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold)),
+                ),
+              )
       ],
     );
   }
@@ -183,35 +179,64 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     }
   }
 
+  Widget _buildSkipControl() {
+    return Row(mainAxisAlignment: MainAxisAlignment.end, children: <Widget>[
+      FlatButton(
+        child: Text(
+          'Skip profile form',
+          style: TextStyle(color: Colors.white, fontSize: 16.0),
+        ),
+        onPressed: () => widget._navigateForward(),
+      ),
+    ]);
+  }
+
   @override
   Widget build(BuildContext context) {
     double _deviceWidth = MediaQuery.of(context).size.width;
     double _targetWidth = _deviceWidth > 550.0 ? 500.0 : _deviceWidth * .90;
 
-    return Container(
-        child: Center(
-      child: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 20.0),
-          width: _targetWidth,
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: 100.0),
-                _buildFirstNameTextField(),
-                SizedBox(height: 20.0),
-                _buildLastNameTextField(),
-                SizedBox(height: 20.0),
-                _buildMobilePhoneTextField(),
-                _buildOtherPhoneTextField(),
-                SizedBox(height: 30),
-                _buildFormControls(context)
-              ],
+    return ScopedModelDescendant<MainModel>(
+        builder: (BuildContext context, Widget child, MainModel model) {
+      return Container(
+          child: Center(
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            width: _targetWidth,
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  SizedBox(height: 80.0),
+                  Text(
+                    'Your account is not yet activated!',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                      'Complete the registration process by navigate through the signup wizard to activate your account',
+                      style: TextStyle(color: Colors.white, fontSize: 16.0)),
+                  SizedBox(height: 40),
+                  _buildFirstNameTextField(),
+                  SizedBox(height: 20.0),
+                  _buildLastNameTextField(),
+                  SizedBox(height: 20.0),
+                  _buildMobilePhoneTextField(),
+                  _buildOtherPhoneTextField(),
+                  SizedBox(height: 30),
+                  _buildFormControls(context, model),
+                  SizedBox(height: 20),
+                  model.profile == null ? Container() : _buildSkipControl()
+                ],
+              ),
             ),
           ),
         ),
-      ),
-    ));
+      ));
+    });
   }
 }

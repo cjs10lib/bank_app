@@ -7,6 +7,8 @@ mixin AccountModel implements GeneralModel {
 
   final _accountService = AccountService();
 
+  Account get accountStatus => _accountStatus;
+
   Future<Map<String, dynamic>> createAccount() async {
     try {
       isLoading = true;

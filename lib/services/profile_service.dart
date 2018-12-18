@@ -4,6 +4,10 @@ class ProfileService {
   final _db = Firestore.instance;
   final serverTimestamp = FieldValue.serverTimestamp();
 
+  Future<DocumentSnapshot> fetchProfile(String uid) {
+    return _db.collection('people').document(uid).get();
+  }
+
   Future<void> createProfile(String uid, String firstname, String lastname,
       String mobilePhone, String otherPhone) {
     return _db.collection('people').document(uid).setData({
