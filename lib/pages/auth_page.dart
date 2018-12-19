@@ -134,10 +134,11 @@ class _AuthPageState extends State<AuthPage> {
           model.accountStatus == null) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
       } else if (_authMode == AuthMode.Login &&
-              model.profile != null &&
-              model.accountStatus != null ||
-          !model.accountStatus.isActivated) {
-        Navigator.of(context).pushReplacementNamed('/pending-activation');
+          model.profile != null &&
+          model.accountStatus != null) {
+        if (!model.accountStatus.isActivated) {
+          Navigator.of(context).pushReplacementNamed('/pending-activation');
+        }
       } else if (_authMode == AuthMode.Signup) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
       } else {
