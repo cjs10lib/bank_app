@@ -106,9 +106,19 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
             borderRadius: BorderRadius.circular(125.0),
             border: Border.all(color: Colors.white, width: 2.0)),
         child: model.profileImage != null
-            ? CircleAvatar(
-                radius: 125.0,
-                backgroundImage: NetworkImage(model.profileImage))
+            // ? FadeInImage(
+            //     fit: BoxFit.cover,
+            //     image: NetworkImage(model.profileImage),
+            //     placeholder: AssetImage('assets/avatar/avatar.png'))
+
+            ? ClipRRect(
+                borderRadius: BorderRadius.circular(10000.0),
+                child: FadeInImage(
+                    fit: BoxFit.cover,
+                    height: 200.0,
+                    width: 200.0,
+                    image: NetworkImage(model.profileImage),
+                    placeholder: AssetImage('assets/avatar/avatar.png')))
             : CircleAvatar(
                 radius: 125.0,
                 backgroundImage: _imageFile == null

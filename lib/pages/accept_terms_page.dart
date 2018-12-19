@@ -54,7 +54,6 @@ class AcceptTermsPage extends StatelessWidget {
               : GestureDetector(
                   onTap: () {
                     _submitForm(model, context);
-                    Navigator.of(context).pushReplacementNamed('/tabs');
                   },
                   child: Container(
                     height: 40.0,
