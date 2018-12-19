@@ -124,8 +124,10 @@ class _AuthPageState extends State<AuthPage> {
       Map<String, dynamic> successInformation, MainModel model) async {
     if (successInformation['success']) {
       // fetch authenticatedUser details
+      model.isLoading = true;
       await model.fetchProfile();
       await model.fetchAccount();
+      model.isLoading = false;
 
       if (_authMode == AuthMode.Login && model.profile == null) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
@@ -138,11 +140,12 @@ class _AuthPageState extends State<AuthPage> {
           model.accountStatus != null) {
         if (!model.accountStatus.isActivated) {
           Navigator.of(context).pushReplacementNamed('/pending-activation');
+        } else if (_authMode == AuthMode.Login &&
+            model.accountStatus.isActivated) {
+          Navigator.of(context).pushReplacementNamed('/tabs');
         }
       } else if (_authMode == AuthMode.Signup) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
-      } else {
-        Navigator.of(context).pushReplacementNamed('/tabs');
       }
 
       // _authMode == AuthMode.Login
