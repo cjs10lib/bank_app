@@ -216,13 +216,11 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               child: Column(
                 children: <Widget>[
                   SizedBox(height: 50.0),
-                  Text(
-                    'Your account is not yet activated!',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold),
-                  ),
+                  Text('Your account is not yet activated!',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold)),
                   SizedBox(height: 10),
                   Text(
                       'Complete the registration process by navigate through the signup wizard to activate your account',

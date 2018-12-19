@@ -123,18 +123,21 @@ class _AuthPageState extends State<AuthPage> {
   Future _returnAuthMessage(
       Map<String, dynamic> successInformation, MainModel model) async {
     if (successInformation['success']) {
-
       // fetch authenticatedUser details
-      await model.fetchProfile();      
+      await model.fetchProfile();
       await model.fetchAccount();
 
       if (_authMode == AuthMode.Login && model.profile == null) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
       } else if (_authMode == AuthMode.Login &&
-              model.profile != null &&
-              model.accountStatus == null ||
-          !model.accountStatus.isActivated) {
+          model.profile != null &&
+          model.accountStatus == null) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
+      } else if (_authMode == AuthMode.Login &&
+              model.profile != null &&
+              model.accountStatus != null ||
+          !model.accountStatus.isActivated) {
+        Navigator.of(context).pushReplacementNamed('/pending-activation');
       } else if (_authMode == AuthMode.Signup) {
         Navigator.of(context).pushReplacementNamed('/sign-up');
       } else {
