@@ -201,6 +201,7 @@ class _AuthPageState extends State<AuthPage> {
                         : _authMode = AuthMode.Login;
 
                     _formKey.currentState.reset();
+                    _passwordController.text = '';
                   });
                 })
           ],
@@ -233,7 +234,29 @@ class _AuthPageState extends State<AuthPage> {
                   key: _formKey,
                   child: Column(
                     children: <Widget>[
-                      Image.asset('assets/logo/cua-logo-white.png'),
+                      // Image.asset('assets/logo/cua-logo-white.png'),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          Image.asset('assets/logo/white-cu-logo.png',
+                              height: 100.0, width: 100.0),
+                          SizedBox(width: 10.0),
+                          Column(
+                            children: <Widget>[
+                              Text('KAMCCU CORP',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.bold)),
+                              Text('CREDIT UNION',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 30.0,
+                                      fontWeight: FontWeight.bold)),
+                            ],
+                          )
+                        ],
+                      ),
                       SizedBox(height: 20.0),
                       Container(
                         // height: _authMode == AuthMode.Login ? 400.0 : 470.0,

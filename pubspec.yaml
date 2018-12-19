@@ -45,6 +45,7 @@ flutter:
   assets:
     - assets/login/login-background.jpg
     - assets/logo/cua-logo-white.png
+    - assets/logo/white-cu-logo.png
     - assets/avatar/avatar.png
     - assets/home/card.png
     - assets/home/desk.png

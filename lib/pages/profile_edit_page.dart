@@ -36,7 +36,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['firstname'] = value;
+        _formData['firstname'] = '${value[0].toUpperCase()}${value.substring(1)}';
       },
     );
   }
@@ -55,7 +55,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['lastname'] = value;
+        _formData['lastname'] = '${value[0].toUpperCase()}${value.substring(1)}';
       },
     );
   }
