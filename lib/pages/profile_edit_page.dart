@@ -36,7 +36,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['firstname'] = '${value[0].toUpperCase()}${value.substring(1)}';
+        _formData['firstname'] =
+            '${value[0].toUpperCase()}${value.substring(1)}';
       },
     );
   }
@@ -55,7 +56,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['lastname'] = '${value[0].toUpperCase()}${value.substring(1)}';
+        _formData['lastname'] =
+            '${value[0].toUpperCase()}${value.substring(1)}';
       },
     );
   }
@@ -77,7 +79,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['mobilePhone'] = value;
+        _formData['mobilePhone'] = '+233$value';
       },
     );
   }
@@ -94,10 +96,30 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           suffixIcon: Icon(Icons.local_phone)),
       initialValue: profile != null ? profile.otherPhone : null,
       onSaved: (String value) {
-        _formData['otherPhone'] = value;
+        _formData['otherPhone'] = '+233$value';
       },
     );
   }
+
+  // Widget _buildLastNameTextField(Profile profile) {
+  //   return TextFormField(
+  //     decoration: InputDecoration(
+  //       filled: true,
+  //       fillColor: Colors.white,
+  //       labelText: 'Last Name',
+  //     ),
+  //     initialValue: profile != null ? profile.lastname : null,
+  //     validator: (String value) {
+  //       if (value.isEmpty) {
+  //         return 'Lastname is required!';
+  //       }
+  //     },
+  //     onSaved: (String value) {
+  //       _formData['lastname'] =
+  //           '${value[0].toUpperCase()}${value.substring(1)}';
+  //     },
+  //   );
+  // }
 
   Widget _buildFormControls(BuildContext context, MainModel model) {
     return Row(
