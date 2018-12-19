@@ -105,7 +105,9 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
       children: <Widget>[
         GestureDetector(
           onTap: () {
-            Navigator.of(context).pushReplacementNamed('/');
+            model.signOut().then((_) {
+              Navigator.of(context).pushReplacementNamed('/');
+            });
           },
           child: Container(
             height: 40.0,

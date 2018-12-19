@@ -4,23 +4,21 @@ import 'package:bank_app/models/profile.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 mixin ProfileModel implements GeneralModel {
-  Profile _profile;
-
-  Profile get profile => _profile;
+  Profile get accountProfile => profile;
 
   Future<void> fetchProfile() async {
     try {
       DocumentSnapshot doc =
           await profileService.fetchProfile(authenticatedUser.uid);
-      final profile = doc.data;
+      final profileData = doc.data;
 
       if (doc.exists) {
-        _profile = Profile(
+        profile = Profile(
             uid: authenticatedUser.uid,
-            firstname: profile['firstname'],
-            lastname: profile['lastname'],
-            mobilePhone: profile['mobilePhone'],
-            otherPhone: profile['otherPhone'],
+            firstname: profileData['firstname'],
+            lastname: profileData['lastname'],
+            mobilePhone: profileData['mobilePhone'],
+            otherPhone: profileData['otherPhone'],
             email: authenticatedUser.email);
         notifyListeners();
 
@@ -40,7 +38,7 @@ mixin ProfileModel implements GeneralModel {
       await profileService.createProfile(
           authenticatedUser.uid, firstname, lastname, mobilePhone, otherPhone);
 
-      _profile = Profile(
+      profile = Profile(
           uid: authenticatedUser.uid,
           firstname: firstname,
           lastname: lastname,

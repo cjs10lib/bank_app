@@ -14,6 +14,8 @@ mixin AuthModel implements GeneralModel {
         authenticatedUser = User(uid: user.uid, email: user.email);
       }
       notifyListeners();
+
+      print(user.uid);
     } catch (error) {
       print(error.message);
     }
@@ -44,7 +46,10 @@ mixin AuthModel implements GeneralModel {
     }
   }
 
-  // Future<Null> signOut() async {
-  //   return await authService.signout();
-  // }
+  Future<void> signOut() async {
+    await authService.signout();
+    profile = null;
+    authenticatedUser = null;
+    // notifyListeners();
+  }
 }

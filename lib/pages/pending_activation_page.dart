@@ -32,7 +32,9 @@ class PendingActivationPage extends StatelessWidget {
                 SizedBox(height: 50.0),
                 GestureDetector(
                   onTap: () {
-                    Navigator.of(context).pushReplacementNamed('/');
+                    model.signOut().then((_) {
+                      Navigator.of(context).pushReplacementNamed('/');
+                    });
                   },
                   child: Container(
                     height: 40.0,

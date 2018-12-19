@@ -75,13 +75,15 @@ class AcceptTermsPage extends StatelessWidget {
 
   Future _submitForm(MainModel model, BuildContext context) async {
     Map<String, dynamic> successInformation = await model.createAccount();
-    _returnMessage(successInformation, context);
+    _returnMessage(successInformation, context, model);
   }
 
-  void _returnMessage(
-      Map<String, dynamic> successInformation, BuildContext context) {
+  void _returnMessage(Map<String, dynamic> successInformation,
+      BuildContext context, MainModel model) {
     if (successInformation['success']) {
-      Navigator.of(context).pushReplacementNamed('/');
+      model.signOut().then((_) {
+        Navigator.of(context).pushReplacementNamed('/');
+      });
     } else {
       showDialog(
           context: context,
