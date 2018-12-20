@@ -50,6 +50,7 @@ mixin AuthModel implements GeneralModel {
   Future<void> signOut() async {
     await authService.signout();
     profile = null;
+    profileImageUrl = null;
     authenticatedUser = null;
     // notifyListeners();
   }

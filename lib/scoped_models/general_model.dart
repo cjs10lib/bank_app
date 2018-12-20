@@ -10,6 +10,7 @@ mixin GeneralModel implements Model {
   bool isLoading = false;
   User authenticatedUser; 
   Profile profile;
+  String profileImageUrl;
   
 
   final authService = AuthService();

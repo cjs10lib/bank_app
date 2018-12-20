@@ -78,7 +78,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               Text(
-                'Hello, ${model.profile.firstname}',
+                'Hello, ${model.profile != null ? model.profile.firstname : null}',
                 style: TextStyle(color: Colors.white, fontSize: 50.0),
               ),
               Text(

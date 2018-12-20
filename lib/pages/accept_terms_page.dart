@@ -74,7 +74,9 @@ class AcceptTermsPage extends StatelessWidget {
   }
 
   Future _submitForm(MainModel model, BuildContext context) async {
-    Map<String, dynamic> successInformation = await model.createAccount();
+    Map<String, dynamic> successInformation = 
+        await model.createAccount();
+        await model.createWallet();
     _returnMessage(successInformation, context, model);
   }
 
