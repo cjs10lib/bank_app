@@ -31,9 +31,9 @@ class ProfilePage extends StatelessWidget {
             color: Color.fromRGBO(59, 70, 80, 1)));
   }
 
-  Widget _buildProfileAddress() {
+  Widget _buildProfileAddress(Profile profile) {
     return Text(
-      'East Legon, Accra',
+      profile.address,
       style: TextStyle(fontSize: 16.0, color: Colors.grey[700]),
     );
   }
@@ -97,8 +97,8 @@ class ProfilePage extends StatelessWidget {
               leading: CircleAvatar(
                   child: Icon(Icons.phone, color: Colors.white),
                   backgroundColor: Theme.of(context).primaryColor),
-              title: Text(profile.mobilePhone),
-              subtitle: Text(profile.otherPhone),
+              title: Text('+233${profile.mobilePhone}'),
+              subtitle: Text('+233${profile.otherPhone}'),
             ),
             FlatButton(
                 child: Text('Sign Out',
@@ -140,7 +140,7 @@ class ProfilePage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
                             _buildProfileName(_profile),
-                            _buildProfileAddress(),
+                            _buildProfileAddress(_profile),
                             SizedBox(height: 10.0),
                             _buildControls(context, model)
                           ],

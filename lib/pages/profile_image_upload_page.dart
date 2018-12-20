@@ -112,7 +112,7 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
             //     placeholder: AssetImage('assets/avatar/avatar.png'))
 
             ? ClipRRect(
-                borderRadius: BorderRadius.circular(10000.0),
+                borderRadius: BorderRadius.circular(125.0),
                 child: FadeInImage(
                     fit: BoxFit.cover,
                     height: 200.0,

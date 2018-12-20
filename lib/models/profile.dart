@@ -7,6 +7,7 @@ class Profile {
   String mobilePhone;
   String otherPhone;
   String email;
+  String address;
 
   Profile(
       {@required this.uid,
@@ -14,5 +15,6 @@ class Profile {
       @required this.lastname,
       @required this.mobilePhone,
       this.otherPhone,
-      @required this.email});
+      @required this.email,
+      @required this.address});
 }

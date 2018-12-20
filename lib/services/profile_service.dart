@@ -9,12 +9,13 @@ class ProfileService {
   }
 
   Future<void> createProfile(String uid, String firstname, String lastname,
-      String mobilePhone, String otherPhone) {
+      String mobilePhone, String otherPhone, String address) {
     return _db.collection('people').document(uid).setData({
       'firstname': firstname,
       'lastname': lastname,
       'mobilePhone': mobilePhone,
       'otherPhone': otherPhone,
+      'address': address,
       'created': serverTimestamp,
       'lastUpdate': serverTimestamp
     }, merge: true);

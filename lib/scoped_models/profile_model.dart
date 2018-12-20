@@ -19,7 +19,8 @@ mixin ProfileModel implements GeneralModel {
             lastname: profileData['lastname'],
             mobilePhone: profileData['mobilePhone'],
             otherPhone: profileData['otherPhone'],
-            email: authenticatedUser.email);
+            email: authenticatedUser.email,
+            address: profileData['address']);
         notifyListeners();
 
         print('${doc.data} fetch product');
@@ -30,13 +31,13 @@ mixin ProfileModel implements GeneralModel {
   }
 
   Future<Map<String, dynamic>> createProfile(String firstname, String lastname,
-      String mobilePhone, String otherPhone) async {
+      String mobilePhone, String otherPhone, String address) async {
     try {
       isLoading = true;
       notifyListeners();
 
-      await profileService.createProfile(
-          authenticatedUser.uid, firstname, lastname, mobilePhone, otherPhone);
+      await profileService.createProfile(authenticatedUser.uid, firstname,
+          lastname, mobilePhone, otherPhone, address);
 
       profile = Profile(
           uid: authenticatedUser.uid,
@@ -44,7 +45,8 @@ mixin ProfileModel implements GeneralModel {
           lastname: lastname,
           mobilePhone: mobilePhone,
           otherPhone: otherPhone,
-          email: authenticatedUser.email);
+          email: authenticatedUser.email,
+          address: address);
 
       isLoading = false;
       notifyListeners();

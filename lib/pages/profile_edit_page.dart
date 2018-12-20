@@ -17,7 +17,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
     'firstname': null,
     'lastname': null,
     'mobilePhone': null,
-    'otherPhone': null
+    'otherPhone': null,
+    'address': null
   };
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
@@ -79,7 +80,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         }
       },
       onSaved: (String value) {
-        _formData['mobilePhone'] = '+233$value';
+        _formData['mobilePhone'] = value;
       },
     );
   }
@@ -96,30 +97,29 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
           suffixIcon: Icon(Icons.local_phone)),
       initialValue: profile != null ? profile.otherPhone : null,
       onSaved: (String value) {
-        _formData['otherPhone'] = '+233$value';
+        _formData['otherPhone'] = value;
       },
     );
   }
 
-  // Widget _buildLastNameTextField(Profile profile) {
-  //   return TextFormField(
-  //     decoration: InputDecoration(
-  //       filled: true,
-  //       fillColor: Colors.white,
-  //       labelText: 'Last Name',
-  //     ),
-  //     initialValue: profile != null ? profile.lastname : null,
-  //     validator: (String value) {
-  //       if (value.isEmpty) {
-  //         return 'Lastname is required!';
-  //       }
-  //     },
-  //     onSaved: (String value) {
-  //       _formData['lastname'] =
-  //           '${value[0].toUpperCase()}${value.substring(1)}';
-  //     },
-  //   );
-  // }
+  Widget _buildAddresseTextField(Profile profile) {
+    return TextFormField(
+      decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white,
+          labelText: 'Residential Address',
+          suffixIcon: Icon(Icons.location_on)),
+      initialValue: profile != null ? profile.address : null,
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Address is required!';
+        }
+      },
+      onSaved: (String value) {
+        _formData['address'] = '${value[0].toUpperCase()}${value.substring(1)}';
+      },
+    );
+  }
 
   Widget _buildFormControls(BuildContext context, MainModel model) {
     return Row(
@@ -147,8 +147,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         model.isLoading
             ? Container(
                 height: 40.0,
-                width: 120.0,
-                padding: EdgeInsets.all(5.0),
+                width: 160.0,
+                // padding: EdgeInsets.all(5.0),
                 color: Color.fromRGBO(59, 70, 80, 1),
                 alignment: Alignment.center,
                 child: CircularProgressIndicator())
@@ -180,7 +180,8 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
         _formData['firstname'],
         _formData['lastname'],
         _formData['mobilePhone'],
-        _formData['otherPhone']);
+        _formData['otherPhone'],
+        _formData['address']);
 
     _returnMessage(successInformation);
   }
@@ -239,7 +240,7 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
               key: _formKey,
               child: Column(
                 children: <Widget>[
-                  SizedBox(height: 50.0),
+                  SizedBox(height: 30.0),
                   Text('Your account is not yet activated!',
                       style: TextStyle(
                           color: Colors.white,
@@ -249,16 +250,17 @@ class _ProfileEditPageState extends State<ProfileEditPage> {
                   Text(
                       'Complete the registration process by navigate through the signup wizard to activate your account',
                       style: TextStyle(color: Colors.white, fontSize: 16.0)),
-                  SizedBox(height: 40),
+                  SizedBox(height: 30),
                   _buildFirstNameTextField(_profile),
                   SizedBox(height: 20.0),
                   _buildLastNameTextField(_profile),
                   SizedBox(height: 20.0),
                   _buildMobilePhoneTextField(_profile),
                   _buildOtherPhoneTextField(_profile),
+                  _buildAddresseTextField(_profile),
                   SizedBox(height: 30),
                   _buildFormControls(context, model),
-                  SizedBox(height: 20),
+                  SizedBox(height: 10),
                   model.profile == null ? Container() : _buildSkipControl()
                 ],
               ),

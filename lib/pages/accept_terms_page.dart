@@ -81,9 +81,11 @@ class AcceptTermsPage extends StatelessWidget {
   void _returnMessage(Map<String, dynamic> successInformation,
       BuildContext context, MainModel model) {
     if (successInformation['success']) {
+      model.isLoading = true;
       model.signOut().then((_) {
         Navigator.of(context).pushReplacementNamed('/');
       });
+      model.isLoading = false;
     } else {
       showDialog(
           context: context,
