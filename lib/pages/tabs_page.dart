@@ -1,28 +1,33 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bank_app/pages/home_page.dart';
 import 'package:bank_app/pages/wallet_page.dart';
 
 class TabsPage extends StatefulWidget {
+  final MainModel _model;
+
+  TabsPage(this._model);
 
   @override
   _TabsPageState createState() => _TabsPageState();
 }
 
-class _TabsPageState extends State<TabsPage> with SingleTickerProviderStateMixin {
-  TabController _tabController;  
+class _TabsPageState extends State<TabsPage>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
 
   @override
-    void initState() {
-      _tabController = TabController(vsync: this, length: 3);
-      super.initState();
-    }
+  void initState() {   
+    _tabController = TabController(vsync: this, length: 3);
+    super.initState();
+  }
 
-    @override
-      void dispose() {
-        _tabController.dispose();
-        super.dispose();
-      }
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +36,7 @@ class _TabsPageState extends State<TabsPage> with SingleTickerProviderStateMixin
           controller: _tabController,
           children: <Widget>[
             HomePage(),
-            WalletPage(),
+            WalletPage(widget._model),
           ],
         ),
         floatingActionButton: FloatingActionButton(
@@ -41,8 +46,7 @@ class _TabsPageState extends State<TabsPage> with SingleTickerProviderStateMixin
             Navigator.of(context).pushNamed('/loan-order');
           },
         ),
-        floatingActionButtonLocation:
-            FloatingActionButtonLocation.endFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),
           // notchMargin: 10.0,

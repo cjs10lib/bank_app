@@ -59,7 +59,9 @@ class HomePage extends StatelessWidget {
                       child: Hero(
                         tag: 'profile-image',
                         child: CircleAvatar(
-                            backgroundImage: NetworkImage(model.profileImage)),
+                            backgroundImage: model.profileImage != null
+                                ? NetworkImage(model.profileImage)
+                                : AssetImage('assets/avatar/avatar.png')),
                         // AssetImage('assets/avatar/avatar.png')),
                       ),
                     ),

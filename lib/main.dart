@@ -29,10 +29,10 @@ class MyApp extends StatelessWidget {
             errorColor: Colors.red),
         routes: <String, WidgetBuilder>{
           '/': (BuildContext context) => AuthPage(),
-          '/tabs': (BuildContext context) => TabsPage(),
+          '/tabs': (BuildContext context) => TabsPage(_model),
           '/home': (BuildContext context) => HomePage(),
           '/profile': (BuildContext context) => ProfilePage(),
-          '/wallet': (BuildContext context) => WalletPage(),
+          // '/wallet': (BuildContext context) => WalletPage(),
           '/loan-order': (BuildContext context) => LoanOrderPage(),
           '/sign-up': (BuildContext context) => SignUpWizardPage(),
           '/pending-activation': (BuildContext context) => PendingActivationPage()

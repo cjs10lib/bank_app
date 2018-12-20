@@ -1,14 +1,35 @@
 import 'package:bank_app/models/wallet.dart';
 import 'package:bank_app/scoped_models/general_model.dart';
-
-import 'package:bank_app/services/wallet_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 mixin WalletModel implements GeneralModel {
-  final walletService = WalletService();
+  Wallet get wallet => profileWallet;
 
-  Wallet _wallet;
+  fetchWallet() async {
+    try {
+      isLoading = true;
+      notifyListeners();
 
-  Wallet get wallet => _wallet;
+      DocumentSnapshot snap =
+          await walletService.fetchWallet(authenticatedUser.uid);
+      profileWallet = Wallet(
+          uid: authenticatedUser.uid,
+          accountNumber: profile.mobilePhone,
+          balance: snap.data['balance'],
+          created: snap.data['created'],
+          lastUpdate: snap.data['lastUpdate']);
+      // notifyListeners();
+
+      isLoading = false;
+      notifyListeners();
+
+      print(snap.data);
+    } catch (error) {
+      print(error);
+      isLoading = false;
+      notifyListeners();
+    }
+  }
 
   Future<void> createWallet() async {
     try {
@@ -18,11 +39,10 @@ mixin WalletModel implements GeneralModel {
       await walletService.createWallet(
           authenticatedUser.uid, profile.mobilePhone);
 
-      _wallet = Wallet(
-        uid: authenticatedUser.uid,
-        accountNumber: profile.mobilePhone,
-        balance: 0.00
-      );
+      profileWallet = Wallet(
+          uid: authenticatedUser.uid,
+          accountNumber: profile.mobilePhone,
+          balance: 0.00);
 
       isLoading = false;
       notifyListeners();

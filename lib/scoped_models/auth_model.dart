@@ -51,6 +51,7 @@ mixin AuthModel implements GeneralModel {
     await authService.signout();
     profile = null;
     profileImageUrl = null;
+    profileWallet = null;
     authenticatedUser = null;
     // notifyListeners();
   }

@@ -4,6 +4,10 @@ class WalletService {
   final _db = Firestore.instance;
   final _serverTimestamp = FieldValue.serverTimestamp();
 
+  Future<DocumentSnapshot> fetchWallet(String uid) {
+    return _db.collection('wallets').document(uid).get();
+  }
+
   Future<void> createWallet(String uid, String mobilePhone) {
     return _db.collection('wallets').document(uid).setData({
       'balance': 0.00,
