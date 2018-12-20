@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
           '/profile': (BuildContext context) => ProfilePage(),
           '/wallet': (BuildContext context) => WalletPage(),
           '/loan-order': (BuildContext context) => LoanOrderPage(),
-          '/sign-up': (BuildContext context) => SignUpWizardPage(_model),
+          '/sign-up': (BuildContext context) => SignUpWizardPage(),
           '/pending-activation': (BuildContext context) => PendingActivationPage()
         },
       ),

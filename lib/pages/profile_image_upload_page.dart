@@ -175,13 +175,28 @@ class _ProfileImageUploadPageState extends State<ProfileImageUploadPage> {
   }
 
   Future _submitForm(MainModel model) async {
-    if (_imageFile == null) {
-      print('Select Image!');
-    } else {
+    if (_imageFile != null) {
       Map<String, dynamic> successInformation =
           await model.uploadProfileImage();
 
       _returnMessage(successInformation);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Oops! Something went wrong'),
+              content: Text('Please select an image!'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
     }
   }
 

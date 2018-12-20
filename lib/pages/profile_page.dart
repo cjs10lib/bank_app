@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class ProfilePage extends StatelessWidget {
-  Widget _buildSliverAppBar() {
+  Widget _buildSliverAppBar(MainModel model) {
     return SliverAppBar(
       expandedHeight: 250.0,
       pinned: true,
@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
           child: FadeInImage(
             fit: BoxFit.cover,
             height: 250.0,
-            image: AssetImage('assets/avatar/avatar.png'),
+            image: NetworkImage(model.profileImage),
             placeholder: AssetImage('assets/avatar/avatar.png'),
           ),
         ),
@@ -128,7 +128,7 @@ class ProfilePage extends StatelessWidget {
           body: SafeArea(
             child: CustomScrollView(
               slivers: <Widget>[
-                _buildSliverAppBar(),
+                _buildSliverAppBar(model),
                 SliverList(
                   delegate: SliverChildListDelegate([
                     Material(

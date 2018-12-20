@@ -2,14 +2,9 @@ import 'package:bank_app/models/user.dart';
 import 'package:bank_app/pages/accept_terms_page.dart';
 import 'package:bank_app/pages/profile_edit_page.dart';
 import 'package:bank_app/pages/profile_image_upload_page.dart';
-import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 
 class SignUpWizardPage extends StatefulWidget {
-  final MainModel model;
-
-  SignUpWizardPage(this.model);
-
   @override
   _SignUpWizardPageState createState() => _SignUpWizardPageState();
 }
@@ -21,8 +16,6 @@ class _SignUpWizardPageState extends State<SignUpWizardPage>
 
   @override
   void initState() {
-    widget.model.fetchProfileImage();
-
     _tabController = TabController(vsync: this, length: 3);
     super.initState();
   }

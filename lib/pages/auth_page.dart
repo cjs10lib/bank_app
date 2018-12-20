@@ -127,6 +127,7 @@ class _AuthPageState extends State<AuthPage> {
       model.isLoading = true;
       await model.fetchProfile();
       await model.fetchAccount();
+      await model.fetchProfileImage();
       model.isLoading = false;
 
       if (_authMode == AuthMode.Login && model.profile == null) {

@@ -1,7 +1,9 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class HomePage extends StatelessWidget {
-  Widget _buildHeaderStack(BuildContext context) {
+  Widget _buildHeaderStack(BuildContext context, MainModel model) {
     return Stack(
       children: <Widget>[
         Container(
@@ -57,8 +59,8 @@ class HomePage extends StatelessWidget {
                       child: Hero(
                         tag: 'profile-image',
                         child: CircleAvatar(
-                            backgroundImage:
-                                AssetImage('assets/avatar/avatar.png')),
+                            backgroundImage: NetworkImage(model.profileImage)),
+                        // AssetImage('assets/avatar/avatar.png')),
                       ),
                     ),
                   ),
@@ -76,7 +78,7 @@ class HomePage extends StatelessWidget {
               ),
               SizedBox(height: 20.0),
               Text(
-                'Hello, Pino',
+                'Hello, ${model.profile.firstname}',
                 style: TextStyle(color: Colors.white, fontSize: 50.0),
               ),
               Text(
@@ -239,7 +241,8 @@ class HomePage extends StatelessWidget {
                       Container(
                         height: 40.0,
                         width: 80.0,
-                        padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5.0, horizontal: 5.0),
                         color: Theme.of(context).primaryColor,
                         alignment: Alignment.center,
                         child: Text(value,
@@ -273,33 +276,40 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: <Widget>[
-        SliverAppBar(
-          pinned: true,
-          expandedHeight: 350.0,
-          snap: true,
-          floating: true,
-          flexibleSpace: FlexibleSpaceBar(
-            background: _buildHeaderStack(context),
-          ),
-          bottom: PreferredSize(child: _buildOfferOptions(), preferredSize: Size.fromHeight(70.0),),
-        ),
-        SliverList(
-          delegate: SliverChildListDelegate([
-            SizedBox(height: 20.0),
-            _buildAddOffers(
-                context, 'assets/home/ottoman.jpg', 'Flash Sales', 'GHc10.99', true),
-            SizedBox(height: 20.0),
-            _buildAddOffers(
-                context, 'assets/home/chair.jpg', 'Discount On Intrests', '-1%', false),
-            SizedBox(height: 20.0),
-            _buildAddOffers(
-                context, 'assets/home/sale-desk.png', 'More Savings, More Intrests', '0.65%', false),
-            SizedBox(height: 20.0),
-          ]),
-        )
-      ],
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return CustomScrollView(
+          slivers: <Widget>[
+            SliverAppBar(
+              pinned: true,
+              expandedHeight: 350.0,
+              snap: true,
+              floating: true,
+              flexibleSpace: FlexibleSpaceBar(
+                background: _buildHeaderStack(context, model),
+              ),
+              bottom: PreferredSize(
+                child: _buildOfferOptions(),
+                preferredSize: Size.fromHeight(70.0),
+              ),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate([
+                SizedBox(height: 20.0),
+                _buildAddOffers(context, 'assets/home/ottoman.jpg',
+                    'Flash Sales', 'GHc10.99', true),
+                SizedBox(height: 20.0),
+                _buildAddOffers(context, 'assets/home/chair.jpg',
+                    'Discount On Intrests', '-1%', false),
+                SizedBox(height: 20.0),
+                _buildAddOffers(context, 'assets/home/sale-desk.png',
+                    'More Savings, More Intrests', '0.65%', false),
+                SizedBox(height: 20.0),
+              ]),
+            )
+          ],
+        );
+      },
     );
   }
 }
