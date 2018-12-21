@@ -44,24 +44,21 @@ class _WalletPageState extends State<WalletPage> {
   }
 
   Widget _buildWalletBalance(MainModel model) {
-    return model.wallet == null
-        ? CircularProgressIndicator()
-        : Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('GHc',
-                  style: TextStyle(
-                      color: Colors.white, fontWeight: FontWeight.bold)),
-              SizedBox(
-                width: 10.0,
-              ),
-              Text(
-                  model.wallet != null
-                      ? model.wallet.balance.toString()
-                      : '0.0',
-                  style: TextStyle(color: Colors.white, fontSize: 60.0)),
-            ],
-          );
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Text('GHc',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        SizedBox(
+          width: 10.0,
+        ),
+        model.wallet == null
+            ? CircularProgressIndicator()
+            : Text(
+                model.wallet != null ? model.wallet.balance.toString() : '0.0',
+                style: TextStyle(color: Colors.white, fontSize: 60.0)),
+      ],
+    );
   }
 
   Widget _buildWalletIncomeAndExpenditure() {

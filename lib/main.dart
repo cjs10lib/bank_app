@@ -1,3 +1,4 @@
+import 'package:bank_app/pages/withdrawal_order_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
           '/profile': (BuildContext context) => ProfilePage(),
           // '/wallet': (BuildContext context) => WalletPage(),
           '/loan-order': (BuildContext context) => LoanOrderPage(),
+          '/withdrawal-order': (BuildContext context) => WithdrawalOrderPage(),
           '/sign-up': (BuildContext context) => SignUpWizardPage(),
           '/pending-activation': (BuildContext context) => PendingActivationPage()
         },

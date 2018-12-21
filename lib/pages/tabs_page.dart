@@ -1,4 +1,5 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/tabs/options_fab.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bank_app/pages/home_page.dart';
@@ -18,7 +19,7 @@ class _TabsPageState extends State<TabsPage>
   TabController _tabController;
 
   @override
-  void initState() {   
+  void initState() {
     _tabController = TabController(vsync: this, length: 3);
     super.initState();
   }
@@ -39,13 +40,7 @@ class _TabsPageState extends State<TabsPage>
             WalletPage(widget._model),
           ],
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: Theme.of(context).primaryColor,
-          child: Icon(Icons.add),
-          onPressed: () {
-            Navigator.of(context).pushNamed('/loan-order');
-          },
-        ),
+        floatingActionButton: OptionsFAB(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         bottomNavigationBar: BottomAppBar(
           shape: CircularNotchedRectangle(),

@@ -21,6 +21,7 @@ dependencies:
   cupertino_icons: ^0.1.2
   scoped_model: ^1.0.1
   image_picker: ^0.4.10
+  url_launcher: ^4.0.2
   firebase_auth: ^0.6.6
   cloud_firestore: ^0.8.2+3
   firebase_storage: ^1.0.4
