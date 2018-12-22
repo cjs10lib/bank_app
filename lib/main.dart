@@ -1,4 +1,6 @@
-import 'package:bank_app/pages/withdrawal_order_page.dart';
+import 'package:bank_app/pages/funds_deposit_page.dart';
+import 'package:bank_app/pages/funds_transfer_page.dart';
+import 'package:bank_app/pages/funds_withdrawal_page.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 
@@ -7,7 +9,7 @@ import 'package:bank_app/pages/auth_page.dart';
 import 'package:bank_app/pages/tabs_page.dart';
 import 'package:bank_app/pages/profile_page.dart';
 import 'package:bank_app/pages/wallet_page.dart';
-import 'package:bank_app/pages/loan_order_page.dart';
+import 'package:bank_app/pages/funds_loan_page.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:bank_app/pages/sign_up_wizard_page.dart';
 import 'package:bank_app/pages/pending_activation_page.dart';
@@ -34,8 +36,10 @@ class MyApp extends StatelessWidget {
           '/home': (BuildContext context) => HomePage(),
           '/profile': (BuildContext context) => ProfilePage(),
           // '/wallet': (BuildContext context) => WalletPage(),
-          '/loan-order': (BuildContext context) => LoanOrderPage(),
-          '/withdrawal-order': (BuildContext context) => WithdrawalOrderPage(),
+          '/loan': (BuildContext context) => FundsLoanPage(),
+          '/transfer': (BuildContext context) => FundsTransferPage(),
+          '/deposit': (BuildContext context) => FundsDepositPage(),
+          '/withdrawal': (BuildContext context) => FundsWithdrawalPage(),
           '/sign-up': (BuildContext context) => SignUpWizardPage(),
           '/pending-activation': (BuildContext context) => PendingActivationPage()
         },

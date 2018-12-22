@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class WithdrawalOrderPage extends StatelessWidget {
+class FundsWithdrawalPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(

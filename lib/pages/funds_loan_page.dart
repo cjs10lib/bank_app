@@ -2,12 +2,12 @@ import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class LoanOrderPage extends StatefulWidget {
+class FundsLoanPage extends StatefulWidget {
   @override
-  _LoanOrderPageState createState() => _LoanOrderPageState();
+  _FundsLoanPageState createState() => _FundsLoanPageState();
 }
 
-class _LoanOrderPageState extends State<LoanOrderPage> {
+class _FundsLoanPageState extends State<FundsLoanPage> {
   String _payBackDate = '';
 
   Future _buildConfrimBottomSheetModal(BuildContext context, MainModel model) {

@@ -208,6 +208,7 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
+
         return CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(

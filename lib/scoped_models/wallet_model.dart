@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin WalletModel implements GeneralModel {
   Wallet get wallet => profileWallet;
 
-  fetchWallet() async {
+  Future fetchWallet() async {
     try {
       isLoading = true;
       notifyListeners();
@@ -18,7 +18,7 @@ mixin WalletModel implements GeneralModel {
           balance: snap.data['balance'],
           created: snap.data['created'],
           lastUpdate: snap.data['lastUpdate']);
-      // notifyListeners();
+      notifyListeners();
 
       isLoading = false;
       notifyListeners();
