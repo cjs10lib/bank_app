@@ -168,11 +168,12 @@ class FundsTransferPage extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                             fontSize: 20.0),
                         decoration: InputDecoration(
-                            prefix: Text('GHC '),
+                            hintText: 'Enter Amount',
+                            prefixIcon: Icon(Icons.account_balance_wallet),
                             suffixStyle: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontWeight: FontWeight.bold),
-                            suffix: Text(' Transfer Amount'),
+                            suffix: Text(' GHC Transfer Amount'),
                             filled: true,
                             fillColor: Theme.of(context).cardColor),
                       ),
@@ -197,12 +198,13 @@ class FundsTransferPage extends StatelessWidget {
                               fontSize: 15.0, fontWeight: FontWeight.bold)),
                       AbsorbPointer(
                         child: TextFormField(
+                          initialValue: '7034306929',
                           keyboardType: TextInputType.number,
                           style: TextStyle(
                               color: Theme.of(context).primaryColor,
                               fontSize: 20.0),
                           decoration: InputDecoration(
-                              prefix: Text('GHC '),
+                              prefixIcon: Icon(Icons.account_balance),
                               suffixStyle: TextStyle(
                                   color: Theme.of(context).accentColor,
                                   fontWeight: FontWeight.bold),
@@ -235,10 +237,12 @@ class FundsTransferPage extends StatelessWidget {
                             color: Theme.of(context).primaryColor,
                             fontSize: 20.0),
                         decoration: InputDecoration(
-                            prefix: Text('A/C '),
+                            hintText: 'Enter Recipients A/C',
+                            prefixIcon: Icon(Icons.transfer_within_a_station),
                             suffixStyle: TextStyle(
                                 color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold)),
+                                fontWeight: FontWeight.bold),
+                            suffix: Text(' Account Transfer')),
                       ),
                       SizedBox(height: 30.0),
                       Row(

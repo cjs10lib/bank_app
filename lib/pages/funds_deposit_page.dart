@@ -155,30 +155,38 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               // SizedBox(height: 30.0),
               Material(
                 elevation: 1.0,
-                color: Theme.of(context).cardColor,
+                color: Theme.of(context).primaryColor,
                 child: Container(
                   padding: EdgeInsets.all(20.0),
+                  color: Theme.of(context).primaryColor,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text('Deposit Cash',
-                          style: TextStyle(
-                              fontSize: 20.0, fontWeight: FontWeight.bold)),
-                      SizedBox(height: 20),
-                      TextField(
-                        keyboardType: TextInputType.number,
+                      Text(
+                        'Deposit Funds',
                         style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            labelText: 'Deposit Amount',
-                            prefix: Text('GHC '),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' Current Balance'),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0))),
+                            color: Colors.white,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 20),
+                      AbsorbPointer(
+                        child: TextFormField(
+                          keyboardType: TextInputType.number,
+                          initialValue: '7034306929',
+                          style: TextStyle(
+                              color: Theme.of(context).primaryColor,
+                              fontSize: 20.0),
+                          decoration: InputDecoration(
+                              hintText: 'Recieving Account',
+                              prefixIcon: Icon(Icons.account_balance),
+                              suffixStyle: TextStyle(
+                                  color: Theme.of(context).accentColor,
+                                  fontWeight: FontWeight.bold),
+                              suffix: Text(' Current Balance'),
+                              filled: true,
+                              fillColor: Theme.of(context).cardColor),
+                        ),
                       ),
                     ],
                   ),
@@ -193,27 +201,46 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Transaction Details',
-                        style: TextStyle(
-                            fontSize: 20.0, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20.0),
+                      Text('Transaction Details',
+                          style: TextStyle(
+                              color: Colors.grey, fontWeight: FontWeight.bold)),
+                      Divider(color: Colors.grey),
+                      Text('Deposit Amount',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
                       TextField(
                         keyboardType: TextInputType.number,
                         style: TextStyle(
                             color: Theme.of(context).primaryColor,
                             fontSize: 20.0),
                         decoration: InputDecoration(
-                            labelText: 'Transaction Number',
-                            hintText: 'Eg. 1234567890',
+                            hintText: 'Enter Amount',
+                            prefixIcon: Icon(Icons.monetization_on),
                             suffixStyle: TextStyle(
                                 color: Theme.of(context).accentColor,
                                 fontWeight: FontWeight.bold),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(5.0))),
+                            suffix: Text(' GHC Deposit Amount')),
                       ),
                       SizedBox(height: 20.0),
+                      Text('Transaction Number',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
+                      TextField(
+                        keyboardType: TextInputType.number,
+                        style: TextStyle(
+                            color: Theme.of(context).primaryColor,
+                            fontSize: 20.0),
+                        decoration: InputDecoration(
+                            hintText: 'Enter Transaction Number',
+                            prefixIcon: Icon(Icons.format_list_numbered_rtl),
+                            suffixStyle: TextStyle(
+                                color: Theme.of(context).accentColor,
+                                fontWeight: FontWeight.bold)),
+                      ),
+                      SizedBox(height: 20.0),
+                      Text('Transaction Date',
+                          style: TextStyle(
+                              fontSize: 15.0, fontWeight: FontWeight.bold)),
                       GestureDetector(
                         onTap: () {
                           _selectTransactionDate(context);
@@ -226,13 +253,8 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
                                 color: Theme.of(context).primaryColor,
                                 fontSize: 20.0),
                             decoration: InputDecoration(
-                                labelText: 'Transaction Date',
-                                suffixStyle: TextStyle(
-                                    color: Theme.of(context).accentColor,
-                                    fontWeight: FontWeight.bold),
-                                suffixIcon: Icon(Icons.calendar_today),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(5.0))),
+                                hintText: 'Select Transaction Date',
+                                prefixIcon: Icon(Icons.calendar_today)),
                           ),
                         ),
                       ),
@@ -266,7 +288,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
                               // color: Color.fromRGBO(59, 70, 80, 1),
                               color: Theme.of(context).primaryColor,
                               alignment: Alignment.center,
-                              child: Text('Confirm Withdrawal',
+                              child: Text('Confirm Deposit',
                                   style: TextStyle(
                                       color: Colors.white,
                                       fontSize: 16.0,
