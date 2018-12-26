@@ -118,7 +118,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
             fillColor: Theme.of(context).cardColor),
         validator: (String value) {
           if (value.isEmpty || value.length != 9) {
-            return 'Sorry! Your account number is invalid';
+            return 'Sorry! Your account number is invalid!';
           }
         },
         onSaved: (String value) {
@@ -163,7 +163,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               fontWeight: FontWeight.bold)),
       validator: (String value) {
         if (value.isEmpty || value.length != 10) {
-          return 'Sorry! Your transaction number is invalid';
+          return 'Sorry! Your transaction number is invalid!';
         }
       },
       onSaved: (String value) {
@@ -178,7 +178,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         _selectTransactionDate(context);
       },
       child: AbsorbPointer(
-        child: TextField(
+        child: TextFormField(
           keyboardType: TextInputType.number,
           controller: _transactionDateController,
           style:
@@ -186,6 +186,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           decoration: InputDecoration(
               hintText: 'Select Transaction Date',
               prefixIcon: Icon(Icons.calendar_today)),
+              validator: (String value) {
+                if (_transactionDateController.text.isEmpty) {
+                  return 'Date of transfer transaction is required!';
+                }
+              },
         ),
       ),
     );
