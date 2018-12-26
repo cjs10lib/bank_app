@@ -1,7 +1,12 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
 
 class FundsDepositPage extends StatefulWidget {
+  final MainModel _model;
+
+  FundsDepositPage(this._model);
+
   @override
   _FundsDepositPageState createState() => _FundsDepositPageState();
 }
@@ -141,6 +146,143 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         });
   }
 
+  Widget _buildTransactionDetails(BuildContext context) {
+    return Material(
+      elevation: 1.0,
+      color: Colors.white,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('Transaction Details',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('Deposit Amount',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildDepositAmountFormField(),
+            SizedBox(height: 20.0),
+            Text('Transaction Number',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildTransactionNumberFormField(),
+            SizedBox(height: 20.0),
+            Text('Transaction Date',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildTransactionDateFormField(),
+            SizedBox(height: 30.0),
+            _buildFormControls(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDepositFundFormField() {
+    return AbsorbPointer(
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        initialValue: '7034306929',
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+        decoration: InputDecoration(
+            hintText: 'Recieving Account',
+            prefixIcon: Icon(Icons.account_balance),
+            suffixStyle: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.bold),
+            suffix: Text(' Current Balance'),
+            filled: true,
+            fillColor: Theme.of(context).cardColor),
+      ),
+    );
+  }
+
+  _buildDepositAmountFormField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Amount',
+          prefixIcon: Icon(Icons.monetization_on),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text(' GHC Deposit Amount')),
+    );
+  }
+
+  _buildTransactionNumberFormField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Transaction Number',
+          prefixIcon: Icon(Icons.format_list_numbered_rtl),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold)),
+    );
+  }
+
+  _buildTransactionDateFormField() {
+    return GestureDetector(
+      onTap: () {
+        _selectTransactionDate(context);
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          controller: _transactionDateController,
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+          decoration: InputDecoration(
+              hintText: 'Select Transaction Date',
+              prefixIcon: Icon(Icons.calendar_today)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormControls(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            height: 40.0,
+            width: 80.0,
+            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+            color: Theme.of(context).errorColor,
+            alignment: Alignment.center,
+            child: Text('Cancel',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _buildConfirmBottomSheetModal(context);
+          },
+          child: Container(
+            height: 40.0,
+            width: 200.0,
+            // color: Color.fromRGBO(59, 70, 80, 1),
+            color: Theme.of(context).primaryColor,
+            alignment: Alignment.center,
+            child: Text('Confirm Deposit',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +293,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              WalletCardStack(),
+              WalletCardStack(model: widget._model),
               // SizedBox(height: 30.0),
               Material(
                 elevation: 1.0,
@@ -170,137 +312,13 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 20),
-                      AbsorbPointer(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '7034306929',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0),
-                          decoration: InputDecoration(
-                              hintText: 'Recieving Account',
-                              prefixIcon: Icon(Icons.account_balance),
-                              suffixStyle: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                  fontWeight: FontWeight.bold),
-                              suffix: Text(' Current Balance'),
-                              filled: true,
-                              fillColor: Theme.of(context).cardColor),
-                        ),
-                      ),
+                      _buildDepositFundFormField(),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: 30.0),
-              Material(
-                elevation: 1.0,
-                color: Colors.white,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('Transaction Details',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                      Divider(color: Colors.grey),
-                      Text('Deposit Amount',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Amount',
-                            prefixIcon: Icon(Icons.monetization_on),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' GHC Deposit Amount')),
-                      ),
-                      SizedBox(height: 20.0),
-                      Text('Transaction Number',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Transaction Number',
-                            prefixIcon: Icon(Icons.format_list_numbered_rtl),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                      SizedBox(height: 20.0),
-                      Text('Transaction Date',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      GestureDetector(
-                        onTap: () {
-                          _selectTransactionDate(context);
-                        },
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: _transactionDateController,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 20.0),
-                            decoration: InputDecoration(
-                                hintText: 'Select Transaction Date',
-                                prefixIcon: Icon(Icons.calendar_today)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              height: 40.0,
-                              width: 80.0,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 5.0),
-                              color: Theme.of(context).errorColor,
-                              alignment: Alignment.center,
-                              child: Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              await _buildConfirmBottomSheetModal(context);
-                            },
-                            child: Container(
-                              height: 40.0,
-                              width: 200.0,
-                              // color: Color.fromRGBO(59, 70, 80, 1),
-                              color: Theme.of(context).primaryColor,
-                              alignment: Alignment.center,
-                              child: Text('Confirm Deposit',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
+              _buildTransactionDetails(context)
             ],
           )
         ],

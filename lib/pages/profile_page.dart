@@ -15,7 +15,7 @@ class ProfilePage extends StatelessWidget {
           child: FadeInImage(
             fit: BoxFit.cover,
             height: 250.0,
-            image: NetworkImage(model.profileImage),
+            image: model.profileImage != null ? NetworkImage(model.profileImage) : AssetImage('assets/avatar/avatar.png'),
             placeholder: AssetImage('assets/avatar/avatar.png'),
           ),
         ),
