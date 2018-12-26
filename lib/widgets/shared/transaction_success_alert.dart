@@ -86,7 +86,10 @@ class TransactionSuccessAlert extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   GestureDetector(
-                    onTap: () => Navigator.of(context).pop(),
+                    onTap: () { 
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
                     child: Container(
                       height: 40.0,
                       width: 80.0,

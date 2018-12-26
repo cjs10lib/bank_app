@@ -1,4 +1,5 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/shared/confirm_transaction_bottom_modal.dart';
 import 'package:bank_app/widgets/shared/transaction_success_alert.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
@@ -35,9 +36,9 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
   Future _selectTransactionDate(BuildContext context) async {
     _pickedDate = await showDatePicker(
         context: context,
-        initialDate: DateTime.now().add(new Duration(days: 1)),
-        firstDate: DateTime.now(),
-        lastDate: DateTime.now().add(new Duration(days: 35)),
+        initialDate: DateTime.now(), // Highlighted Date
+        firstDate: DateTime.now().subtract(new Duration(days: 7)), // Date range
+        lastDate: DateTime.now(),
         initialDatePickerMode: DatePickerMode.day);
     if (_pickedDate != null) {
       setState(() {
@@ -47,11 +48,12 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     }
   }
 
-  Future _buildConfirmBottomSheetModal(BuildContext context) {
+  Future _buildConfirmBottomSheetModal(BuildContext context,
+      Map<String, dynamic> transactionDetails, Function submitForm) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return 
+          return ConfirmTransactionBottomModal(transactionDetails, submitForm);
         });
   }
 
@@ -59,6 +61,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
       BuildContext context, Map<String, String> message, MainModel model) {
     return showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (BuildContext context) {
           return TransactionSuccessAlert(message, model);
         });
@@ -113,6 +116,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
             suffix: Text(' Current Balance'),
             filled: true,
             fillColor: Theme.of(context).cardColor),
+        validator: (String value) {
+          if (value.isEmpty || value.length != 9) {
+            return 'Sorry! Your account number is invalid';
+          }
+        },
         onSaved: (String value) {
           _formData['accountNumber'] = value;
         },
@@ -131,6 +139,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text(' GHC Deposit Amount')),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Amount is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['amount'] = value;
       },
@@ -139,6 +152,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
 
   _buildTransactionNumberFormField() {
     return TextFormField(
+      maxLength: 10,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -147,6 +161,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           suffixStyle: TextStyle(
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold)),
+      validator: (String value) {
+        if (value.isEmpty || value.length != 10) {
+          return 'Sorry! Your transaction number is invalid';
+        }
+      },
       onSaved: (String value) {
         _formData['transactionNumber'] = value;
       },
@@ -192,40 +211,57 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           ),
         ),
         GestureDetector(
-          onTap: model.isLoading
-              ? null
-              : () async {
-                  // await _buildConfirmBottomSheetModal(context);
-                  _submitForm(model);
-                },
+          onTap: () async {
+            if (!_formKey.currentState.validate()) {
+              return;
+            }
+
+            Map<String, dynamic> transactionDetails = {
+              'profileImage': model.profileImage,
+              'transactionType': 'DEPOSIT',
+              'amount': _formData['amount'],
+              'transactionNumber': _formData['transactionNumber'],
+              'fromAccount': _formData['transactionNumber'],
+              'toAccount': _formData['accountNumber'],
+              'transactionDate': _transactionDateController.text
+            };
+            await _buildConfirmBottomSheetModal(
+                context, transactionDetails, _submitForm);
+          },
           child: Container(
             height: 40.0,
             width: 200.0,
             // color: Color.fromRGBO(59, 70, 80, 1),
             color: Theme.of(context).primaryColor,
             alignment: Alignment.center,
-            child: model.isLoading
-                ? CircularProgressIndicator()
-                : Text('Confirm Deposit',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold)),
+            child: Text('Confirm Deposit',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
           ),
         ),
       ],
     );
   }
 
-  Future _submitForm(MainModel model) async {
+  Future _submitForm() async {
+    if (!_formKey.currentState.validate()) {
+      Navigator.of(context).pop();
+      return;
+    }
     _formKey.currentState.save();
-    Map<String, dynamic> successInformation = await model.createDeposit(
+    Map<String, dynamic> successInformation = await widget._model.createDeposit(
         double.parse(_formData['amount']),
         _formData['accountNumber'],
         _formData['transactionNumber'],
         _pickedDate);
 
-    _returnMessage(successInformation, model);
+    _returnMessage(successInformation, widget._model);
+    _formKey.currentState.reset(); // Clear formState
+    _transactionDateController.clear();
+    _pickedDate = null;
+
   }
 
   Future _returnMessage(
