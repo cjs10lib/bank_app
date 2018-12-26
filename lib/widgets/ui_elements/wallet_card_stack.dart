@@ -104,10 +104,6 @@ class WalletCardStackState extends State<WalletCardStack> {
         ? model.wallet.accountNumber.substring(5)
         : null;
 
-    print(_fourthNumber);
-
-    // '2332 7074 7772'
-
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[

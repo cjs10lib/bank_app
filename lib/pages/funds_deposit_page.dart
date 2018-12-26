@@ -1,6 +1,8 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/shared/transaction_success_alert.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class FundsDepositPage extends StatefulWidget {
   final MainModel _model;
@@ -14,7 +16,21 @@ class FundsDepositPage extends StatefulWidget {
 class _FundsDepositPageState extends State<FundsDepositPage> {
   DateTime _pickedDate;
 
+  final Map<String, dynamic> _formData = {
+    'amount': 0.0,
+    'accountNumber': null,
+    'transactionNumber': null,
+    'transactionDate': null
+  };
+
   TextEditingController _transactionDateController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  @override
+  initState() {
+    widget._model.fetchWallet();
+    super.initState();
+  }
 
   Future _selectTransactionDate(BuildContext context) async {
     _pickedDate = await showDatePicker(
@@ -35,118 +51,20 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            height: 350.0,
-            width: 200.0,
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 50.0,
-                  width: 50.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar/avatar.png')),
-                ),
-                Text('DEPOSIT',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.grey)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('1000.00',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontSize: 50.0)),
-                    SizedBox(width: 10.0),
-                    Text('GHC',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Text('1234567890',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.0)),
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('ACCOUNT',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 50.0),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          '703430692',
-                          style: TextStyle(
-                              color: Color.fromRGBO(59, 70, 80, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '(20/12/2018)',
-                          style:
-                              TextStyle(color: Color.fromRGBO(59, 70, 80, 1)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        height: 40.0,
-                        width: 80.0,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 5.0),
-                        color: Theme.of(context).errorColor,
-                        alignment: Alignment.center,
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 40.0,
-                        width: 150.0,
-                        // color: Color.fromRGBO(59, 70, 80, 1),
-                        color: Theme.of(context).primaryColor,
-                        alignment: Alignment.center,
-                        child: Text('Submit Request',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
+          return 
         });
   }
 
-  Widget _buildTransactionDetails(BuildContext context) {
+  Future _buildSuccessfulTransactionAlert(
+      BuildContext context, Map<String, String> message, MainModel model) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return TransactionSuccessAlert(message, model);
+        });
+  }
+
+  Widget _buildTransactionDetails(BuildContext context, MainModel model) {
     return Material(
       elevation: 1.0,
       color: Colors.white,
@@ -171,18 +89,20 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
             _buildTransactionDateFormField(),
             SizedBox(height: 30.0),
-            _buildFormControls(context)
+            _buildFormControls(context, model)
           ],
         ),
       ),
     );
   }
 
-  Widget _buildDepositFundFormField() {
+  Widget _buildDepositFundFormField(MainModel model) {
     return AbsorbPointer(
       child: TextFormField(
         keyboardType: TextInputType.number,
-        initialValue: '7034306929',
+        initialValue: model.wallet != null
+            ? model.wallet.accountNumber
+            : 'No Account Selected!',
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
         decoration: InputDecoration(
             hintText: 'Recieving Account',
@@ -193,12 +113,15 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
             suffix: Text(' Current Balance'),
             filled: true,
             fillColor: Theme.of(context).cardColor),
+        onSaved: (String value) {
+          _formData['accountNumber'] = value;
+        },
       ),
     );
   }
 
   _buildDepositAmountFormField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -208,11 +131,14 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text(' GHC Deposit Amount')),
+      onSaved: (String value) {
+        _formData['amount'] = value;
+      },
     );
   }
 
   _buildTransactionNumberFormField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -221,6 +147,9 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           suffixStyle: TextStyle(
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold)),
+      onSaved: (String value) {
+        _formData['transactionNumber'] = value;
+      },
     );
   }
 
@@ -230,7 +159,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         _selectTransactionDate(context);
       },
       child: AbsorbPointer(
-        child: TextFormField(
+        child: TextField(
           keyboardType: TextInputType.number,
           controller: _transactionDateController,
           style:
@@ -243,7 +172,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     );
   }
 
-  Widget _buildFormControls(BuildContext context) {
+  Widget _buildFormControls(BuildContext context, MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -263,66 +192,119 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           ),
         ),
         GestureDetector(
-          onTap: () async {
-            await _buildConfirmBottomSheetModal(context);
-          },
+          onTap: model.isLoading
+              ? null
+              : () async {
+                  // await _buildConfirmBottomSheetModal(context);
+                  _submitForm(model);
+                },
           child: Container(
             height: 40.0,
             width: 200.0,
             // color: Color.fromRGBO(59, 70, 80, 1),
             color: Theme.of(context).primaryColor,
             alignment: Alignment.center,
-            child: Text('Confirm Deposit',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold)),
+            child: model.isLoading
+                ? CircularProgressIndicator()
+                : Text('Confirm Deposit',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold)),
           ),
         ),
       ],
     );
   }
 
+  Future _submitForm(MainModel model) async {
+    _formKey.currentState.save();
+    Map<String, dynamic> successInformation = await model.createDeposit(
+        double.parse(_formData['amount']),
+        _formData['accountNumber'],
+        _formData['transactionNumber'],
+        _pickedDate);
+
+    _returnMessage(successInformation, model);
+  }
+
+  Future _returnMessage(
+      Map<String, dynamic> successInformation, MainModel model) async {
+    if (successInformation['success']) {
+      Map<String, String> message = {
+        'title': successInformation['message'],
+        'subtitle':
+            'Your account will be credited on successful confirmaion of transaction.'
+      };
+
+      _buildSuccessfulTransactionAlert(context, message, model);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Oops! Something went wrong'),
+              content: Text(successInformation['message']),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('Deposit'),
-          backgroundColor: Theme.of(context).primaryColor),
-      body: ListView(
-        children: <Widget>[
-          Column(
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return Scaffold(
+          appBar: AppBar(
+              title: Text('Deposit'),
+              backgroundColor: Theme.of(context).primaryColor),
+          body: ListView(
             children: <Widget>[
-              WalletCardStack(model: widget._model),
-              // SizedBox(height: 30.0),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  color: Theme.of(context).primaryColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Deposit Funds',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
+              Form(
+                key: _formKey,
+                child: Column(
+                  children: <Widget>[
+                    WalletCardStack(model: model),
+                    // SizedBox(height: 30.0),
+                    Material(
+                      elevation: 1.0,
+                      color: Theme.of(context).primaryColor,
+                      child: Container(
+                        padding: EdgeInsets.all(20.0),
+                        color: Theme.of(context).primaryColor,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            Text(
+                              'Deposit Funds',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20.0,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                            SizedBox(height: 20),
+                            _buildDepositFundFormField(model),
+                          ],
+                        ),
                       ),
-                      SizedBox(height: 20),
-                      _buildDepositFundFormField(),
-                    ],
-                  ),
+                    ),
+                    SizedBox(height: 30.0),
+                    _buildTransactionDetails(context, model)
+                  ],
                 ),
-              ),
-              SizedBox(height: 30.0),
-              _buildTransactionDetails(context)
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        );
+      },
     );
   }
 }

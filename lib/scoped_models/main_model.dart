@@ -7,5 +7,6 @@ import 'package:bank_app/scoped_models/profile_model.dart';
 import 'package:bank_app/scoped_models/profile_image_model.dart';
 import 'package:bank_app/scoped_models/account_model.dart';
 import 'package:bank_app/scoped_models/wallet_model.dart';
+import 'package:bank_app/scoped_models/transaction_model.dart';
 
-class MainModel extends Model with GeneralModel, AuthModel, ProfileModel, ProfileImageModel, AccountModel, WalletModel {}
+class MainModel extends Model with GeneralModel, AuthModel, ProfileModel, ProfileImageModel, AccountModel, WalletModel, FundsDepositModel {}
