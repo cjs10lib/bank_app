@@ -24,6 +24,8 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     'transactionDate': null
   };
 
+  Map<String, dynamic> _transactionDetails;
+
   TextEditingController _transactionDateController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -130,6 +132,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
 
   _buildDepositAmountFormField() {
     return TextFormField(
+      maxLength: 4,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -186,11 +189,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
           decoration: InputDecoration(
               hintText: 'Select Transaction Date',
               prefixIcon: Icon(Icons.calendar_today)),
-              validator: (String value) {
-                if (_transactionDateController.text.isEmpty) {
-                  return 'Date of transfer transaction is required!';
-                }
-              },
+          validator: (String value) {
+            if (_transactionDateController.text.isEmpty) {
+              return 'Date of transfer transaction is required!';
+            }
+          },
         ),
       ),
     );
@@ -220,8 +223,9 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
             if (!_formKey.currentState.validate()) {
               return;
             }
+            _formKey.currentState.save();
 
-            Map<String, dynamic> transactionDetails = {
+            _transactionDetails = {
               'profileImage': model.profileImage,
               'transactionType': 'DEPOSIT',
               'amount': _formData['amount'],
@@ -231,7 +235,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               'transactionDate': _transactionDateController.text
             };
             await _buildConfirmBottomSheetModal(
-                context, transactionDetails, _submitForm);
+                context, _transactionDetails, _submitForm);
           },
           child: Container(
             height: 40.0,
@@ -266,7 +270,6 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     _formKey.currentState.reset(); // Clear formState
     _transactionDateController.clear();
     _pickedDate = null;
-
   }
 
   Future _returnMessage(

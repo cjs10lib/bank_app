@@ -37,7 +37,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text(_transactionDetails['amount'],
+                Text(_transactionDetails['amount'].toString(),
                     style: TextStyle(
                         color: Color.fromRGBO(59, 70, 80, 1), fontSize: 50.0)),
                 SizedBox(width: 10.0),
@@ -52,7 +52,8 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
               decoration: BoxDecoration(
                   color: Theme.of(context).primaryColor,
                   borderRadius: BorderRadius.circular(10.0)),
-              child: Text(_transactionDetails['transactionNumber'],
+                  // _transactionDetails['transactionNumber']
+              child: Text(_transactionDetails['transactionNumber'].toString(),
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -65,7 +66,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                 Text('From:', style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(width: 50.0),
                 Text(
-                  _transactionDetails['fromAccount'],
+                  _transactionDetails['fromAccount'].toString(),
                   style: TextStyle(
                       color: Color.fromRGBO(59, 70, 80, 1),
                       fontWeight: FontWeight.bold),
@@ -78,7 +79,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                 Text('To:', style: TextStyle(fontWeight: FontWeight.bold)),
                 SizedBox(width: 50.0),
                 Text(
-                  _transactionDetails['toAccount'],
+                  _transactionDetails['toAccount'].toString(),
                   style: TextStyle(
                       color: Color.fromRGBO(59, 70, 80, 1),
                       fontWeight: FontWeight.bold),
@@ -89,7 +90,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Text('(${_transactionDetails['transactionDate']})',
+                Text('(${_transactionDetails['transactionDate'].toString()})',
                     style: TextStyle(
                         color: Color.fromRGBO(59, 70, 80, 1),
                         fontWeight: FontWeight.bold)),
