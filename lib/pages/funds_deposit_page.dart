@@ -50,12 +50,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     }
   }
 
-  Future _buildConfirmBottomSheetModal(BuildContext context,
-      Map<String, dynamic> transactionDetails, Function submitForm) {
+  Future _buildConfirmBottomSheetModal(BuildContext context, Function submitForm) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(transactionDetails, submitForm);
+          return ConfirmTransactionBottomModal(_transactionDetails, submitForm);
         });
   }
 
@@ -235,7 +234,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               'transactionDate': _transactionDateController.text
             };
             await _buildConfirmBottomSheetModal(
-                context, _transactionDetails, _submitForm);
+                context, _submitForm);
           },
           child: Container(
             height: 40.0,
@@ -272,8 +271,8 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     _pickedDate = null;
   }
 
-  Future _returnMessage(
-      Map<String, dynamic> successInformation, MainModel model) async {
+  _returnMessage(
+      Map<String, dynamic> successInformation, MainModel model) {
     if (successInformation['success']) {
       Map<String, String> message = {
         'title': successInformation['message'],

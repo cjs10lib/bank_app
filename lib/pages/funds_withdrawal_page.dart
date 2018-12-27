@@ -1,6 +1,9 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/shared/confirm_transaction_bottom_modal.dart';
+import 'package:bank_app/widgets/shared/transaction_success_alert.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class FundsWithdrawalPage extends StatefulWidget {
   final MainModel _model;
@@ -14,21 +17,37 @@ class FundsWithdrawalPage extends StatefulWidget {
 }
 
 class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
+  final Map<String, dynamic> _formData = {'amount': 0.0, 'accountNumber': null};
+  Map<String, dynamic> _transactionDetails;
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     widget._model.fetchWallet();
     super.initState();
   }
 
-  Future _buildConfirmBottomSheetModal(BuildContext context) {
+  Future _buildConfirmBottomSheetModal(
+      BuildContext context, Function submitForm) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Container();
+          return ConfirmTransactionBottomModal(_transactionDetails, submitForm);
         });
   }
 
-  Widget _buildTransactionDetails() {
+  Future _buildSuccessfulTransactionAlert(
+      BuildContext context, Map<String, String> message, MainModel model) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return TransactionSuccessAlert(message, model);
+        });
+  }
+
+  Widget _buildTransactionDetails(MainModel model) {
     return Material(
       elevation: 1.0,
       color: Theme.of(context).cardColor,
@@ -45,7 +64,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
             _buildRecipientAccountTextField(),
             SizedBox(height: 30.0),
-            _buildFormControls()
+            _buildFormControls(model)
           ],
         ),
       ),
@@ -53,7 +72,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
   }
 
   Widget _buildFundsWithdrawalAmountTextField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -65,6 +84,9 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
           suffix: Text(' GHC Withdrawal Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      onSaved: (String value) {
+        _formData['amount'] = double.parse(value);
+      },
     );
   }
 
@@ -80,10 +102,13 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text('MOMO Transaction')),
+      onSaved: (String value) {
+        _formData['accountNumber'] = value;
+      },
     ));
   }
 
-  Widget _buildFormControls() {
+  Widget _buildFormControls(MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -104,7 +129,17 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
         ),
         GestureDetector(
           onTap: () async {
-            await _buildConfirmBottomSheetModal(context);
+            _formKey.currentState.save();
+
+            _transactionDetails = {
+              'profileImage': model.profileImage,
+              'transactionType': 'WITHDRAWAL',
+              'amount': _formData['amount'],
+              'fromAccount': _formData['accountNumber'],
+              'toAccount': _formData['accountNumber'],
+              // 'transactionDate': null
+            };
+            await _buildConfirmBottomSheetModal(context, _submitForm);
           },
           child: Container(
             height: 40.0,
@@ -123,47 +158,91 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
     );
   }
 
+  Future _submitForm() async {
+    _formKey.currentState.save();
+
+    Map<String, dynamic> successInformation = await widget._model
+        .createWithdrawal(_formData['amount'], _formData['accountNumber']);
+
+    _returnMessage(successInformation, widget._model);
+  }
+
+  _returnMessage(Map<String, dynamic> successInformation, MainModel model) {
+    if (successInformation['success']) {
+      Map<String, String> message = {
+        'title': successInformation['message'],
+        'subtitle':
+            'Your account will be debited on successful confirmaion of transaction and the money will be transfered to your MOMO account'
+      };
+
+      _buildSuccessfulTransactionAlert(context, message, model);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Oops! Something went wrong'),
+              content: Text(successInformation['message']),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-          title: Text('Withdraw'),
-          backgroundColor: Theme.of(context).primaryColor),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              WalletCardStack(
-                model: widget._model,
-              ),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  color: Theme.of(context).primaryColor,
+        appBar: AppBar(
+            title: Text('Withdraw'),
+            backgroundColor: Theme.of(context).primaryColor),
+        body: ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return ListView(
+              children: <Widget>[
+                Form(
+                  key: _formKey,
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
-                      Text(
-                        'Funds Withdrawal',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
+                      WalletCardStack(
+                        model: widget._model,
                       ),
-                      SizedBox(height: 20),
-                      _buildFundsWithdrawalAmountTextField(),
+                      Material(
+                        elevation: 1.0,
+                        color: Theme.of(context).primaryColor,
+                        child: Container(
+                          padding: EdgeInsets.all(20.0),
+                          color: Theme.of(context).primaryColor,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                'Funds Withdrawal',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              SizedBox(height: 20),
+                              _buildFundsWithdrawalAmountTextField(),
+                            ],
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 30.0),
+                      _buildTransactionDetails(model)
                     ],
                   ),
-                ),
-              ),
-              SizedBox(height: 30.0),
-              _buildTransactionDetails()
-            ],
-          )
-        ],
-      ),
-    );
+                )
+              ],
+            );
+          },
+        ));
   }
 }

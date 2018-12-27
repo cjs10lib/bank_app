@@ -47,18 +47,22 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                         fontWeight: FontWeight.bold)),
               ],
             ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-              decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.circular(10.0)),
-                  // _transactionDetails['transactionNumber']
-              child: Text(_transactionDetails['transactionNumber'].toString(),
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 2.0)),
-            ),
+            _transactionDetails['transactionNumber'] == null
+                ? Container()
+                : Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColor,
+                        borderRadius: BorderRadius.circular(10.0)),
+                    // _transactionDetails['transactionNumber']
+                    child: Text(
+                        _transactionDetails['transactionNumber'].toString(),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 2.0)),
+                  ),
             SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -87,15 +91,18 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
               ],
             ),
             Divider(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('(${_transactionDetails['transactionDate'].toString()})',
-                    style: TextStyle(
-                        color: Color.fromRGBO(59, 70, 80, 1),
-                        fontWeight: FontWeight.bold)),
-              ],
-            ),
+            _transactionDetails['transactionDate'] == null
+                ? Container()
+                : Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                          '(${_transactionDetails['transactionDate'].toString()})',
+                          style: TextStyle(
+                              color: Color.fromRGBO(59, 70, 80, 1),
+                              fontWeight: FontWeight.bold)),
+                    ],
+                  ),
             SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -119,8 +126,8 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                 GestureDetector(
                   onTap: model.isLoading
                       ? null
-                      : () {
-                          _submitForm();
+                      : () async {
+                          await _submitForm();
                         },
                   child: Container(
                     height: 40.0,

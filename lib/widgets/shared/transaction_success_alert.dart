@@ -12,7 +12,7 @@ class TransactionSuccessAlert extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Container(
-        height: 350.0,
+        height: 370.0,
         width: 200.0,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
         child: Column(
@@ -77,7 +77,7 @@ class TransactionSuccessAlert extends StatelessWidget {
             ),
             Container(
               padding: EdgeInsets.only(right: 20.0, left: 20.0),
-              child: Text(_message['subtitle']),
+              child: Text(_message['subtitle'], textAlign: TextAlign.center),
               // 'Your account will be credited on successful confirmaion of transaction.'),
             ),
             Padding(

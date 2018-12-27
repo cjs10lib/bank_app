@@ -1,23 +1,23 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class DepositService {
+class WithdrawalService {
   final _db = Firestore.instance;
   final _serverTimestamp = FieldValue.serverTimestamp();
 
-  Future<void> createDeposit(String uid, double amount, String accountNumber,
-      String transactionNumber, DateTime transactionDate) {
+  Future<void> createWithdrawal(
+      String uid, double amount, String accountNumber) {
     return _db
         .collection('wallets')
         .document(uid)
         .collection('transactions')
-        .document(transactionNumber)
+        .document()
         .setData({
-      'transaction': 'CREDIT',
-      'transactionType': 'DEPOSIT',
+      'transaction': 'DEBIT',
+      'transactionType': 'WITHDRAWAL',
       'amount': amount,
       'fromAccount': accountNumber,
       'toAccount': accountNumber,
-      'transactionDate': transactionDate,
+      'transactionDate': _serverTimestamp,
       'isConfirmed': false,
       'isPerformed': false,
       'created': _serverTimestamp,
