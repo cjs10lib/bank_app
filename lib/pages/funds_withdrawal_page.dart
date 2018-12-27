@@ -1,132 +1,141 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
 
-class FundsWithdrawalPage extends StatelessWidget {
+class FundsWithdrawalPage extends StatefulWidget {
+  final MainModel _model;
+
+  FundsWithdrawalPage(this._model);
+
+  @override
+  FundsWithdrawalPageState createState() {
+    return new FundsWithdrawalPageState();
+  }
+}
+
+class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
+  @override
+  void initState() {
+    widget._model.fetchWallet();
+    super.initState();
+  }
+
   Future _buildConfirmBottomSheetModal(BuildContext context) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return Container(
-            height: 350.0,
-            width: 200.0,
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 50.0,
-                  width: 50.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar/avatar.png')),
-                ),
-                Text('WITHDRAW',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.grey)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('1000.00',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontSize: 50.0)),
-                    SizedBox(width: 10.0),
-                    Text('GHC',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Text('1234567890',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.0)),
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('ACCOUNT',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 50.0),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          '703430692',
-                          style: TextStyle(
-                              color: Color.fromRGBO(59, 70, 80, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '(20/12/2018)',
-                          style:
-                              TextStyle(color: Color.fromRGBO(59, 70, 80, 1)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        height: 40.0,
-                        width: 80.0,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 5.0),
-                        color: Theme.of(context).errorColor,
-                        alignment: Alignment.center,
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 40.0,
-                        width: 150.0,
-                        // color: Color.fromRGBO(59, 70, 80, 1),
-                        color: Theme.of(context).primaryColor,
-                        alignment: Alignment.center,
-                        child: Text('Submit Request',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
+          return Container();
         });
+  }
+
+  Widget _buildTransactionDetails() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('RECIPIENT ACCOUNT',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('My Account',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildRecipientAccountTextField(),
+            SizedBox(height: 30.0),
+            _buildFormControls()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFundsWithdrawalAmountTextField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Amount',
+          prefixIcon: Icon(Icons.monetization_on),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text(' GHC Withdrawal Amount'),
+          filled: true,
+          fillColor: Theme.of(context).cardColor),
+    );
+  }
+
+  Widget _buildRecipientAccountTextField() {
+    return AbsorbPointer(
+        child: TextFormField(
+      keyboardType: TextInputType.number,
+      initialValue: '7034306929',
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          prefixIcon: Icon(Icons.account_balance),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text('MOMO Transaction')),
+    ));
+  }
+
+  Widget _buildFormControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            height: 40.0,
+            width: 80.0,
+            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+            color: Theme.of(context).errorColor,
+            alignment: Alignment.center,
+            child: Text('Cancel',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _buildConfirmBottomSheetModal(context);
+          },
+          child: Container(
+            height: 40.0,
+            width: 200.0,
+            // color: Color.fromRGBO(59, 70, 80, 1),
+            color: Theme.of(context).primaryColor,
+            alignment: Alignment.center,
+            child: Text('Confirm Request',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Text('Withdraw'), backgroundColor: Theme.of(context).primaryColor),
+          title: Text('Withdraw'),
+          backgroundColor: Theme.of(context).primaryColor),
       body: ListView(
         children: <Widget>[
           Column(
             children: <Widget>[
-              WalletCardStack(),
+              WalletCardStack(
+                model: widget._model,
+              ),
               Material(
                 elevation: 1.0,
                 color: Theme.of(context).primaryColor,
@@ -144,99 +153,13 @@ class FundsWithdrawalPage extends StatelessWidget {
                             fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 20),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Amount',
-                            prefixIcon: Icon(Icons.monetization_on),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' GHC Withdrawal Amount'),
-                            filled: true,
-                            fillColor: Theme.of(context).cardColor),
-                      ),
+                      _buildFundsWithdrawalAmountTextField(),
                     ],
                   ),
                 ),
               ),
               SizedBox(height: 30.0),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).cardColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('RECIPIENT ACCOUNT',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                      Divider(color: Colors.grey),
-                      Text('My Account',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      AbsorbPointer(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '7034306929',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0),
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.account_balance),
-                              suffixStyle: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                  fontWeight: FontWeight.bold),
-                                  suffix: Text('MOMO Transaction')),
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              height: 40.0,
-                              width: 80.0,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 5.0),
-                              color: Theme.of(context).errorColor,
-                              alignment: Alignment.center,
-                              child: Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              await _buildConfirmBottomSheetModal(context);
-                            },
-                            child: Container(
-                              height: 40.0,
-                              width: 200.0,
-                              // color: Color.fromRGBO(59, 70, 80, 1),
-                              color: Theme.of(context).primaryColor,
-                              alignment: Alignment.center,
-                              child: Text('Confirm Request',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              _buildTransactionDetails()
             ],
           )
         ],
