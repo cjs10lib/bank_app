@@ -18,6 +18,8 @@ class DepositService {
       'fromAccount': accountNumber,
       'toAccount': accountNumber,
       'transactionDate': transactionDate,
+      'isConfirmed': false,
+      'isCredited': false,
       'created': _serverTimestamp,
       'lastUpdate': _serverTimestamp
     });

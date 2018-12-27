@@ -306,46 +306,53 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return Scaffold(
-          appBar: AppBar(
-              title: Text('Deposit'),
-              backgroundColor: Theme.of(context).primaryColor),
-          body: ListView(
-            children: <Widget>[
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: <Widget>[
-                    WalletCardStack(model: model),
-                    // SizedBox(height: 30.0),
-                    Material(
-                      elevation: 1.0,
-                      color: Theme.of(context).primaryColor,
-                      child: Container(
-                        padding: EdgeInsets.all(20.0),
-                        color: Theme.of(context).primaryColor,
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
-                            Text(
-                              'Deposit Funds',
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold),
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+                title: Text('Deposit'),
+                backgroundColor: Theme.of(context).primaryColor),
+            body: SafeArea(
+              child: ListView(
+                children: <Widget>[
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        WalletCardStack(model: model),
+                        // SizedBox(height: 30.0),
+                        Material(
+                          elevation: 1.0,
+                          color: Theme.of(context).primaryColor,
+                          child: Container(
+                            padding: EdgeInsets.all(20.0),
+                            color: Theme.of(context).primaryColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Deposit Funds',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 20),
+                                _buildDepositFundFormField(model),
+                              ],
                             ),
-                            SizedBox(height: 20),
-                            _buildDepositFundFormField(model),
-                          ],
+                          ),
                         ),
-                      ),
+                        // SizedBox(height: 30.0),
+                        _buildTransactionDetails(context, model)
+                      ],
                     ),
-                    SizedBox(height: 30.0),
-                    _buildTransactionDetails(context, model)
-                  ],
-                ),
-              )
-            ],
+                  )
+                ],
+              ),
+            ),
           ),
         );
       },
