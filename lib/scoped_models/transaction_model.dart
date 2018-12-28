@@ -59,8 +59,8 @@ mixin FundsWithdrawalModel implements GeneralModel {
 mixin FundsTransferModel implements GeneralModel {
   final _transferService = FundsTransferService();
 
-  Future<Map<String, dynamic>> createTransfer(
-      double amount, String accountNumber, String fromAccount, String toAccount) async {
+  Future<Map<String, dynamic>> createTransfer(double amount,
+      String accountNumber, String fromAccount, String toAccount) async {
     try {
       isLoading = true;
       notifyListeners();
@@ -83,14 +83,14 @@ mixin FundsTransferModel implements GeneralModel {
 mixin FundsLoanModel implements GeneralModel {
   final _loanService = FundsLoanService();
 
-  Future<Map<String, dynamic>> createLoan(
-      double amount, String accountNumber, String fromAccount, String toAccount) async {
+  Future<Map<String, dynamic>> createLoan(double amount, String accountNumber,
+      String fromAccount, String toAccount, DateTime payBackDate) async {
     try {
       isLoading = true;
       notifyListeners();
 
-      await _loanService.createLoan(
-          authenticatedUser.uid, amount, accountNumber, fromAccount, toAccount);
+      await _loanService.createLoan(authenticatedUser.uid, amount,
+          accountNumber, fromAccount, toAccount, payBackDate);
 
       isLoading = false;
       notifyListeners();

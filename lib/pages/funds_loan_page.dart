@@ -1,4 +1,5 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/shared/transaction_success_alert.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -13,9 +14,18 @@ class FundsLoanPage extends StatefulWidget {
 }
 
 class _FundsLoanPageState extends State<FundsLoanPage> {
+  Map<String, dynamic> _formData = {
+    'amount': 0.0,
+    'accountNumber': null,
+    'fromAccount': null,
+    'toAccount': null,
+    'payBackDate': null
+  };
+
   DateTime _pickedDate;
 
-  TextEditingController _transactionDateController = TextEditingController();
+  TextEditingController _payBackDateController = TextEditingController();
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -23,7 +33,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     super.initState();
   }
 
-  Future _selectTransactionDate(BuildContext context) async {
+  Future _selectPayBackDate(BuildContext context) async {
     _pickedDate = await showDatePicker(
         context: context,
         initialDate: DateTime.now().add(new Duration(days: 1)),
@@ -32,7 +42,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         initialDatePickerMode: DatePickerMode.day);
     if (_pickedDate != null) {
       setState(() {
-        _transactionDateController.text =
+        _payBackDateController.text =
             '${_pickedDate.day}/${_pickedDate.month}/${_pickedDate.year}';
       });
     }
@@ -153,6 +163,29 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         });
   }
 
+  //  Future _buildConfirmBottomSheetModal(
+  //     BuildContext context, Function submitForm) {
+  //   return showModalBottomSheet(
+  //       context: context,
+  //       builder: (BuildContext context) {
+  //         return ConfirmTransactionBottomModal(
+  //           _transactionDetails,
+  //           submitForm,
+  //           requestingForm: 'TRANSFER',
+  //         );
+  //       });
+  // }
+
+  Future _buildSuccessfulTransactionAlert(
+      BuildContext context, Map<String, String> message, MainModel model) {
+    return showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return TransactionSuccessAlert(message, model);
+        });
+  }
+
   Widget _buildLoanAmountMaterialContainer() {
     return Material(
       elevation: 1.0,
@@ -197,7 +230,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
             SizedBox(height: 20.0),
             Text('When can you pay back?',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            _buildTransactionDate(),
+            _buildPayBackDate(),
             SizedBox(height: 30.0),
             _buildFormControls()
           ],
@@ -207,7 +240,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
   }
 
   Widget _buildLoanAmountTextField() {
-    return TextField(
+    return TextFormField(
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -219,6 +252,9 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
           suffix: Text(' GHC Loan Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      onSaved: (String value) {
+        _formData['amount'] = double.parse(value);
+      },
     );
   }
 
@@ -235,19 +271,24 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
             suffixStyle: TextStyle(
                 color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.bold)),
+        onSaved: (String value) {
+          _formData['accountNumber'] = value;
+          _formData['fromAccount'] = value;
+          _formData['toAccount'] = value;
+        },
       ),
     );
   }
 
-  Widget _buildTransactionDate() {
+  Widget _buildPayBackDate() {
     return GestureDetector(
       onTap: () {
-        _selectTransactionDate(context);
+        _selectPayBackDate(context);
       },
       child: AbsorbPointer(
         child: TextFormField(
           keyboardType: TextInputType.number,
-          controller: _transactionDateController,
+          controller: _payBackDateController,
           style:
               TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
           decoration: InputDecoration(
@@ -279,7 +320,8 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         ),
         GestureDetector(
           onTap: () async {
-            await _buildConfirmBottomSheetModal(context);
+            await _submitForm();
+            // await _buildConfirmBottomSheetModal(context);
           },
           child: Container(
             height: 40.0,
@@ -298,6 +340,54 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     );
   }
 
+  Future _submitForm() async {
+    if (!_formKey.currentState.validate()) {
+      Navigator.of(context).pop();
+      return;
+    }
+    _formKey.currentState.save();
+
+    Map<String, dynamic> successInformation = await widget._model.createLoan(
+      _formData['amount'],
+      _formData['accountNumber'],
+      _formData['fromAccount'],
+      _formData['toAccount'],
+      _pickedDate,
+    );
+
+    _returnMessage(successInformation, widget._model);
+    _formKey.currentState.reset();
+  }
+
+  _returnMessage(Map<String, dynamic> successInformation, MainModel model) {
+    if (successInformation['success']) {
+      Map<String, String> message = {
+        'title': successInformation['message'],
+        'subtitle':
+            'Your LOAN transaction request will be processed after being reviewed. We will notify you on process completion and the requested loan amount will be credited to your account on successfull process completion'
+      };
+
+      _buildSuccessfulTransactionAlert(context, message, model);
+    } else {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Oops! Something went wrong'),
+              content: Text(successInformation['message']),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('Okay'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
@@ -312,12 +402,15 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
                 backgroundColor: Theme.of(context).primaryColor),
             body: ListView(
               children: <Widget>[
-                Column(
-                  children: <Widget>[
-                    WalletCardStack(model: model),
-                    _buildLoanAmountMaterialContainer(),
-                    _buildTransactionDetailsMaterialContainer(model),
-                  ],
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: <Widget>[
+                      WalletCardStack(model: model),
+                      _buildLoanAmountMaterialContainer(),
+                      _buildTransactionDetailsMaterialContainer(model),
+                    ],
+                  ),
                 )
               ],
             ),
