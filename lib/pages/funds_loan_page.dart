@@ -147,6 +147,149 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         });
   }
 
+  Widget _buildLoanAmountMaterialContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).primaryColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        color: Theme.of(context).primaryColor,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Get Loan',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            _buildLoanAmountTextField(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransactionDetailsMaterialContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('RECIPIENT ACCOUNT',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('My Account',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildRecipientAccountTextField(),
+            SizedBox(height: 20.0),
+            Text('When can you pay back?',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildTransactionDate(),
+            SizedBox(height: 30.0),
+            _buildFormControls()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoanAmountTextField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Amount',
+          prefixIcon: Icon(Icons.monetization_on),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text(' GHC Loan Amount'),
+          filled: true,
+          fillColor: Theme.of(context).cardColor),
+    );
+  }
+
+  Widget _buildRecipientAccountTextField() {
+    return AbsorbPointer(
+      child: TextFormField(
+        keyboardType: TextInputType.number,
+        initialValue: '7034306929',
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+        decoration: InputDecoration(
+            prefixIcon: Icon(Icons.account_balance),
+            suffixStyle: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.bold)),
+      ),
+    );
+  }
+
+  Widget _buildTransactionDate() {
+    return GestureDetector(
+      onTap: () {
+        _selectTransactionDate(context);
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          controller: _transactionDateController,
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+          decoration: InputDecoration(
+              hintText: 'Select Payback Date',
+              prefixIcon: Icon(Icons.calendar_today)),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            height: 40.0,
+            width: 80.0,
+            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+            color: Theme.of(context).errorColor,
+            alignment: Alignment.center,
+            child: Text('Cancel',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _buildConfirmBottomSheetModal(context);
+          },
+          child: Container(
+            height: 40.0,
+            width: 200.0,
+            // color: Color.fromRGBO(59, 70, 80, 1),
+            color: Theme.of(context).primaryColor,
+            alignment: Alignment.center,
+            child: Text('Confirm Request',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -157,136 +300,8 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
           Column(
             children: <Widget>[
               WalletCardStack(model: widget._model),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  color: Theme.of(context).primaryColor,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Get Loan',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Amount',
-                            prefixIcon: Icon(Icons.monetization_on),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' GHC Loan Amount'),
-                            filled: true,
-                            fillColor: Theme.of(context).cardColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 30.0),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).cardColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('RECIPIENT ACCOUNT',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                      Divider(color: Colors.grey),
-                      Text('My Account',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      AbsorbPointer(
-                        child: TextFormField(
-                          keyboardType: TextInputType.number,
-                          initialValue: '7034306929',
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0),
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.account_balance),
-                              suffixStyle: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                  fontWeight: FontWeight.bold)),
-                        ),
-                      ),
-                      SizedBox(height: 20.0),
-                      Text('When can you pay back?',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      GestureDetector(
-                        onTap: () {
-                          _selectTransactionDate(context);
-                        },
-                        child: AbsorbPointer(
-                          child: TextFormField(
-                            keyboardType: TextInputType.number,
-                            controller: _transactionDateController,
-                            style: TextStyle(
-                                color: Theme.of(context).primaryColor,
-                                fontSize: 20.0),
-                            decoration: InputDecoration(
-                                hintText: 'Select Payback Date',
-                                prefixIcon: Icon(Icons.calendar_today)),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 30.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              height: 40.0,
-                              width: 80.0,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 5.0),
-                              color: Theme.of(context).errorColor,
-                              alignment: Alignment.center,
-                              child: Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              await _buildConfirmBottomSheetModal(context);
-                            },
-                            child: Container(
-                              height: 40.0,
-                              width: 200.0,
-                              // color: Color.fromRGBO(59, 70, 80, 1),
-                              color: Theme.of(context).primaryColor,
-                              alignment: Alignment.center,
-                              child: Text('Confirm Request',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              ),
+              _buildLoanAmountMaterialContainer(),
+              _buildTransactionDetailsMaterialContainer(),
             ],
           )
         ],
