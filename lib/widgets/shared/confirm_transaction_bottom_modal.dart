@@ -90,7 +90,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                 ),
               ],
             ),
-            Divider(),
+            SizedBox(height: 10.0),
             _transactionDetails['transactionDate'] == null
                 ? Container()
                 : Row(

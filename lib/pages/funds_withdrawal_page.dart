@@ -62,7 +62,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
             Divider(color: Colors.grey),
             Text('My Account',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            _buildRecipientAccountTextField(),
+            _buildRecipientAccountTextField(model),
             SizedBox(height: 30.0),
             _buildFormControls(model)
           ],
@@ -73,6 +73,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
 
   Widget _buildFundsWithdrawalAmountTextField() {
     return TextFormField(
+      maxLength: 4,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -84,17 +85,23 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
           suffix: Text(' GHC Withdrawal Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Amount is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['amount'] = double.parse(value);
       },
     );
   }
 
-  Widget _buildRecipientAccountTextField() {
+  Widget _buildRecipientAccountTextField(MainModel model) {
     return AbsorbPointer(
         child: TextFormField(
+          maxLength: 10,
       keyboardType: TextInputType.number,
-      initialValue: '7034306929',
+      initialValue: model.profile != null ? model.profile.mobilePhone : 'Invalid MOMO Number',
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
           prefixIcon: Icon(Icons.account_balance),
@@ -102,6 +109,11 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text('MOMO Transaction')),
+      validator: (String value) {
+        if (value.isEmpty || value.length != 9) {
+          return 'Sorry! Your account number is invalid!';
+        }
+      },
       onSaved: (String value) {
         _formData['accountNumber'] = value;
       },
@@ -129,6 +141,9 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
         ),
         GestureDetector(
           onTap: () async {
+            if (!_formKey.currentState.validate()) {
+              return;
+            }
             _formKey.currentState.save();
 
             _transactionDetails = {
@@ -137,7 +152,6 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
               'amount': _formData['amount'],
               'fromAccount': _formData['accountNumber'],
               'toAccount': _formData['accountNumber'],
-              // 'transactionDate': null
             };
             await _buildConfirmBottomSheetModal(context, _submitForm);
           },
@@ -159,12 +173,17 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
   }
 
   Future _submitForm() async {
+    if (!_formKey.currentState.validate()) {
+      Navigator.of(context).pop();
+      return;
+    }
     _formKey.currentState.save();
 
     Map<String, dynamic> successInformation = await widget._model
         .createWithdrawal(_formData['amount'], _formData['accountNumber']);
 
     _returnMessage(successInformation, widget._model);
+    _formKey.currentState.reset();
   }
 
   _returnMessage(Map<String, dynamic> successInformation, MainModel model) {
@@ -235,7 +254,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 30.0),
+                      // SizedBox(height: 30.0),
                       _buildTransactionDetails(model)
                     ],
                   ),
