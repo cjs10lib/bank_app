@@ -13,6 +13,15 @@ class FundsTransferPage extends StatefulWidget {
 }
 
 class _FundsTransferPageState extends State<FundsTransferPage> {
+  Map<String, dynamic> _formData = {
+    'amount': 0.0,
+    'accountNumber': null,
+    'fromAccount': null,
+    'toAccount': null
+  };
+
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     widget._model.fetchWallet();
@@ -223,7 +232,8 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
   }
 
   Widget _buildTransferFundsTextField() {
-    return TextField(
+    return TextFormField(
+      maxLength: 7,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -235,13 +245,17 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
           suffix: Text(' GHC Transfer Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      onSaved: (String value) {
+        _formData['amount'] = double.parse(value);
+      },
     );
   }
 
   Widget _buildFromAccountTextField() {
     return AbsorbPointer(
       child: TextFormField(
-        initialValue: '7034306929',
+        maxLength: 9,
+        initialValue: '703430692',
         keyboardType: TextInputType.number,
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
         decoration: InputDecoration(
@@ -250,12 +264,16 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
                 color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.bold),
             suffix: Text(' Current Balance')),
+        onSaved: (String value) {
+          _formData['fromAccount'] = value;
+        },
       ),
     );
   }
 
   Widget _buildToAccountFormField() {
-    return TextField(
+    return TextFormField(
+      maxLength: 9,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -265,6 +283,9 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text(' Account Transfer')),
+      onSaved: (String value) {
+        _formData['toAccount'] = value;
+      },
     );
   }
 
@@ -289,7 +310,8 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
         ),
         GestureDetector(
           onTap: () async {
-            await _buildConfirmBottomSheetModal(context);
+            // await _buildConfirmBottomSheetModal(context);
+            _submitForm();
           },
           child: Container(
             height: 40.0,
@@ -308,17 +330,28 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
     );
   }
 
+  void _submitForm() {
+    _formKey.currentState.save();
+    print(_formData.values);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
-      builder: (BuildContext context, Widget child, MainModel model) =>
-          Scaffold(
-            appBar: AppBar(
-                title: Text('Transfer'),
-                backgroundColor: Theme.of(context).primaryColor),
-            body: ListView(
-              children: <Widget>[
-                Column(
+        builder: (BuildContext context, Widget child, MainModel model) {
+      return GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(FocusNode());
+        },
+        child: Scaffold(
+          appBar: AppBar(
+              title: Text('Transfer'),
+              backgroundColor: Theme.of(context).primaryColor),
+          body: ListView(
+            children: <Widget>[
+              Form(
+                key: _formKey,
+                child: Column(
                   children: <Widget>[
                     WalletCardStack(model: model),
                     _buildTransferFundsMaterialContainer(),
@@ -326,10 +359,12 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
                     SizedBox(height: 20.0),
                     _buildToAccountMaterialContainer()
                   ],
-                )
-              ],
-            ),
+                ),
+              )
+            ],
           ),
-    );
+        ),
+      );
+    });
   }
 }
