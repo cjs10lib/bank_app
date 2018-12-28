@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class FundsLoanPage extends StatefulWidget {
+  final MainModel _model;
+
+  FundsLoanPage(this._model);
+
   @override
   _FundsLoanPageState createState() => _FundsLoanPageState();
 }
@@ -152,7 +156,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         children: <Widget>[
           Column(
             children: <Widget>[
-              WalletCardStack(),
+              WalletCardStack(model: widget._model),
               Material(
                 elevation: 1.0,
                 color: Theme.of(context).primaryColor,

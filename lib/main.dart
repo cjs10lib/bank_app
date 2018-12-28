@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
           '/home': (BuildContext context) => HomePage(),
           '/profile': (BuildContext context) => ProfilePage(),
           // '/wallet': (BuildContext context) => WalletPage(),
-          '/loan': (BuildContext context) => FundsLoanPage(),
+          '/loan': (BuildContext context) => FundsLoanPage(_model),
           '/transfer': (BuildContext context) => FundsTransferPage(_model),
           '/deposit': (BuildContext context) => FundsDepositPage(_model),
           '/withdrawal': (BuildContext context) => FundsWithdrawalPage(_model),
