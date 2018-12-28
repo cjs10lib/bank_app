@@ -233,7 +233,6 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
 
   Future _submitForm() async {
     _formKey.currentState.save();
-    print(_formData.values);
 
     Map<String, dynamic> successInformation =
         await widget._model.createTransfer(
@@ -252,7 +251,7 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your account will be credited on successful confirmaion of transaction.'
+            'Your transfer transaction request will be processed after being reviewed. We will notify you on process completion'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);
