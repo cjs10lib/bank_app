@@ -3,6 +3,7 @@ import 'package:bank_app/scoped_models/general_model.dart';
 import 'package:bank_app/services/deposit_service.dart';
 import 'package:bank_app/services/withdrawal_service.dart';
 import 'package:bank_app/services/funds_transfer_service.dart';
+import 'package:bank_app/services/funds_loan_service.dart';
 
 mixin FundsDepositModel implements GeneralModel {
   final _depositService = DepositService();
@@ -65,6 +66,30 @@ mixin FundsTransferModel implements GeneralModel {
       notifyListeners();
 
       await _transferService.createTransfer(
+          authenticatedUser.uid, amount, accountNumber, fromAccount, toAccount);
+
+      isLoading = false;
+      notifyListeners();
+
+      return {'success': true, 'message': 'Transaction Successful'};
+    } catch (error) {
+      isLoading = false;
+      notifyListeners();
+      return {'success': false, 'message': error.message};
+    }
+  }
+}
+
+mixin FundsLoanModel implements GeneralModel {
+  final _loanService = FundsLoanService();
+
+  Future<Map<String, dynamic>> createLoan(
+      double amount, String accountNumber, String fromAccount, String toAccount) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      await _loanService.createLoan(
           authenticatedUser.uid, amount, accountNumber, fromAccount, toAccount);
 
       isLoading = false;

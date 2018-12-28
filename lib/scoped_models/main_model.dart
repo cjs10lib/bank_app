@@ -18,4 +18,5 @@ class MainModel extends Model
         WalletModel,
         FundsDepositModel,
         FundsWithdrawalModel,
-        FundsTransferModel {}
+        FundsTransferModel,
+        FundsLoanModel {}
