@@ -17,6 +17,12 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
 
   TextEditingController _transactionDateController = TextEditingController();
 
+  @override
+  void initState() {
+    widget._model.fetchWallet();
+    super.initState();
+  }
+
   Future _selectTransactionDate(BuildContext context) async {
     _pickedDate = await showDatePicker(
         context: context,
@@ -172,7 +178,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     );
   }
 
-  Widget _buildTransactionDetailsMaterialContainer() {
+  Widget _buildTransactionDetailsMaterialContainer(MainModel model) {
     return Material(
       elevation: 1.0,
       color: Theme.of(context).cardColor,
@@ -187,7 +193,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
             Divider(color: Colors.grey),
             Text('My Account',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
-            _buildRecipientAccountTextField(),
+            _buildRecipientAccountTextField(model),
             SizedBox(height: 20.0),
             Text('When can you pay back?',
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
@@ -216,11 +222,13 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     );
   }
 
-  Widget _buildRecipientAccountTextField() {
+  Widget _buildRecipientAccountTextField(MainModel model) {
     return AbsorbPointer(
       child: TextFormField(
         keyboardType: TextInputType.number,
-        initialValue: '7034306929',
+        initialValue: model.wallet != null
+            ? model.wallet.accountNumber
+            : 'No Account Number',
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
         decoration: InputDecoration(
             prefixIcon: Icon(Icons.account_balance),
@@ -292,20 +300,30 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('Loan'), backgroundColor: Theme.of(context).primaryColor),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              WalletCardStack(model: widget._model),
-              _buildLoanAmountMaterialContainer(),
-              _buildTransactionDetailsMaterialContainer(),
-            ],
-          )
-        ],
-      ),
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+            appBar: AppBar(
+                title: Text('Loan'),
+                backgroundColor: Theme.of(context).primaryColor),
+            body: ListView(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    WalletCardStack(model: model),
+                    _buildLoanAmountMaterialContainer(),
+                    _buildTransactionDetailsMaterialContainer(model),
+                  ],
+                )
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }
