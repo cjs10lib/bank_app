@@ -1,7 +1,24 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-class FundsTransferPage extends StatelessWidget {
+class FundsTransferPage extends StatefulWidget {
+  final MainModel _model;
+
+  const FundsTransferPage(this._model);
+
+  @override
+  _FundsTransferPageState createState() => _FundsTransferPageState();
+}
+
+class _FundsTransferPageState extends State<FundsTransferPage> {
+  @override
+  void initState() {
+    widget._model.fetchWallet();
+    super.initState();
+  }
+
   Future _buildConfirmBottomSheetModal(BuildContext context) {
     return showModalBottomSheet(
         context: context,
@@ -135,162 +152,184 @@ class FundsTransferPage extends StatelessWidget {
         });
   }
 
+  Widget _buildTransferFundsMaterialContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).primaryColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text(
+              'Transfer Funds',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 20),
+            _buildTransferFundsTextField(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFromAccountMaterialContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('FROM',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('My Account',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildFromAccountTextField(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildToAccountMaterialContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Text('TO',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('Recipient',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildToAccountFormField(),
+            SizedBox(height: 30.0),
+            _buildFormControls()
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTransferFundsTextField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Amount',
+          prefixIcon: Icon(Icons.account_balance_wallet),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text(' GHC Transfer Amount'),
+          filled: true,
+          fillColor: Theme.of(context).cardColor),
+    );
+  }
+
+  Widget _buildFromAccountTextField() {
+    return AbsorbPointer(
+      child: TextFormField(
+        initialValue: '7034306929',
+        keyboardType: TextInputType.number,
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+        decoration: InputDecoration(
+            prefixIcon: Icon(Icons.account_balance),
+            suffixStyle: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.bold),
+            suffix: Text(' Current Balance')),
+      ),
+    );
+  }
+
+  Widget _buildToAccountFormField() {
+    return TextField(
+      keyboardType: TextInputType.number,
+      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+      decoration: InputDecoration(
+          hintText: 'Enter Recipients A/C',
+          prefixIcon: Icon(Icons.transfer_within_a_station),
+          suffixStyle: TextStyle(
+              color: Theme.of(context).accentColor,
+              fontWeight: FontWeight.bold),
+          suffix: Text(' Account Transfer')),
+    );
+  }
+
+  Widget _buildFormControls() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            height: 40.0,
+            width: 80.0,
+            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+            color: Theme.of(context).errorColor,
+            alignment: Alignment.center,
+            child: Text('Cancel',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+        GestureDetector(
+          onTap: () async {
+            await _buildConfirmBottomSheetModal(context);
+          },
+          child: Container(
+            height: 40.0,
+            width: 200.0,
+            // color: Color.fromRGBO(59, 70, 80, 1),
+            color: Theme.of(context).primaryColor,
+            alignment: Alignment.center,
+            child: Text('Confirm Transfer',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text('Transfer'),
-          backgroundColor: Theme.of(context).primaryColor),
-      body: ListView(
-        children: <Widget>[
-          Column(
-            children: <Widget>[
-              WalletCardStack(),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).primaryColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        'Transfer Funds',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 20),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Amount',
-                            prefixIcon: Icon(Icons.account_balance_wallet),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' GHC Transfer Amount'),
-                            filled: true,
-                            fillColor: Theme.of(context).cardColor),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).cardColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('FROM',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                      Divider(color: Colors.grey),
-                      Text('My Account',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      AbsorbPointer(
-                        child: TextFormField(
-                          initialValue: '7034306929',
-                          keyboardType: TextInputType.number,
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColor,
-                              fontSize: 20.0),
-                          decoration: InputDecoration(
-                              prefixIcon: Icon(Icons.account_balance),
-                              suffixStyle: TextStyle(
-                                  color: Theme.of(context).accentColor,
-                                  fontWeight: FontWeight.bold),
-                              suffix: Text(' Current Balance')),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Material(
-                elevation: 1.0,
-                color: Theme.of(context).cardColor,
-                child: Container(
-                  padding: EdgeInsets.all(20.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text('TO',
-                          style: TextStyle(
-                              color: Colors.grey, fontWeight: FontWeight.bold)),
-                      Divider(color: Colors.grey),
-                      Text('Recipient',
-                          style: TextStyle(
-                              fontSize: 15.0, fontWeight: FontWeight.bold)),
-                      TextField(
-                        keyboardType: TextInputType.number,
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColor,
-                            fontSize: 20.0),
-                        decoration: InputDecoration(
-                            hintText: 'Enter Recipients A/C',
-                            prefixIcon: Icon(Icons.transfer_within_a_station),
-                            suffixStyle: TextStyle(
-                                color: Theme.of(context).accentColor,
-                                fontWeight: FontWeight.bold),
-                            suffix: Text(' Account Transfer')),
-                      ),
-                      SizedBox(height: 30.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: <Widget>[
-                          GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
-                            child: Container(
-                              height: 40.0,
-                              width: 80.0,
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5.0, horizontal: 5.0),
-                              color: Theme.of(context).errorColor,
-                              alignment: Alignment.center,
-                              child: Text('Cancel',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () async {
-                              await _buildConfirmBottomSheetModal(context);
-                            },
-                            child: Container(
-                              height: 40.0,
-                              width: 200.0,
-                              // color: Color.fromRGBO(59, 70, 80, 1),
-                              color: Theme.of(context).primaryColor,
-                              alignment: Alignment.center,
-                              child: Text('Confirm Transfer',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 16.0,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ),
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
-      ),
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) =>
+          Scaffold(
+            appBar: AppBar(
+                title: Text('Transfer'),
+                backgroundColor: Theme.of(context).primaryColor),
+            body: ListView(
+              children: <Widget>[
+                Column(
+                  children: <Widget>[
+                    WalletCardStack(model: model),
+                    _buildTransferFundsMaterialContainer(),
+                    _buildFromAccountMaterialContainer(),
+                    SizedBox(height: 20.0),
+                    _buildToAccountMaterialContainer()
+                  ],
+                )
+              ],
+            ),
+          ),
     );
   }
 }

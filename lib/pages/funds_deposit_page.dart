@@ -131,7 +131,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
 
   _buildDepositAmountFormField() {
     return TextFormField(
-      maxLength: 4,
+      maxLength: 7,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(

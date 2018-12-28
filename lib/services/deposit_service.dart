@@ -10,7 +10,7 @@ class DepositService {
         .collection('wallets')
         .document(uid)
         .collection('transactions')
-        .document(transactionNumber)
+        .document()
         .setData({
       'transaction': 'CREDIT',
       'transactionType': 'DEPOSIT',
@@ -18,8 +18,10 @@ class DepositService {
       'fromAccount': accountNumber,
       'toAccount': accountNumber,
       'transactionDate': transactionDate,
+      'transactionNumber': transactionNumber,
       'isConfirmed': false,
-      'isPerformed': false,
+      'isProcessed': false,
+      'processStatus': 'PENDING',
       'created': _serverTimestamp,
       'lastUpdate': _serverTimestamp
     });

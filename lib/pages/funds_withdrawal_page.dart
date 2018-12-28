@@ -73,7 +73,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
 
   Widget _buildFundsWithdrawalAmountTextField() {
     return TextFormField(
-      maxLength: 4,
+      maxLength: 7,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -99,9 +99,11 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
   Widget _buildRecipientAccountTextField(MainModel model) {
     return AbsorbPointer(
         child: TextFormField(
-          maxLength: 10,
+      maxLength: 10,
       keyboardType: TextInputType.number,
-      initialValue: model.profile != null ? model.profile.mobilePhone : 'Invalid MOMO Number',
+      initialValue: model.profile != null
+          ? model.profile.mobilePhone
+          : 'Invalid MOMO Number',
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
           prefixIcon: Icon(Icons.account_balance),
@@ -217,51 +219,56 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(
-            title: Text('Withdraw'),
-            backgroundColor: Theme.of(context).primaryColor),
-        body: ScopedModelDescendant<MainModel>(
-          builder: (BuildContext context, Widget child, MainModel model) {
-            return ListView(
-              children: <Widget>[
-                Form(
-                  key: _formKey,
-                  child: Column(
-                    children: <Widget>[
-                      WalletCardStack(
-                        model: widget._model,
-                      ),
-                      Material(
-                        elevation: 1.0,
-                        color: Theme.of(context).primaryColor,
-                        child: Container(
-                          padding: EdgeInsets.all(20.0),
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: Scaffold(
+          appBar: AppBar(
+              title: Text('Withdraw'),
+              backgroundColor: Theme.of(context).primaryColor),
+          body: ScopedModelDescendant<MainModel>(
+            builder: (BuildContext context, Widget child, MainModel model) {
+              return ListView(
+                children: <Widget>[
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: <Widget>[
+                        WalletCardStack(
+                          model: widget._model,
+                        ),
+                        Material(
+                          elevation: 1.0,
                           color: Theme.of(context).primaryColor,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                'Funds Withdrawal',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(height: 20),
-                              _buildFundsWithdrawalAmountTextField(),
-                            ],
+                          child: Container(
+                            padding: EdgeInsets.all(20.0),
+                            color: Theme.of(context).primaryColor,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: <Widget>[
+                                Text(
+                                  'Funds Withdrawal',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20.0,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(height: 20),
+                                _buildFundsWithdrawalAmountTextField(),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      // SizedBox(height: 30.0),
-                      _buildTransactionDetails(model)
-                    ],
-                  ),
-                )
-              ],
-            );
-          },
-        ));
+                        // SizedBox(height: 30.0),
+                        _buildTransactionDetails(model)
+                      ],
+                    ),
+                  )
+                ],
+              );
+            },
+          )),
+    );
   }
 }
