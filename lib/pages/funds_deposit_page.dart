@@ -50,11 +50,12 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     }
   }
 
-  Future _buildConfirmBottomSheetModal(BuildContext context, Function submitForm) {
+  Future _buildConfirmBottomSheetModal(
+      BuildContext context, Function submitForm) {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(_transactionDetails, submitForm);
+          return ConfirmTransactionBottomModal(_transactionDetails, submitForm, requestingForm: 'DEPOSIT',);
         });
   }
 
@@ -147,7 +148,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         }
       },
       onSaved: (String value) {
-        _formData['amount'] = value;
+        _formData['amount'] = double.parse(value);
       },
     );
   }
@@ -233,8 +234,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
               'toAccount': _formData['accountNumber'],
               'transactionDate': _transactionDateController.text
             };
-            await _buildConfirmBottomSheetModal(
-                context, _submitForm);
+            await _buildConfirmBottomSheetModal(context, _submitForm);
           },
           child: Container(
             height: 40.0,
@@ -260,7 +260,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     }
     _formKey.currentState.save();
     Map<String, dynamic> successInformation = await widget._model.createDeposit(
-        double.parse(_formData['amount']),
+        _formData['amount'],
         _formData['accountNumber'],
         _formData['transactionNumber'],
         _pickedDate);
@@ -271,8 +271,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     _pickedDate = null;
   }
 
-  _returnMessage(
-      Map<String, dynamic> successInformation, MainModel model) {
+  _returnMessage(Map<String, dynamic> successInformation, MainModel model) {
     if (successInformation['success']) {
       Map<String, String> message = {
         'title': successInformation['message'],

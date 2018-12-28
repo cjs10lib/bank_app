@@ -33,7 +33,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(_transactionDetails, submitForm);
+          return ConfirmTransactionBottomModal(_transactionDetails, submitForm, requestingForm: 'WITHDRAW',);
         });
   }
 
