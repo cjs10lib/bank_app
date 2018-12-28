@@ -102,7 +102,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
       maxLength: 10,
       keyboardType: TextInputType.number,
       initialValue: model.profile != null
-          ? model.profile.mobilePhone
+          ? '0${model.profile.mobilePhone}'
           : 'Invalid MOMO Number',
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -112,7 +112,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
               fontWeight: FontWeight.bold),
           suffix: Text('MOMO Transaction')),
       validator: (String value) {
-        if (value.isEmpty || value.length != 9) {
+        if (value.isEmpty || value.length != 10) {
           return 'Sorry! Your account number is invalid!';
         }
       },
@@ -193,7 +193,7 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your account will be debited on successful confirmaion of transaction and the money will be transfered to your MOMO account'
+            'Your withrawal transaction request will be processed after being reviewed. We will notify you on process completion and the requested amount transfered to your MOMO account on succesfull process completion'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);

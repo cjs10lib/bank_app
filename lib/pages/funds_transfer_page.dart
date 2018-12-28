@@ -36,7 +36,11 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(_transactionDetails, submitForm, requestingForm: 'TRANSFER',);
+          return ConfirmTransactionBottomModal(
+            _transactionDetails,
+            submitForm,
+            requestingForm: 'TRANSFER',
+          );
         });
   }
 
@@ -134,6 +138,11 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
           suffix: Text(' GHC Transfer Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty || double.parse(value) <= 0) {
+          return 'Amount is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['amount'] = double.parse(value);
       },
@@ -144,7 +153,9 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
     return AbsorbPointer(
       child: TextFormField(
         maxLength: 9,
-        initialValue: model.wallet != null ? model.wallet.accountNumber : 'No Account Number',
+        initialValue: model.wallet != null
+            ? model.wallet.accountNumber
+            : 'No Account Number',
         keyboardType: TextInputType.number,
         style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
         decoration: InputDecoration(
@@ -153,6 +164,11 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
                 color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.bold),
             suffix: Text(' Current Balance')),
+        validator: (String value) {
+          if (value.isEmpty || value == 'No Account Number' || value.length != 9) {
+            return 'Account number is required!';
+          }
+        },
         onSaved: (String value) {
           _formData['fromAccount'] = value;
         },
@@ -166,12 +182,17 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
-          hintText: 'Enter Recipients A/C',
+          hintText: 'Enter Recipient\'s A/C',
           prefixIcon: Icon(Icons.transfer_within_a_station),
           suffixStyle: TextStyle(
               color: Theme.of(context).accentColor,
               fontWeight: FontWeight.bold),
           suffix: Text(' Account Transfer')),
+      validator: (String value) {
+        if (value.isEmpty || value.length != 9) {
+          return 'Recipient\'s number is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['toAccount'] = value;
       },
@@ -211,7 +232,7 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
               'fromAccount': _formData['fromAccount'],
               'toAccount': _formData['toAccount'],
             };
-            
+
             await _buildConfirmBottomSheetModal(context, _submitForm);
           },
           child: Container(
@@ -232,6 +253,10 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
   }
 
   Future _submitForm() async {
+    if (!_formKey.currentState.validate()) {
+      Navigator.of(context).pop();
+      return;
+    }
     _formKey.currentState.save();
 
     Map<String, dynamic> successInformation =
@@ -251,7 +276,7 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your transfer transaction request will be processed after being reviewed. We will notify you on process completion'
+            'Your transfer transaction request will be processed after being reviewed. We will notify you on process completion and the requested amount will be transfered on successfull process completion'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);

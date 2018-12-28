@@ -54,16 +54,17 @@ class TransactionSuccessAlert extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           CircleAvatar(
+              radius: 12.0,
               backgroundColor: Colors.green,
               child: Icon(
                 Icons.check,
                 color: Colors.white,
-                size: 30.0,
+                size: 20.0,
               )),
-          SizedBox(width: 5.0),
+          SizedBox(width: 8.0),
           Text(
             _message['title'],
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
           ),
         ],
       ),
@@ -112,7 +113,7 @@ class TransactionSuccessAlert extends StatelessWidget {
     return Dialog(
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
       child: Container(
-        height: 370.0,
+        height: 400.0,
         width: 200.0,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
         child: Column(
