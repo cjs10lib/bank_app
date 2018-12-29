@@ -23,12 +23,12 @@ class _WalletPageState extends State<WalletPage> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(WalletPage oldWidget) {
-    widget._model.fetchWallet();
-    widget._model.fetchWalletTransactions();
-    super.didUpdateWidget(oldWidget);
-  }
+  // @override
+  // void didUpdateWidget(WalletPage oldWidget) {
+  //   widget._model.fetchWallet();
+  //   widget._model.fetchWalletTransactions();
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   Widget _buildWalletLogDate(MainModel model) {
     return Row(

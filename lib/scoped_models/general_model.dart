@@ -14,6 +14,9 @@ mixin GeneralModel implements Model {
   String profileImageUrl;
   Wallet profileWallet;
   List<WalletTransaction> profileWalletTransactions;
+  // Map<String, int> walletTransactionQueries;
+  // int walletTransactionQueriesMonth;
+  // int walletTransactionQueriesYear;
 
   final authService = AuthService();
   final profileService = ProfileService();

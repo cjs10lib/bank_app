@@ -5,6 +5,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin WalletModel implements GeneralModel {
   Wallet get wallet => profileWallet;
 
+  // int get walletTransactionQueryMonth => walletTransactionQueriesMonth;
+  // int get walletTransactionQueryYear => walletTransactionQueriesYear;
+
   List<WalletTransaction> get walletTransactions =>
       List.from(profileWalletTransactions);
 
@@ -60,12 +63,21 @@ mixin WalletModel implements GeneralModel {
         ));
       });
 
-      profileWalletTransactions = filterByMonthYear
-          ? transactions.where((WalletTransaction transaction) {
-              return transaction.lastUpdate.year == transactionYear &&
-                  transaction.lastUpdate.month == transactionMonth;
-            }).toList()
-          : profileWalletTransactions = transactions;
+      if (filterByMonthYear) {
+
+        // walletTransactionQueriesMonth = transactionMonth;
+        // walletTransactionQueriesYear = transactionYear;
+
+        print('Query called');
+
+        profileWalletTransactions =
+            transactions.where((WalletTransaction transaction) {
+          return transaction.lastUpdate.year == transactionYear &&
+              transaction.lastUpdate.month == transactionMonth;
+        }).toList();
+      } else {
+        profileWalletTransactions = transactions;
+      }
 
       notifyListeners();
       isLoading = false;
