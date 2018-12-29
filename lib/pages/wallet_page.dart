@@ -1,15 +1,10 @@
+import 'package:bank_app/models/month.dart';
 import 'package:bank_app/models/wallet.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/wallet/month_year_picker.dart';
 import 'package:bank_app/widgets/wallet/transaction_log.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-
-class Month {
-  String title;
-  int value;
-
-  Month({@required this.title, @required this.value});
-}
 
 class WalletPage extends StatefulWidget {
   final MainModel _model;
@@ -21,31 +16,10 @@ class WalletPage extends StatefulWidget {
 }
 
 class _WalletPageState extends State<WalletPage> {
-  List<int> _membershipLifeSpanYears;
-
-  List<Month> _months = [
-    Month(title: 'January', value: 1),
-    Month(title: 'Feburary', value: 2),
-    Month(title: 'March', value: 3),
-    Month(title: 'April', value: 4),
-    Month(title: 'May', value: 5),
-    Month(title: 'June', value: 6),
-    Month(title: 'July', value: 7),
-    Month(title: 'August', value: 8),
-    Month(title: 'September', value: 9),
-    Month(title: 'October', value: 10),
-    Month(title: 'November', value: 11),
-    Month(title: 'December', value: 12),
-  ];
-
-  int _displayedMonth = DateTime.now().month;
-  int _displayedYear = DateTime.now().year;
-
   @override
   void initState() {
     widget._model.fetchWallet();
     widget._model.fetchWalletTransactions();
-    _getMembershipLifeDuration(); // gets currentYear - (activatedYear * 2)
     super.initState();
   }
 
@@ -53,36 +27,10 @@ class _WalletPageState extends State<WalletPage> {
   void didUpdateWidget(WalletPage oldWidget) {
     widget._model.fetchWallet();
     widget._model.fetchWalletTransactions();
-    _getMembershipLifeDuration();
-    print('didUpdate');
     super.didUpdateWidget(oldWidget);
   }
 
-  // @override
-  // void dispose() {
-  //   widget._model.profileWalletTransactions.clear();
-  //   widget._model.profileWallet = null;
-  //   print('disposed');
-  //   super.dispose();
-  // }
-
-  void _getMembershipLifeDuration() {
-    if (widget._model.accountStatus == null) {
-      return;
-    }
-
-    final DateTime activatedDate = widget._model.accountStatus.lastUpdate;
-    final int activatedYear = activatedDate.year;
-
-    final List<int> years = [];
-    for (var i = activatedYear; i <= DateTime.now().year; i++) {
-      print(i);
-      years.add(i);
-    }
-    _membershipLifeSpanYears = years;
-  }
-
-  Widget _buildWalletLogDate() {
+  Widget _buildWalletLogDate(MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -96,44 +44,7 @@ class _WalletPageState extends State<WalletPage> {
                   color: Colors.white,
                   fontSize: 25.0,
                   fontWeight: FontWeight.bold)),
-          Row(
-            children: <Widget>[
-              DropdownButton<int>(
-                elevation: 2,
-                style: TextStyle(
-                    color: Colors.blueGrey, fontWeight: FontWeight.bold),
-                items: _months.map((Month month) {
-                  return DropdownMenuItem<int>(
-                    child: Text(month.title),
-                    value: month.value,
-                  );
-                }).toList(),
-                onChanged: (int value) {
-                  setState(() {
-                    _displayedMonth = value;
-                  });
-                },
-                value: _displayedMonth,
-              ),
-              DropdownButton<int>(
-                elevation: 2,
-                style: TextStyle(
-                    color: Colors.blueGrey, fontWeight: FontWeight.bold),
-                items: _membershipLifeSpanYears.map((int year) {
-                  return DropdownMenuItem(
-                    child: Text(year.toString()),
-                    value: year,
-                  );
-                }).toList(),
-                onChanged: (int value) {
-                  setState(() {
-                    _displayedYear = value;
-                  });
-                },
-                value: _displayedYear,
-              )
-            ],
-          ),
+          MonthYearPicker(model),
         ]),
         IconButton(
             icon: Icon(Icons.equalizer, color: Colors.white),
@@ -218,7 +129,7 @@ class _WalletPageState extends State<WalletPage> {
     return Stack(
       children: <Widget>[
         Container(
-          height: 350.0,
+          height: 360.0,
           width: double.infinity,
           color: Theme.of(context).primaryColor,
         ),
@@ -249,7 +160,7 @@ class _WalletPageState extends State<WalletPage> {
           padding: EdgeInsets.only(top: 30.0, right: 20.0, left: 20.0),
           child: Column(
             children: <Widget>[
-              _buildWalletLogDate(),
+              _buildWalletLogDate(model),
               SizedBox(height: 20.0),
               Container(
                 padding: EdgeInsets.all(10.0),
@@ -259,9 +170,9 @@ class _WalletPageState extends State<WalletPage> {
                 child: Text('Current Balance',
                     style: TextStyle(color: Colors.white)),
               ),
-              SizedBox(height: 40.0),
+              SizedBox(height: 30.0),
               _buildWalletBalance(model),
-              SizedBox(height: 40.0),
+              SizedBox(height: 30.0),
               _buildWalletIncomeAndExpenditure(),
               // SizedBox(height: 40.0),
             ],
