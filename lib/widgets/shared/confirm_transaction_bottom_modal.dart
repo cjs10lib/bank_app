@@ -179,7 +179,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
   Widget _buildWithdrawConfirmBottomModal(
       BuildContext context, MainModel model) {
     return Container(
-      height: 270.0,
+      height: 300.0,
       width: 200.0,
       padding: EdgeInsets.all(20.0),
       child: Column(
@@ -189,10 +189,23 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           _buildTransactionAmountRow(),
-          // SizedBox(height: 20.0),
-          _buildTransactionFromAccountRow(),
-          _buildTransactionToAccountRow(),
           SizedBox(height: 20.0),
+          // _buildTransactionFromAccountRow(),
+          // _buildTransactionToAccountRow(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('ACCOUNT', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(width: 50.0),
+              Text(
+                _transactionDetails['toAccount'],
+                style: TextStyle(
+                    color: Color.fromRGBO(59, 70, 80, 1),
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.0),
           _buildControls(context, model)
         ],
       ),
@@ -202,7 +215,7 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
   Widget _buildTransferConfirmBottomModal(
       BuildContext context, MainModel model) {
     return Container(
-      height: 270.0,
+      height: 300.0,
       width: 200.0,
       padding: EdgeInsets.all(20.0),
       child: Column(
@@ -212,10 +225,56 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
               style:
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           _buildTransactionAmountRow(),
-          // SizedBox(height: 20.0),
+          SizedBox(height: 20.0),
           _buildTransactionFromAccountRow(),
           _buildTransactionToAccountRow(),
+          SizedBox(height: 30.0),
+          _buildControls(context, model)
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLoanConfirmBottomModal(BuildContext context, MainModel model) {
+    return Container(
+      height: 300.0,
+      width: 200.0,
+      padding: EdgeInsets.all(20.0),
+      child: Column(
+        children: <Widget>[
+          _buildProfileImageContainer(),
+          Text(_transactionDetails['transactionType'],
+              style:
+                  TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
+          _buildTransactionAmountRow(),
           SizedBox(height: 20.0),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('ACCOUNT', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(width: 50.0),
+              Text(
+                _transactionDetails['toAccount'],
+                style: TextStyle(
+                    color: Color.fromRGBO(59, 70, 80, 1),
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('PAYBACK', style: TextStyle(fontWeight: FontWeight.bold)),
+              SizedBox(width: 50.0),
+              Text(
+                _transactionDetails['payBackDate'],
+                style: TextStyle(
+                    color: Color.fromRGBO(59, 70, 80, 1),
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+          SizedBox(height: 30.0),
           _buildControls(context, model)
         ],
       ),
@@ -227,8 +286,10 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
       return _buildDepositConfirmBottomModal(context, model);
     } else if (requestingForm == 'WITHDRAW') {
       return _buildWithdrawConfirmBottomModal(context, model);
-    } else {
+    } else if (requestingForm == 'TRANSFER') {
       return _buildTransferConfirmBottomModal(context, model);
+    } else {
+      return _buildLoanConfirmBottomModal(context, model);
     }
     // return Container();
   }

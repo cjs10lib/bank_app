@@ -1,4 +1,5 @@
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/shared/confirm_transaction_bottom_modal.dart';
 import 'package:bank_app/widgets/shared/transaction_success_alert.dart';
 import 'package:bank_app/widgets/ui_elements/wallet_card_stack.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
 
   DateTime _pickedDate;
 
+  Map<String, dynamic> _transactionDetails;
   TextEditingController _payBackDateController = TextEditingController();
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -48,133 +50,133 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     }
   }
 
-  Future _buildConfirmBottomSheetModal(BuildContext context) {
-    return showModalBottomSheet(
-        context: context,
-        builder: (BuildContext context) {
-          return Container(
-            height: 350.0,
-            width: 200.0,
-            padding: EdgeInsets.all(20.0),
-            child: Column(
-              children: <Widget>[
-                Container(
-                  height: 50.0,
-                  width: 50.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25.0),
-                  ),
-                  child: CircleAvatar(
-                      backgroundImage: AssetImage('assets/avatar/avatar.png')),
-                ),
-                Text('LOAN',
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Colors.grey)),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('1000.00',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontSize: 50.0)),
-                    SizedBox(width: 10.0),
-                    Text('GHC',
-                        style: TextStyle(
-                            color: Color.fromRGBO(59, 70, 80, 1),
-                            fontWeight: FontWeight.bold)),
-                  ],
-                ),
-                Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-                  decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.circular(10.0)),
-                  child: Text('1234567890',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 2.0)),
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text('ACCOUNT',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                    SizedBox(width: 50.0),
-                    Column(
-                      children: <Widget>[
-                        Text(
-                          '703430692',
-                          style: TextStyle(
-                              color: Color.fromRGBO(59, 70, 80, 1),
-                              fontWeight: FontWeight.bold),
-                        ),
-                        Text(
-                          '(20/12/2018)',
-                          style:
-                              TextStyle(color: Color.fromRGBO(59, 70, 80, 1)),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: 30.0),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => Navigator.of(context).pop(),
-                      child: Container(
-                        height: 40.0,
-                        width: 80.0,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 5.0),
-                        color: Theme.of(context).errorColor,
-                        alignment: Alignment.center,
-                        child: Text('Cancel',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {},
-                      child: Container(
-                        height: 40.0,
-                        width: 150.0,
-                        // color: Color.fromRGBO(59, 70, 80, 1),
-                        color: Theme.of(context).primaryColor,
-                        alignment: Alignment.center,
-                        child: Text('Submit Request',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          );
-        });
-  }
-
-  //  Future _buildConfirmBottomSheetModal(
-  //     BuildContext context, Function submitForm) {
+  // Future _buildConfirmBottomSheetModal(BuildContext context) {
   //   return showModalBottomSheet(
   //       context: context,
   //       builder: (BuildContext context) {
-  //         return ConfirmTransactionBottomModal(
-  //           _transactionDetails,
-  //           submitForm,
-  //           requestingForm: 'TRANSFER',
+  //         return Container(
+  //           height: 350.0,
+  //           width: 200.0,
+  //           padding: EdgeInsets.all(20.0),
+  //           child: Column(
+  //             children: <Widget>[
+  //               Container(
+  //                 height: 50.0,
+  //                 width: 50.0,
+  //                 decoration: BoxDecoration(
+  //                   borderRadius: BorderRadius.circular(25.0),
+  //                 ),
+  //                 child: CircleAvatar(
+  //                     backgroundImage: AssetImage('assets/avatar/avatar.png')),
+  //               ),
+  //               Text('LOAN',
+  //                   style: TextStyle(
+  //                       fontWeight: FontWeight.bold, color: Colors.grey)),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: <Widget>[
+  //                   Text('1000.00',
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(59, 70, 80, 1),
+  //                           fontSize: 50.0)),
+  //                   SizedBox(width: 10.0),
+  //                   Text('GHC',
+  //                       style: TextStyle(
+  //                           color: Color.fromRGBO(59, 70, 80, 1),
+  //                           fontWeight: FontWeight.bold)),
+  //                 ],
+  //               ),
+  //               Container(
+  //                 padding:
+  //                     EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+  //                 decoration: BoxDecoration(
+  //                     color: Theme.of(context).primaryColor,
+  //                     borderRadius: BorderRadius.circular(10.0)),
+  //                 child: Text('1234567890',
+  //                     style: TextStyle(
+  //                         color: Colors.white,
+  //                         fontWeight: FontWeight.bold,
+  //                         letterSpacing: 2.0)),
+  //               ),
+  //               SizedBox(height: 30.0),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: <Widget>[
+  //                   Text('ACCOUNT',
+  //                       style: TextStyle(fontWeight: FontWeight.bold)),
+  //                   SizedBox(width: 50.0),
+  //                   Column(
+  //                     children: <Widget>[
+  //                       Text(
+  //                         '703430692',
+  //                         style: TextStyle(
+  //                             color: Color.fromRGBO(59, 70, 80, 1),
+  //                             fontWeight: FontWeight.bold),
+  //                       ),
+  //                       Text(
+  //                         '(20/12/2018)',
+  //                         style:
+  //                             TextStyle(color: Color.fromRGBO(59, 70, 80, 1)),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 ],
+  //               ),
+  //               SizedBox(height: 30.0),
+  //               Row(
+  //                 mainAxisAlignment: MainAxisAlignment.center,
+  //                 children: <Widget>[
+  //                   GestureDetector(
+  //                     onTap: () => Navigator.of(context).pop(),
+  //                     child: Container(
+  //                       height: 40.0,
+  //                       width: 80.0,
+  //                       padding: EdgeInsets.symmetric(
+  //                           vertical: 5.0, horizontal: 5.0),
+  //                       color: Theme.of(context).errorColor,
+  //                       alignment: Alignment.center,
+  //                       child: Text('Cancel',
+  //                           style: TextStyle(
+  //                               color: Colors.white,
+  //                               fontSize: 16.0,
+  //                               fontWeight: FontWeight.bold)),
+  //                     ),
+  //                   ),
+  //                   GestureDetector(
+  //                     onTap: () {},
+  //                     child: Container(
+  //                       height: 40.0,
+  //                       width: 150.0,
+  //                       // color: Color.fromRGBO(59, 70, 80, 1),
+  //                       color: Theme.of(context).primaryColor,
+  //                       alignment: Alignment.center,
+  //                       child: Text('Submit Request',
+  //                           style: TextStyle(
+  //                               color: Colors.white,
+  //                               fontSize: 16.0,
+  //                               fontWeight: FontWeight.bold)),
+  //                     ),
+  //                   ),
+  //                 ],
+  //               )
+  //             ],
+  //           ),
   //         );
   //       });
   // }
+
+   Future _buildConfirmBottomSheetModal(
+      BuildContext context, Function submitForm) {
+    return showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ConfirmTransactionBottomModal(
+            _transactionDetails,
+            submitForm,
+            requestingForm: 'LOAN',
+          );
+        });
+  }
 
   Future _buildSuccessfulTransactionAlert(
       BuildContext context, Map<String, String> message, MainModel model) {
@@ -232,7 +234,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
                 style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
             _buildPayBackDate(),
             SizedBox(height: 30.0),
-            _buildFormControls()
+            _buildFormControls(model)
           ],
         ),
       ),
@@ -299,7 +301,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
     );
   }
 
-  Widget _buildFormControls() {
+  Widget _buildFormControls(MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
@@ -320,7 +322,22 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         ),
         GestureDetector(
           onTap: () async {
-            await _submitForm();
+            if (!_formKey.currentState.validate()) {
+              return;
+            }
+            _formKey.currentState.save();
+
+            _transactionDetails = {
+              'profileImage': model.profileImage,
+              'transactionType': 'LOAN',
+              'amount': _formData['amount'],
+              'fromAccount': _formData['fromAccount'],
+              'toAccount': _formData['toAccount'],
+              'payBackDate': _payBackDateController.text,
+            };
+
+            await _buildConfirmBottomSheetModal(context, _submitForm);
+            // await _submitForm();
             // await _buildConfirmBottomSheetModal(context);
           },
           child: Container(
@@ -357,6 +374,8 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
 
     _returnMessage(successInformation, widget._model);
     _formKey.currentState.reset();
+    _payBackDateController.text = '';
+    _pickedDate = null;
   }
 
   _returnMessage(Map<String, dynamic> successInformation, MainModel model) {
@@ -364,7 +383,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your LOAN transaction request will be processed after being reviewed. We will notify you on process completion and the requested loan amount will be credited to your account on successfull process completion'
+            'Your LOAN transaction request will be processed after being reviewed. We will notify you on process completion and the requested loan amount will be credited to your account'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);

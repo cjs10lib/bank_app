@@ -276,7 +276,7 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your transfer transaction request will be processed after being reviewed. We will notify you on process completion and the requested amount will be transfered on successfull process completion'
+            'Your TRANSFER transaction request will be processed after being reviewed. We will notify you on process completion and the requested amount will be transfered on successfull process completion'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);

@@ -276,7 +276,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
       Map<String, String> message = {
         'title': successInformation['message'],
         'subtitle':
-            'Your deposit transaction request will be processed after being reviewed. We will notify you on process completion and your account will be credited on successful process completion.'
+            'Your DEPOSIT transaction request will be processed after being reviewed. We will notify you on process completion and your account will be credited on successful process completion.'
       };
 
       _buildSuccessfulTransactionAlert(context, message, model);
