@@ -13,6 +13,7 @@ mixin GeneralModel implements Model {
   Profile profile;
   String profileImageUrl;
   Wallet profileWallet;
+  List<WalletTransaction> profileWalletTransactions;
 
   final authService = AuthService();
   final profileService = ProfileService();

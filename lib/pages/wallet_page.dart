@@ -1,6 +1,8 @@
+import 'package:bank_app/models/wallet.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:intl/intl.dart';
 
 class WalletPage extends StatefulWidget {
   final MainModel _model;
@@ -15,6 +17,7 @@ class _WalletPageState extends State<WalletPage> {
   @override
   initState() {
     widget._model.fetchWallet();
+    widget._model.fetchWalletTransactions();
     super.initState();
   }
 
@@ -170,8 +173,11 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Widget _buildTransactionLog(
-      String transaction, String transactionDate, String account) {
+  Widget _buildTransactionLog(String transaction, double amount,
+      DateTime transactionDate, String account) {
+    final formatedDate =
+        DateFormat('EEEE, MMMM d, yyy').format(transactionDate);
+
     return Material(
       elevation: 1.0,
       color: Colors.white,
@@ -183,7 +189,7 @@ class _WalletPageState extends State<WalletPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(transactionDate, style: TextStyle(color: Colors.grey)),
+                Text(formatedDate, style: TextStyle(color: Colors.grey)),
                 Text(transaction,
                     style:
                         TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
@@ -193,9 +199,11 @@ class _WalletPageState extends State<WalletPage> {
             Container(
                 child: Row(
               children: <Widget>[
-                Text('-19',
+                Text(amount.toString(),
                     style: TextStyle(fontSize: 35.0, color: Colors.red)),
-                Text('.99', style: TextStyle(color: Colors.red))
+                // Text('-19',
+                //     style: TextStyle(fontSize: 35.0, color: Colors.red)),
+                // Text('.99', style: TextStyle(color: Colors.red))
               ],
             )),
           ],
@@ -208,7 +216,6 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-
         return CustomScrollView(
           slivers: <Widget>[
             SliverAppBar(
@@ -227,25 +234,16 @@ class _WalletPageState extends State<WalletPage> {
                 centerTitle: true,
               ),
             ),
-            SliverList(
-              delegate: SliverChildListDelegate([
-                _buildTransactionLog('Withdrawal', '08/11/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Deposit', '06/5/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-                SizedBox(height: 10.0),
-                _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-              ]),
-            )
+            model.isLoading
+                ? CircularProgressIndicator()
+                : SliverList(
+                    delegate: SliverChildListDelegate(
+                      model.walletTransactions.map((WalletTransaction doc) {
+                        return _buildTransactionLog(doc.transactionType,
+                            doc.amount, doc.lastUpdate, 'My Account');
+                      }).toList(),
+                    ),
+                  )
           ],
         );
       },

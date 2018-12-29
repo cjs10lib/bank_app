@@ -190,8 +190,6 @@ class ConfirmTransactionBottomModal extends StatelessWidget {
                   TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
           _buildTransactionAmountRow(),
           SizedBox(height: 20.0),
-          // _buildTransactionFromAccountRow(),
-          // _buildTransactionToAccountRow(),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[

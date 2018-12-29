@@ -8,6 +8,10 @@ class WalletService {
     return _db.collection('wallets').document(uid).get();
   }
 
+  Future<QuerySnapshot> fetchWalletTransactions(String uid) {
+    return _db.collection('wallets').document(uid).collection('transactions').getDocuments();
+  }
+
   Future<void> createWallet(String uid, String mobilePhone) {
     return _db.collection('wallets').document(uid).setData({
       'balance': 0.00,
