@@ -21,7 +21,7 @@ mixin AccountModel implements GeneralModel {
             uid: authenticatedUser.uid,
             isActivated: account['isActivated'],
             created: account['created'],
-            lastUpdate: account['lastupdate']);
+            lastUpdate: account['lastUpdate']);
 
         notifyListeners();
         print(account);
