@@ -9,6 +9,7 @@ import 'package:bank_app/services/wallet_service.dart';
 
 mixin GeneralModel implements Model {
   bool isLoading = false;
+  String messagingToken;
   User authenticatedUser;
   Profile profile;
   String profileImageUrl;

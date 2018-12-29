@@ -7,6 +7,7 @@ import 'package:bank_app/scoped_models/profile_image_model.dart';
 import 'package:bank_app/scoped_models/account_model.dart';
 import 'package:bank_app/scoped_models/wallet_model.dart';
 import 'package:bank_app/scoped_models/transaction_model.dart';
+import 'package:bank_app/scoped_models/messaging_model.dart';
 
 class MainModel extends Model
     with
@@ -19,4 +20,5 @@ class MainModel extends Model
         FundsDepositModel,
         FundsWithdrawalModel,
         FundsTransferModel,
-        FundsLoanModel {}
+        FundsLoanModel,
+        MessagingModel {}
