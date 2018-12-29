@@ -1,8 +1,8 @@
 import 'package:bank_app/models/wallet.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
+import 'package:bank_app/widgets/wallet/transaction_log.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
-import 'package:intl/intl.dart';
 
 class WalletPage extends StatefulWidget {
   final MainModel _model;
@@ -15,17 +15,17 @@ class WalletPage extends StatefulWidget {
 
 class _WalletPageState extends State<WalletPage> {
   @override
-  initState() {
+  void initState() {
     widget._model.fetchWallet();
     widget._model.fetchWalletTransactions();
     super.initState();
   }
 
   @override
-  dispose() {
-    widget._model.profileWalletTransactions.clear();
-    print('disposed');
-    super.dispose();
+  void didUpdateWidget(WalletPage oldWidget) {
+    widget._model.fetchWallet();
+    widget._model.fetchWalletTransactions();
+    super.didUpdateWidget(oldWidget);
   }
 
   Widget _buildWalletLogDate() {
@@ -180,45 +180,6 @@ class _WalletPageState extends State<WalletPage> {
     );
   }
 
-  Widget _buildTransactionLog(String transaction, double amount,
-      DateTime transactionDate, String account) {
-    final String _formatedDate =
-        DateFormat('EEEE, MMMM d, yyy').format(transactionDate);
-    List<String> _amount = amount.toString().split('.');
-
-    return Material(
-      elevation: 1.0,
-      color: Colors.white,
-      child: Container(
-        padding: EdgeInsets.all(20.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(_formatedDate, style: TextStyle(color: Colors.grey)),
-                Text(transaction,
-                    style:
-                        TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
-                Text(account, style: TextStyle(color: Colors.grey))
-              ],
-            ),
-            Container(
-                child: Row(
-              children: <Widget>[
-                Text(_amount[0],
-                    style: TextStyle(fontSize: 35.0, color: Colors.red)),
-                SizedBox(width: 5.0),
-                Text(_amount[1], style: TextStyle(color: Colors.red))
-              ],
-            )),
-          ],
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
@@ -251,8 +212,13 @@ class _WalletPageState extends State<WalletPage> {
                         ),
                       ]
                     : model.walletTransactions.map((WalletTransaction doc) {
-                        return _buildTransactionLog(doc.transactionType,
-                            doc.amount, doc.lastUpdate, 'My Account');
+                        Map<String, dynamic> transactionDetails = {
+                          'transactionType': doc.transactionType,
+                          'amount': doc.amount,
+                          'lastUpdate': doc.lastUpdate,
+                        };
+
+                        return TransactionLog(transactionDetails);
                       }).toList(),
               ),
             )
