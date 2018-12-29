@@ -25,6 +25,7 @@ class _WalletPageState extends State<WalletPage> {
   void didUpdateWidget(WalletPage oldWidget) {
     widget._model.fetchWallet();
     widget._model.fetchWalletTransactions();
+    print('didUpdate');
     super.didUpdateWidget(oldWidget);
   }
 
@@ -198,7 +199,7 @@ class _WalletPageState extends State<WalletPage> {
                 //                 fontSize: 25.0,
                 //                 fontWeight: FontWeight.bold)),
                 background: _builHeaderStack(context, model),
-                collapseMode: CollapseMode.pin,
+                collapseMode: CollapseMode.parallax,
                 centerTitle: true,
               ),
             ),
@@ -213,6 +214,7 @@ class _WalletPageState extends State<WalletPage> {
                       ]
                     : model.walletTransactions.map((WalletTransaction doc) {
                         Map<String, dynamic> transactionDetails = {
+                          'transaction': doc.transaction,
                           'transactionType': doc.transactionType,
                           'amount': doc.amount,
                           'lastUpdate': doc.lastUpdate,
@@ -226,22 +228,5 @@ class _WalletPageState extends State<WalletPage> {
         );
       },
     );
-
-    // ListView(
-    //   children: <Widget>[
-    //     Column(
-    //       children: <Widget>[
-    //         _builHeaderStack(context),
-    //         SizedBox(height: 20.0),
-    //         _buildTransactionLog('Withdrawal', '08/11/2018', 'My Account'),
-    //         SizedBox(height: 10.0),
-    //         _buildTransactionLog('Deposit', '06/5/2018', 'My Account'),
-    //         SizedBox(height: 10.0),
-    //         _buildTransactionLog('Withdrawal', '02/02/2018', 'My Account'),
-    //         SizedBox(height: 10.0),
-    //       ],
-    //     ),
-    //   ],
-    // );
   }
 }

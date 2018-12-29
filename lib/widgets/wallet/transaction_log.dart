@@ -8,10 +8,13 @@ class TransactionLog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    String _transaction = _transactionDetails['transaction'];
     String _transactionType = _transactionDetails['transactionType'];
     String _formatedDate = DateFormat('EEEE, MMMM d, yyy')
         .format(_transactionDetails['lastUpdate']);
     List<String> _amount = _transactionDetails['amount'].toString().split('.');
+
+    Color transactionColor = _transaction == 'CREDIT' ? Colors.green : Colors.red;
 
     return Column(
       children: <Widget>[
@@ -37,9 +40,9 @@ class TransactionLog extends StatelessWidget {
                     child: Row(
                   children: <Widget>[
                     Text(_amount[0],
-                        style: TextStyle(fontSize: 35.0, color: Colors.red)),
+                        style: TextStyle(fontSize: 35.0, color: transactionColor)),
                     SizedBox(width: 5.0),
-                    Text(_amount[1], style: TextStyle(color: Colors.red))
+                    Text(_amount[1], style: TextStyle(color:  transactionColor))
                   ],
                 )),
               ],
