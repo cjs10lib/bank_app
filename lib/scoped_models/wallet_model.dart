@@ -30,7 +30,10 @@ mixin WalletModel implements GeneralModel {
     });
   }
 
-  fetchWalletTransactions() {
+  fetchWalletTransactions(
+      {int transactionMonth,
+      int transactionYear,
+      bool filterByMonthYear = false}) {
     isLoading = true;
     notifyListeners();
 
@@ -57,7 +60,13 @@ mixin WalletModel implements GeneralModel {
         ));
       });
 
-      profileWalletTransactions = transactions;
+      profileWalletTransactions = filterByMonthYear
+          ? transactions.where((WalletTransaction transaction) {
+              return transaction.lastUpdate.year == transactionYear &&
+                  transaction.lastUpdate.month == transactionMonth;
+            }).toList()
+          : profileWalletTransactions = transactions;
+
       notifyListeners();
       isLoading = false;
       notifyListeners();

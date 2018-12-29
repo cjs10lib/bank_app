@@ -22,8 +22,8 @@ class WalletTransaction {
   double amount;
   bool isProcessed;
   String processStatus;
-  dynamic created;
-  dynamic lastUpdate;
+  DateTime created;
+  DateTime lastUpdate;
 
   WalletTransaction(
       {@required this.uid,

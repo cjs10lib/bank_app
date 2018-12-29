@@ -23,12 +23,12 @@ class _WalletPageState extends State<WalletPage> {
     super.initState();
   }
 
-  @override
-  void didUpdateWidget(WalletPage oldWidget) {
-    widget._model.fetchWallet();
-    widget._model.fetchWalletTransactions();
-    super.didUpdateWidget(oldWidget);
-  }
+  // @override
+  // void didUpdateWidget(WalletPage oldWidget) {
+  //   widget._model.fetchWallet();
+  //   widget._model.fetchWalletTransactions();
+  //   super.didUpdateWidget(oldWidget);
+  // }
 
   Widget _buildWalletLogDate(MainModel model) {
     return Row(
@@ -202,28 +202,51 @@ class _WalletPageState extends State<WalletPage> {
           ),
         ),
         SliverList(
-          delegate: SliverChildListDelegate(
-            model.isLoading
-                ? [
-                    Container(
-                      padding: EdgeInsets.all(50.0),
-                      child: Center(child: CircularProgressIndicator()),
-                    ),
-                  ]
-                : model.walletTransactions.map((WalletTransaction doc) {
-                    Map<String, dynamic> transactionDetails = {
-                      'transaction': doc.transaction,
-                      'transactionType': doc.transactionType,
-                      'amount': doc.amount,
-                      'lastUpdate': doc.lastUpdate,
-                    };
-
-                    return TransactionLog(transactionDetails);
-                  }).toList(),
-          ),
+          delegate: SliverChildListDelegate(_adaptiveContent(model)),
         )
       ],
     );
+  }
+
+  _adaptiveContent(MainModel model) {
+    Widget _content = Center(
+      child: Text(
+        'Sorry you have no transaction log for this month.',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
+    );
+
+    if (!model.isLoading && model.profileWalletTransactions.length > 0) {
+      return model.walletTransactions.map((WalletTransaction doc) {
+        Map<String, dynamic> transactionDetails = {
+          'transaction': doc.transaction,
+          'transactionType': doc.transactionType,
+          'amount': doc.amount,
+          'lastUpdate': doc.lastUpdate,
+        };
+        return TransactionLog(transactionDetails);
+      }).toList();
+    } else if (model.isLoading) {
+      return <Widget>[
+        Container(
+          padding: EdgeInsets.all(50.0),
+          child: Center(child: CircularProgressIndicator()),
+        )
+      ];
+    } else {
+      return <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(50.0),
+              child: Center(child: _content),
+            ),
+          ],
+        )
+      ];
+    }
   }
 
   @override
@@ -234,7 +257,7 @@ class _WalletPageState extends State<WalletPage> {
           child: _pageContent(model),
           onRefresh: () async {
             await model.fetchWallet();
-            await model.fetchWalletTransactions();
+            // await model.fetchWalletTransactions();
           },
         );
       },

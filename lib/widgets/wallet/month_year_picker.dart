@@ -43,7 +43,16 @@ class MonthYearPickerState extends State<MonthYearPicker> {
   @override
   void didUpdateWidget(MonthYearPicker oldWidget) {
     _getMembershipLifeDuration();
-    print('didUpdate MonthYear Picker');
+
+    // widget._model.fetchWallet();
+    // widget._model.fetchWalletTransactions();
+
+    // widget._model.fetchWalletTransactions(
+    //     // fetch transactions based on query
+    //     filterByMonthYear: true,
+    //     transactionYear: _displayedYear,
+    //     transactionMonth: _displayedMonth);
+    print('did-Update MonthYear Picker');
     super.didUpdateWidget(oldWidget);
   }
 
@@ -76,6 +85,11 @@ class MonthYearPickerState extends State<MonthYearPicker> {
       onChanged: (int value) {
         setState(() {
           _displayedMonth = value;
+          widget._model.fetchWalletTransactions(
+              // fetch transactions based on query when selected
+              filterByMonthYear: true,
+              transactionYear: _displayedYear,
+              transactionMonth: _displayedMonth);
         });
       },
       value: _displayedMonth,
@@ -95,6 +109,11 @@ class MonthYearPickerState extends State<MonthYearPicker> {
       onChanged: (int value) {
         setState(() {
           _displayedYear = value;
+          widget._model.fetchWalletTransactions(
+              // fetch transactions based on query when selected
+              filterByMonthYear: true,
+              transactionYear: _displayedYear,
+              transactionMonth: _displayedMonth);
         });
       },
       value: _displayedYear,
@@ -104,10 +123,7 @@ class MonthYearPickerState extends State<MonthYearPicker> {
   @override
   Widget build(BuildContext context) {
     return Row(
-      children: <Widget>[
-        _buildMonthDropDown(),
-        _buildYearDropDown()
-      ],
+      children: <Widget>[_buildMonthDropDown(), _buildYearDropDown()],
     );
   }
 }
