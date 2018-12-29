@@ -29,6 +29,14 @@ class _WalletPageState extends State<WalletPage> {
     super.didUpdateWidget(oldWidget);
   }
 
+  // @override
+  // void dispose() {
+  //   widget._model.profileWalletTransactions.clear();
+  //   widget._model.profileWallet = null;
+  //   print('disposed');
+  //   super.dispose();
+  // }
+
   Widget _buildWalletLogDate() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -174,7 +182,52 @@ class _WalletPageState extends State<WalletPage> {
               _buildWalletBalance(model),
               SizedBox(height: 40.0),
               _buildWalletIncomeAndExpenditure(),
+              // SizedBox(height: 40.0),
             ],
+          ),
+        )
+      ],
+    );
+  }
+
+  Widget _pageContent(MainModel model) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          floating: true,
+          snap: true,
+          expandedHeight: 350.0,
+          flexibleSpace: FlexibleSpaceBar(
+            // title: Text('myWallet',
+            //             style: TextStyle(
+            //                 color: Colors.white,
+            //                 fontSize: 25.0,
+            //                 fontWeight: FontWeight.bold)),
+            background: _builHeaderStack(context, model),
+            collapseMode: CollapseMode.parallax,
+            centerTitle: true,
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            model.isLoading
+                ? [
+                    Container(
+                      padding: EdgeInsets.all(50.0),
+                      child: Center(child: CircularProgressIndicator()),
+                    ),
+                  ]
+                : model.walletTransactions.map((WalletTransaction doc) {
+                    Map<String, dynamic> transactionDetails = {
+                      'transaction': doc.transaction,
+                      'transactionType': doc.transactionType,
+                      'amount': doc.amount,
+                      'lastUpdate': doc.lastUpdate,
+                    };
+
+                    return TransactionLog(transactionDetails);
+                  }).toList(),
           ),
         )
       ],
@@ -185,46 +238,12 @@ class _WalletPageState extends State<WalletPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              floating: true,
-              snap: true,
-              expandedHeight: 350.0,
-              flexibleSpace: FlexibleSpaceBar(
-                // title: Text('myWallet',
-                //             style: TextStyle(
-                //                 color: Colors.white,
-                //                 fontSize: 25.0,
-                //                 fontWeight: FontWeight.bold)),
-                background: _builHeaderStack(context, model),
-                collapseMode: CollapseMode.parallax,
-                centerTitle: true,
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(
-                model.isLoading
-                    ? [
-                        Container(
-                          padding: EdgeInsets.all(50.0),
-                          child: Center(child: CircularProgressIndicator()),
-                        ),
-                      ]
-                    : model.walletTransactions.map((WalletTransaction doc) {
-                        Map<String, dynamic> transactionDetails = {
-                          'transaction': doc.transaction,
-                          'transactionType': doc.transactionType,
-                          'amount': doc.amount,
-                          'lastUpdate': doc.lastUpdate,
-                        };
-
-                        return TransactionLog(transactionDetails);
-                      }).toList(),
-              ),
-            )
-          ],
+        return RefreshIndicator(
+          child: _pageContent(model),
+          onRefresh: () async {
+            await model.fetchWallet();
+            await model.fetchWalletTransactions();
+          },
         );
       },
     );

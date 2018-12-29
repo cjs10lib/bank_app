@@ -8,13 +8,13 @@ mixin WalletModel implements GeneralModel {
   List<WalletTransaction> get walletTransactions =>
       List.from(profileWalletTransactions);
 
-  Future fetchWallet() async {
-    try {
-      isLoading = true;
-      notifyListeners();
+  fetchWallet() async {
+    isLoading = true;
+    notifyListeners();
 
-      DocumentSnapshot snap =
-          await walletService.fetchWallet(authenticatedUser.uid);
+    return walletService
+        .fetchWallet(authenticatedUser.uid)
+        .then((DocumentSnapshot snap) {
       profileWallet = Wallet(
           uid: authenticatedUser.uid,
           accountNumber: profile.mobilePhone,
@@ -27,50 +27,45 @@ mixin WalletModel implements GeneralModel {
       notifyListeners();
 
       print(snap.data);
-    } catch (error) {
-      print(error);
-      isLoading = false;
-      notifyListeners();
-    }
+    });
   }
 
-  fetchWalletTransactions() async {
-    try {
-      isLoading = true;
-      notifyListeners();
+  fetchWalletTransactions() {
+    isLoading = true;
+    notifyListeners();
 
-      QuerySnapshot snap =
-          await walletService.fetchWalletTransactions(authenticatedUser.uid);
-
-      if (snap.documents.length > 0) {
-        final List<WalletTransaction> transactions = [];
-
-        snap.documents.forEach((DocumentSnapshot document) {
-          transactions.add(WalletTransaction(
-              uid: document.documentID,
-              transaction: document.data['transaction'],
-              transactionType: document.data['transactionType'],
-              amount: document.data['amount'],
-              isProcessed: document.data['isProcessed'],
-              processStatus: document.data['processStatus'],
-              created: document.data['created'],
-              lastUpdate: document.data['lastUpdate'],
-              ));
-        });
-
-        profileWalletTransactions = transactions;
+    return walletService
+        .fetchWalletTransactions(authenticatedUser.uid)
+        .then((QuerySnapshot snap) {
+      if (snap.documents.length == -1) {
+        isLoading = false;
         notifyListeners();
+        return;
       }
+      final List<WalletTransaction> transactions = [];
 
+      snap.documents.forEach((DocumentSnapshot document) {
+        transactions.add(WalletTransaction(
+          uid: document.documentID,
+          transaction: document.data['transaction'],
+          transactionType: document.data['transactionType'],
+          amount: document.data['amount'],
+          isProcessed: document.data['isProcessed'],
+          processStatus: document.data['processStatus'],
+          created: document.data['created'],
+          lastUpdate: document.data['lastUpdate'],
+        ));
+      });
+
+      profileWalletTransactions = transactions;
+      notifyListeners();
       isLoading = false;
       notifyListeners();
 
       print(snap.documents.map((docs) => docs.data));
-    } catch (error) {
-      print(error);
-      isLoading = false;
-      notifyListeners();
-    }
+    }).catchError((error) {
+      print(error.message);
+    });
   }
 
   Future<void> createWallet() async {
