@@ -21,6 +21,13 @@ class _WalletPageState extends State<WalletPage> {
     super.initState();
   }
 
+  @override
+  dispose() {
+    widget._model.profileWalletTransactions.clear();
+    print('disposed');
+    super.dispose();
+  }
+
   Widget _buildWalletLogDate() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,8 +182,9 @@ class _WalletPageState extends State<WalletPage> {
 
   Widget _buildTransactionLog(String transaction, double amount,
       DateTime transactionDate, String account) {
-    final formatedDate =
+    final String _formatedDate =
         DateFormat('EEEE, MMMM d, yyy').format(transactionDate);
+    List<String> _amount = amount.toString().split('.');
 
     return Material(
       elevation: 1.0,
@@ -189,7 +197,7 @@ class _WalletPageState extends State<WalletPage> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Text(formatedDate, style: TextStyle(color: Colors.grey)),
+                Text(_formatedDate, style: TextStyle(color: Colors.grey)),
                 Text(transaction,
                     style:
                         TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold)),
@@ -199,11 +207,10 @@ class _WalletPageState extends State<WalletPage> {
             Container(
                 child: Row(
               children: <Widget>[
-                Text(amount.toString(),
+                Text(_amount[0],
                     style: TextStyle(fontSize: 35.0, color: Colors.red)),
-                // Text('-19',
-                //     style: TextStyle(fontSize: 35.0, color: Colors.red)),
-                // Text('.99', style: TextStyle(color: Colors.red))
+                SizedBox(width: 5.0),
+                Text(_amount[1], style: TextStyle(color: Colors.red))
               ],
             )),
           ],
@@ -234,16 +241,21 @@ class _WalletPageState extends State<WalletPage> {
                 centerTitle: true,
               ),
             ),
-            model.isLoading
-                ? CircularProgressIndicator()
-                : SliverList(
-                    delegate: SliverChildListDelegate(
-                      model.walletTransactions.map((WalletTransaction doc) {
+            SliverList(
+              delegate: SliverChildListDelegate(
+                model.isLoading
+                    ? [
+                        Container(
+                          padding: EdgeInsets.all(50.0),
+                          child: Center(child: CircularProgressIndicator()),
+                        ),
+                      ]
+                    : model.walletTransactions.map((WalletTransaction doc) {
                         return _buildTransactionLog(doc.transactionType,
                             doc.amount, doc.lastUpdate, 'My Account');
                       }).toList(),
-                    ),
-                  )
+              ),
+            )
           ],
         );
       },
