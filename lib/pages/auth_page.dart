@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import 'package:bank_app/models/auth.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
@@ -15,6 +16,16 @@ class _AuthPageState extends State<AuthPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _passwordController = TextEditingController();
   AuthMode _authMode = AuthMode.Login;
+
+  final FirebaseMessaging _messaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    _messaging.getToken().then((String token) {
+      print(token);
+    });
+    super.initState();
+  }
 
   Widget _buildEmailTextField() {
     return TextFormField(

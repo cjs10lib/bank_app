@@ -8,7 +8,6 @@ import 'package:bank_app/pages/home_page.dart';
 import 'package:bank_app/pages/auth_page.dart';
 import 'package:bank_app/pages/tabs_page.dart';
 import 'package:bank_app/pages/profile_page.dart';
-import 'package:bank_app/pages/wallet_page.dart';
 import 'package:bank_app/pages/funds_loan_page.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:bank_app/pages/sign_up_wizard_page.dart';
