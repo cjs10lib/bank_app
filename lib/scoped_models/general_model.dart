@@ -1,3 +1,4 @@
+import 'package:bank_app/models/account.dart';
 import 'package:bank_app/models/wallet.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -14,6 +15,7 @@ mixin GeneralModel implements Model {
   Profile profile;
   String profileImageUrl;
   Wallet profileWallet;
+  Account profileAccountStatus;
   List<WalletTransaction> profileWalletTransactions;
   // Map<String, int> walletTransactionQueries;
   // int walletTransactionQueriesMonth;

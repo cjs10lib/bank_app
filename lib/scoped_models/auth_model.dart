@@ -49,6 +49,7 @@ mixin AuthModel implements GeneralModel {
 
   Future<void> signOut() async {
     await authService.signout();
+    profileAccountStatus = null;
     profile = null;
     profileImageUrl = null;
     profileWallet = null;

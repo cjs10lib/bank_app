@@ -24,6 +24,7 @@ dependencies:
   url_launcher: ^4.0.2
   flutter_fab_dialer: ^0.1.1
   intl: ^0.15.7
+  flutter_local_notifications: ^0.4.2+1
   firebase_auth: ^0.6.6
   cloud_firestore: ^0.8.2+3
   firebase_storage: ^1.0.4

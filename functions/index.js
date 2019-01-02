@@ -3,11 +3,12 @@ const admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-var msgData = 'Thank you for signing up. We will review your credentials and notify you on approval.'
 
 exports.welcomeMessage = functions.firestore
     .document('account/{accountId}')
     .onCreate((snapshot, context) => {
+        var msgData = 'Thank you for signing up. We will review your credentials and notify you on approval.'
+        
         admin.firestore().collection('pushtokens').doc(snapshot.id).get().then((snapshots) => {
             var token;
             if (snapshots.exists) {
