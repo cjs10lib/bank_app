@@ -106,9 +106,12 @@ exports.onFundsTransactionRequest = functions.firestore.document('wallets/{walle
                 msgData = `Hello ${profile.firstname}, we have recieved your loan request for GHC${transaction.amount}. We will notify you on loan approval. Thanks`;
             } else if (transaction.transactionType == 'TRANSFER') {
                 msgTitle = 'Transfer Request'
-                msgData = `Hello ${profile.firstname}, we have recieved your transfer request of GHC${transaction.amount} to A/C ${transaction.toAccount}. We will notify you on transfer completion. Thanks`;
+                msgData = `Hello ${profile.firstname}, we have recieved your transfer request of GHC${transaction.amount} to A/C ${transaction.toAccount}. We will notify you on transaction completion. Thanks`;
+            } else if (transaction.transactionType == 'DEPOSIT') {
+                msgTitle = 'Deposit Request'
+                msgData = `Hello ${profile.firstname}, we have recieved your deposit request of GHC${transaction.amount} to your account A/C ${transaction.toAccount}. We will notify you on transaction completion. Thanks`;
             } else {
-                msgData = 'Not Applied';
+                msgData = 'Not Implemented';
             }
 
             console.log(msgTitle, msgData);

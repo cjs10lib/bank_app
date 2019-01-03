@@ -12,6 +12,7 @@ class DepositService {
         .collection('transactions')
         .document()
         .setData({
+      'uid': uid,
       'transaction': 'CREDIT',
       'transactionType': 'DEPOSIT',
       'amount': amount,

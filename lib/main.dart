@@ -72,54 +72,54 @@ class _MyAppState extends State<MyApp> {
         payload: notification['body']);
   }
 
-  Future onSelectNotification(String payload) {
+  Future onSelectNotification(String payload) async {
     if (payload != null) {
       print('payload: $payload');
     }
 
-    return showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          //   return AlertDialog();
-          // });
+    return await Navigator.of(context).pushNamed('tabs');
+    // return showDialog(
+    //     context: context,
+    //     barrierDismissible: true,
+    //     builder: (BuildContext context) {
+    //       //   return AlertDialog();
+    //       // });
 
-          // await Navigator.of(context).pushReplacementNamed('pending-activation');
 
-          return Dialog(
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0)),
-            child: Container(
-              height: 300.0,
-              width: 200.0,
-              decoration:
-                  BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    height: 100.0,
-                    alignment: Alignment.center,
-                    child: Text('KAMCCU CORP CREDIT UNION',
-                        style: TextStyle(fontSize: 20.0)),
-                  ),
-                  SizedBox(height: 20),
-                  Container(
-                    height: 100.0,
-                    child: Text(payload, style: TextStyle(fontSize: 15.0)),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: <Widget>[
-                      RaisedButton(
-                          child: Text('Okay'),
-                          onPressed: () => Navigator.of(context).pop())
-                    ],
-                  )
-                ],
-              ),
-            ),
-          );
-        });
+    //       return Dialog(
+    //         shape: RoundedRectangleBorder(
+    //             borderRadius: BorderRadius.circular(20.0)),
+    //         child: Container(
+    //           height: 300.0,
+    //           width: 200.0,
+    //           decoration:
+    //               BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+    //           child: Column(
+    //             children: <Widget>[
+    //               Container(
+    //                 height: 100.0,
+    //                 alignment: Alignment.center,
+    //                 child: Text('KAMCCU CORP CREDIT UNION',
+    //                     style: TextStyle(fontSize: 20.0)),
+    //               ),
+    //               SizedBox(height: 20),
+    //               Container(
+    //                 height: 100.0,
+    //                 child: Text(payload, style: TextStyle(fontSize: 15.0)),
+    //               ),
+    //               SizedBox(height: 20),
+    //               Row(
+    //                 children: <Widget>[
+    //                   RaisedButton(
+    //                       child: Text('Okay'),
+    //                       onPressed: () => Navigator.of(context).pop())
+    //                 ],
+    //               )
+    //             ],
+    //           ),
+    //         ),
+    //       );
+    //     });
   }
 
   @override
