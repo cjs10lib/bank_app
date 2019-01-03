@@ -128,6 +128,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
 
   Widget _buildLoanAmountTextField() {
     return TextFormField(
+      maxLength: 7,
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
@@ -139,6 +140,11 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
           suffix: Text(' GHC Loan Amount'),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty || double.parse(value) <= 0) {
+          return 'Loan amount is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['amount'] = double.parse(value);
       },
@@ -158,6 +164,11 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
             suffixStyle: TextStyle(
                 color: Theme.of(context).accentColor,
                 fontWeight: FontWeight.bold)),
+        validator: (String value) {
+          if (value.isEmpty || value.length != 9) {
+            return 'Invalid account number!';
+          }
+        },
         onSaved: (String value) {
           _formData['accountNumber'] = value;
           _formData['fromAccount'] = value;
@@ -181,6 +192,11 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
           decoration: InputDecoration(
               hintText: 'Select Payback Date',
               prefixIcon: Icon(Icons.calendar_today)),
+          validator: (String value) {
+            if (value.isEmpty || _payBackDateController.text.isEmpty) {
+              return 'Payback date is required!';
+            }
+          },
         ),
       ),
     );
