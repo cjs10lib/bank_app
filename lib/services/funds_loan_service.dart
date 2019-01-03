@@ -12,6 +12,7 @@ class FundsLoanService {
         .collection('transactions')
         .document()
         .setData({
+      'uid': uid,
       'transaction': 'CREDIT',
       'transactionType': 'LOAN',
       'amount': amount,
