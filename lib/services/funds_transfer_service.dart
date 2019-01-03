@@ -12,6 +12,7 @@ class FundsTransferService {
         .collection('transactions')
         .document()
         .setData({
+      'uid': uid,
       'transaction': 'DEBIT',
       'transactionType': 'TRANSFER',
       'amount': amount,

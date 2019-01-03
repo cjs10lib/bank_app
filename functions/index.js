@@ -82,7 +82,10 @@ exports.onAccountActivation = functions.firestore.document('account/{accountId}'
 
 });
 
-exports.onLoanRequest = functions.firestore.document('wallets/{walletsId}/transactions/{transactionId}').onCreate((snapshot, context) => {
+exports.onFundsTransactionRequest = functions.firestore.document('wallets/{walletsId}/transactions/{transactionId}').onCreate((snapshot, context) => {
+    var msgTitle;
+    var msgData;
+
     const transactionId = snapshot.id;
     const transaction = snapshot.data();
     const uid = transaction.uid;
@@ -90,14 +93,25 @@ exports.onLoanRequest = functions.firestore.document('wallets/{walletsId}/transa
     // copy transaction to transactions collection
     return admin.firestore().collection('transactions').doc(transactionId).set(transaction).then((_) => {
 
-        console.log('Copied transactions!');
-        console.log(`Current auth uid ${uid}`);
+        console.log(`Copied transactions! auth uid ${uid}`);
 
         //  get account profile
         return admin.firestore().collection('people').doc(uid).get().then((snapshots) => {
             var profile = snapshots.data();
             console.log('Profile Name' + profile.firstname);
-            msgData = `Hello ${profile.firstname}, we have recieved your loan request for GHC${transaction.amount}. We will notify you on loan approval. Thanks`;
+
+
+            if (transaction.transactionType == 'LOAN') {
+                msgTitle = 'Loan Application';
+                msgData = `Hello ${profile.firstname}, we have recieved your loan request for GHC${transaction.amount}. We will notify you on loan approval. Thanks`;
+            } else if (transaction.transactionType == 'TRANSFER') {
+                msgTitle = 'Transfer Request'
+                msgData = `Hello ${profile.firstname}, we have recieved your transfer request of GHC${transaction.amount} to A/C ${transaction.toAccount}. We will notify you on transfer completion. Thanks`;
+            } else {
+                msgData = 'Not Applied';
+            }
+
+            console.log(msgTitle, msgData);
 
             admin.firestore().collection('pushtokens').doc(uid).get().then((snapshots) => {
                 var token;
@@ -110,7 +124,7 @@ exports.onLoanRequest = functions.firestore.document('wallets/{walletsId}/transa
 
                 var payload = {
                     "notification": {
-                        "title": "Loan Application!",
+                        "title": msgTitle,
                         "body": msgData,
                         "notification": "default"
                     },
@@ -121,7 +135,7 @@ exports.onLoanRequest = functions.firestore.document('wallets/{walletsId}/transa
                 }
 
                 return admin.messaging().sendToDevice(token, payload).then((response) => {
-                    console.log('Pushed account activated message');
+                    console.log(`Pushed ${msgTitle} message`);
                 }).catch((error) => console.log(error));
 
             }).catch((error) => console.log(error));

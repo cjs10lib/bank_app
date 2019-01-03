@@ -53,6 +53,7 @@ mixin AuthModel implements GeneralModel {
     profile = null;
     profileImageUrl = null;
     profileWallet = null;
+    profileWalletTransactions = null;
     authenticatedUser = null;
     // notifyListeners();
   }

@@ -321,7 +321,7 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
                     WalletCardStack(model: model),
                     _buildTransferFundsMaterialContainer(),
                     _buildFromAccountMaterialContainer(model),
-                    SizedBox(height: 20.0),
+                    SizedBox(height: 5.0),
                     _buildToAccountMaterialContainer(model)
                   ],
                 ),
