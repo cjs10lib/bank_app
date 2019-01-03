@@ -110,6 +110,9 @@ exports.onFundsTransactionRequest = functions.firestore.document('wallets/{walle
             } else if (transaction.transactionType == 'DEPOSIT') {
                 msgTitle = 'Deposit Request'
                 msgData = `Hello ${profile.firstname}, we have recieved your deposit request of GHC${transaction.amount} to your account A/C ${transaction.toAccount}. We will notify you on transaction completion. Thanks`;
+            } else if (transaction.transactionType == 'WITHDRAW') {
+                msgTitle = 'Withdraw Request'
+                msgData = `Hello ${profile.firstname}, we have recieved your withraw request of GHC${transaction.amount}. We will notify you on transaction completion. Thanks`;
             } else {
                 msgData = 'Not Implemented';
             }

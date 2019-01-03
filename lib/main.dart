@@ -77,14 +77,14 @@ class _MyAppState extends State<MyApp> {
       print('payload: $payload');
     }
 
-    return await Navigator.of(context).pushNamed('tabs');
-    // return showDialog(
-    //     context: context,
-    //     barrierDismissible: true,
-    //     builder: (BuildContext context) {
-    //       //   return AlertDialog();
-    //       // });
-
+    // Future.delayed(Duration.zero, () {
+    //   showDialog(
+    //       context: context,
+    //       barrierDismissible: true,
+    //       builder: (_) {
+    //         return AlertDialog();
+    //       });
+    // });
 
     //       return Dialog(
     //         shape: RoundedRectangleBorder(

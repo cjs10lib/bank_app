@@ -12,8 +12,9 @@ class WithdrawalService {
         .collection('transactions')
         .document()
         .setData({
+      'uid': uid,
       'transaction': 'DEBIT',
-      'transactionType': 'WITHDRAWAL',
+      'transactionType': 'WITHDRAW',
       'amount': amount,
       'fromAccount': accountNumber,
       'toAccount': accountNumber,
