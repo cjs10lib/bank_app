@@ -69,11 +69,13 @@ class HomePage extends StatelessWidget {
                   Container(
                     child: IconButton(
                       icon: Icon(
-                        Icons.menu,
+                        Icons.add_a_photo,
                         color: Colors.white,
                       ),
                       iconSize: 30.0,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).pushReplacementNamed('/add-offers');
+                      },
                     ),
                   ),
                 ],
@@ -109,6 +111,23 @@ class HomePage extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildSideDrawer() {
+    return Drawer(
+      child: Container(
+        child: Column(
+          children: <Widget>[
+            ListTile(
+              leading: CircleAvatar(
+                child: Icon(Icons.local_offer),
+              ),
+              title: Text('Add Offers'),
+            )
+          ],
+        ),
+      ),
     );
   }
 
