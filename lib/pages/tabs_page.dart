@@ -22,6 +22,7 @@ class _TabsPageState extends State<TabsPage>
   @override
   void initState() {
     widget._model.fetchWallet();
+    widget._model.fetchOffers();
     _tabController = TabController(vsync: this, length: 3);
     super.initState();
   }

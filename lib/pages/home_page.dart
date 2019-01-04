@@ -1,3 +1,4 @@
+import 'package:bank_app/models/offer.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/home/header_stack.dart';
 import 'package:bank_app/widgets/home/offer_list.dart';
@@ -16,10 +17,51 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-    void initState() {
-      widget.model.fetchOffers();
-      super.initState();
+  void initState() {
+    widget.model.fetchOffers();
+    super.initState();
+  }
+
+  _adaptiveContent(MainModel model) {
+    Widget _content = Center(
+      child: Text(
+        'Sorry, no offers yet.',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
+    );
+
+    if (!model.isLoading && model.offers.length > 0) {
+      return model.offers.map((Offer offer) {
+        return OfferList(
+          offerTitle: offer.title,
+          offerDescription: offer.description,
+          amount: offer.amount,
+          offerImage: 'assets/home/chair.jpg',
+          isFavorite: true,
+        );
+      }).toList();
+    } else if (model.isLoading) {
+      return <Widget>[
+        Container(
+          padding: EdgeInsets.all(50.0),
+          child: Center(child: CircularProgressIndicator()),
+        )
+      ];
+    } else {
+      return <Widget>[
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              padding: EdgeInsets.all(50.0),
+              child: Center(child: _content),
+            ),
+          ],
+        )
+      ];
     }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,23 +83,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             SliverList(
-              delegate: SliverChildListDelegate([
-                SizedBox(height: 20.0),
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),                
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),                
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),                
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),                
-                OfferList(offerTitle: 'Discount On Intrests', offerDescription: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla.', value: '10.99', offerImage: 'assets/home/chair.jpg', isFavorite: true,),
-                SizedBox(height: 20.0),                
-              ]),
+              delegate: SliverChildListDelegate(_adaptiveContent(model)),
             )
           ],
         );
