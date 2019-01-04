@@ -93,6 +93,11 @@ class OfferFormPageState extends State<OfferFormPage> {
           hintText: 'Enter Title',
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty) {
+          return 'Offer title is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['title'] = value;
       },
@@ -109,6 +114,11 @@ class OfferFormPageState extends State<OfferFormPage> {
           hintText: 'Enter Description',
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty || value.length < 10) {
+          return 'Description is required and should be 10+ characters';
+        }
+      },
       onSaved: (String value) {
         _formData['description'] = value;
       },
@@ -126,6 +136,11 @@ class OfferFormPageState extends State<OfferFormPage> {
           prefix: Text('GHC '),
           filled: true,
           fillColor: Theme.of(context).cardColor),
+      validator: (String value) {
+        if (value.isEmpty || double.parse(value) <= 0) {
+          return 'Amount is required!';
+        }
+      },
       onSaved: (String value) {
         _formData['amount'] = double.parse(value);
       },
@@ -150,8 +165,10 @@ class OfferFormPageState extends State<OfferFormPage> {
               filled: true,
               fillColor: Theme.of(context).cardColor),
           validator: (String value) {
-            if (value.isEmpty || _offerStartDateController.text.isEmpty) {
-              return 'Offer start date is required!';
+            if (value.isEmpty ||
+                _offerStartDateController.text.isEmpty ||
+                _startDate == null) {
+              return 'Offer start-date is required!';
             }
           },
         ),
@@ -177,8 +194,10 @@ class OfferFormPageState extends State<OfferFormPage> {
               filled: true,
               fillColor: Theme.of(context).cardColor),
           validator: (String value) {
-            if (value.isEmpty || _offerEndDateController.text.isEmpty) {
-              return 'Offer end date is required!';
+            if (value.isEmpty ||
+                _offerEndDateController.text.isEmpty ||
+                _endDate == null) {
+              return 'Offer end-date is required!';
             }
           },
         ),
@@ -191,37 +210,49 @@ class OfferFormPageState extends State<OfferFormPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: () {
-            _submitForm(model);
-          },
+          onTap: model.isLoading
+              ? null
+              : () {
+                  _submitForm(model);
+                },
           child: Container(
             height: 50.0,
             width: 160.0,
             padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
             color: Theme.of(context).primaryColor,
             alignment: Alignment.center,
-            child: Text('Save Offer',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16.0,
-                    fontWeight: FontWeight.bold)),
+            child: model.isLoading
+                ? CircularProgressIndicator()
+                : Text('Save Offer',
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold)),
           ),
         )
       ],
     );
   }
 
-  _submitForm(MainModel model) {
+  _submitForm(MainModel model) async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
     _formKey.currentState.save();
-    // print(_formData.values);
 
-    model.createOffer(
+    await model.createOffer(
       _formData['title'],
       _formData['description'],
       _formData['amount'],
       _startDate,
       _endDate,
     );
+
+    _formKey.currentState.reset();
+    _offerStartDateController.text = '';
+    _offerEndDateController.text = '';
+    _startDate = null;
+    _endDate = null;
   }
 
   @override

@@ -5,11 +5,23 @@ import 'package:bank_app/services/offer_service.dart';
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
 
-  createOffer(String title, String description, double amount,
+  Future<void> createOffer(String title, String description, double amount,
       DateTime startDate, DateTime endDate) async {
-    final doc = await _offerService.createOffer(
-        authenticatedUser.uid, title, description, amount, startDate, endDate);
+    try {
+      isLoading = true;
+      notifyListeners();
 
-    print(doc.documentID);
+      final doc = await _offerService.createOffer(authenticatedUser.uid, title,
+          description, amount, startDate, endDate);
+
+      isLoading = false;
+      notifyListeners();
+
+      print(doc.documentID);
+    } catch (error) {
+      print(error);
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }
