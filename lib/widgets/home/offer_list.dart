@@ -45,29 +45,50 @@ class OfferList extends StatelessWidget {
     );
   }
 
+  Widget _buildOfferDescriptionRow() {
+    return Container(
+      height: 50.0,
+      child: Text(
+        offerDescription,
+        style: TextStyle(fontSize: 12.0),
+      ),
+    );
+  }
+
   Widget _buildOfferControlsRow(BuildContext context) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Container(
           height: 40.0,
-          width: 80.0,
+          width: 120.0,
           padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
           color: Theme.of(context).primaryColor,
           alignment: Alignment.center,
-          child: Text('$amount',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('GHC',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 10.0,
+                      fontWeight: FontWeight.bold)),
+              SizedBox(width: 5.0),
+              Text('$amount',
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontWeight: FontWeight.bold)),
+            ],
+          ),
         ),
         Container(
           height: 40.0,
-          width: 120.0,
+          width: 80.0,
           // color: Color.fromRGBO(0, 25, 45, .40),
           color: Color.fromRGBO(59, 70, 80, 1),
           alignment: Alignment.center,
-          child: Text('More Details',
+          child: Text('Details',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 16.0,
@@ -108,14 +129,7 @@ class OfferList extends StatelessWidget {
                     children: <Widget>[
                       _buildOfferTitleRow(),
                       SizedBox(height: 10.0),
-                      Container(
-                        height: 50.0,
-                        child: Text(
-                          offerDescription,
-                          textAlign: TextAlign.justify,
-                          style: TextStyle(fontSize: 12.0),
-                        ),
-                      ),
+                      _buildOfferDescriptionRow(),
                       SizedBox(height: 20.0),
                       _buildOfferControlsRow(context)
                     ],

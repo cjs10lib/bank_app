@@ -48,6 +48,7 @@ mixin WalletModel implements GeneralModel {
         notifyListeners();
         return;
       }
+      
       final List<WalletTransaction> transactions = [];
 
       snap.documents.forEach((DocumentSnapshot document) {

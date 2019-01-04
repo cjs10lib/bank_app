@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
   _adaptiveContent(MainModel model) {
     Widget _content = Center(
       child: Text(
-        'Sorry, no offers yet.',
+        'Sorry, no offers available at the moment.',
         textAlign: TextAlign.center,
         style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
       ),

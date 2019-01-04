@@ -7,12 +7,15 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
 
-  List<Offer> _bankOffers;
+  List<Offer> _bankOffers = [];
 
   List<Offer> get offers => List.from(_bankOffers);
 
   fetchOffers() async {
     try {
+      isLoading = true;
+      notifyListeners();
+
       QuerySnapshot snapshot = await _offerService.fetchOffers();
       if (snapshot.documents.length < 1) {
         return;
@@ -33,13 +36,17 @@ mixin OfferModel implements GeneralModel {
 
         _offers.add(offer);
 
-        print(snap.data.values);
+        print('Offer data ${snap.data.values}');
       });
 
       _bankOffers = _offers;
       
+      isLoading = false;
+      notifyListeners();
     } catch (error) {
       print(error);
+      isLoading = false;
+      notifyListeners();
     }
   }
 

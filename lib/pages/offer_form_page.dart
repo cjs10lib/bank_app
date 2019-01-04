@@ -87,6 +87,7 @@ class OfferFormPageState extends State<OfferFormPage> {
 
   Widget _buildTitleFormField(BuildContext context) {
     return TextFormField(
+      maxLength: 25,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
           labelText: 'Title',
@@ -106,8 +107,9 @@ class OfferFormPageState extends State<OfferFormPage> {
 
   Widget _buildDescriptionFormField(BuildContext context) {
     return TextFormField(
-      keyboardType: TextInputType.multiline,
       maxLines: 3,
+      maxLength: 100,
+      keyboardType: TextInputType.multiline,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
           labelText: 'Description',
@@ -115,8 +117,8 @@ class OfferFormPageState extends State<OfferFormPage> {
           filled: true,
           fillColor: Theme.of(context).cardColor),
       validator: (String value) {
-        if (value.isEmpty || value.length < 10) {
-          return 'Description is required and should be 10+ characters';
+        if (value.isEmpty || value.length < 30) {
+          return 'Description is required and should be 30+ characters';
         }
       },
       onSaved: (String value) {
@@ -253,6 +255,8 @@ class OfferFormPageState extends State<OfferFormPage> {
     _offerEndDateController.text = '';
     _startDate = null;
     _endDate = null;
+
+    Navigator.of(context).pushReplacementNamed('/tabs');
   }
 
   @override
