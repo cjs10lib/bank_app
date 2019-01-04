@@ -63,29 +63,38 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Widget _buildPageContent(MainModel model) {
+    return CustomScrollView(
+      slivers: <Widget>[
+        SliverAppBar(
+          pinned: true,
+          expandedHeight: 350.0,
+          snap: true,
+          floating: true,
+          flexibleSpace: FlexibleSpaceBar(
+            background: HeaderStack(model),
+          ),
+          bottom: PreferredSize(
+            child: OfferOptions(),
+            preferredSize: Size.fromHeight(70.0),
+          ),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(_adaptiveContent(model)),
+        )
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return CustomScrollView(
-          slivers: <Widget>[
-            SliverAppBar(
-              pinned: true,
-              expandedHeight: 350.0,
-              snap: true,
-              floating: true,
-              flexibleSpace: FlexibleSpaceBar(
-                background: HeaderStack(model),
-              ),
-              bottom: PreferredSize(
-                child: OfferOptions(),
-                preferredSize: Size.fromHeight(70.0),
-              ),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate(_adaptiveContent(model)),
-            )
-          ],
+        return RefreshIndicator(
+          child: _buildPageContent(model),
+          onRefresh: () async {
+            await model.fetchOffers();
+          },
         );
       },
     );

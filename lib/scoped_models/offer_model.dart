@@ -12,11 +12,10 @@ mixin OfferModel implements GeneralModel {
   List<Offer> get offers => List.from(_bankOffers);
 
   fetchOffers() async {
-    try {
-      isLoading = true;
-      notifyListeners();
+    isLoading = true;
+    notifyListeners();
 
-      QuerySnapshot snapshot = await _offerService.fetchOffers();
+    return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
       if (snapshot.documents.length < 1) {
         return;
       }
@@ -40,14 +39,12 @@ mixin OfferModel implements GeneralModel {
       });
 
       _bankOffers = _offers;
-      
+
       isLoading = false;
       notifyListeners();
-    } catch (error) {
+    }).catchError((error) {
       print(error);
-      isLoading = false;
-      notifyListeners();
-    }
+    });
   }
 
   Future<void> createOffer(String title, String description, double amount,
