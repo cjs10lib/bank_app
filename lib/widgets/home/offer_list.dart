@@ -44,6 +44,38 @@ class OfferList extends StatelessWidget {
     );
   }
 
+  Widget _buildOfferControlsRow(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: <Widget>[
+        Container(
+          height: 40.0,
+          width: 80.0,
+          padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+          color: Theme.of(context).primaryColor,
+          alignment: Alignment.center,
+          child: Text(value,
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold)),
+        ),
+        Container(
+          height: 40.0,
+          width: 120.0,
+          // color: Color.fromRGBO(0, 25, 45, .40),
+          color: Color.fromRGBO(59, 70, 80, 1),
+          alignment: Alignment.center,
+          child: Text('More Details',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16.0,
+                  fontWeight: FontWeight.bold)),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     double _deviceWidth = MediaQuery.of(context).size.width;
@@ -85,36 +117,7 @@ class OfferList extends StatelessWidget {
                     ),
                   ),
                   SizedBox(height: 20.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      Container(
-                        height: 40.0,
-                        width: 80.0,
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5.0, horizontal: 5.0),
-                        color: Theme.of(context).primaryColor,
-                        alignment: Alignment.center,
-                        child: Text(value,
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                      Container(
-                        height: 40.0,
-                        width: 120.0,
-                        // color: Color.fromRGBO(0, 25, 45, .40),
-                        color: Color.fromRGBO(59, 70, 80, 1),
-                        alignment: Alignment.center,
-                        child: Text('More Details',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 16.0,
-                                fontWeight: FontWeight.bold)),
-                      ),
-                    ],
-                  )
+                  _buildOfferControlsRow(context)
                 ],
               ),
             )

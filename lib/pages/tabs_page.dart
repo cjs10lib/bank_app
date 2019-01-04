@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:bank_app/pages/home_page.dart';
 import 'package:bank_app/pages/wallet_page.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class TabsPage extends StatefulWidget {
   final MainModel _model;
@@ -33,52 +34,51 @@ class _TabsPageState extends State<TabsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: TabBarView(
-          controller: _tabController,
-          children: <Widget>[
-            HomePage(),
-            WalletPage(widget._model),
-          ],
-        ),
-        floatingActionButton: OptionsFAB(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        bottomNavigationBar: BottomAppBar(
-          shape: CircularNotchedRectangle(),
-          // notchMargin: 10.0,
-          child: Material(
-            color: Theme.of(context).primaryColor,
-            child: TabBar(
-              controller: _tabController,
-              tabs: <Widget>[
-                Tab(
-                  icon: Icon(
-                    Icons.home,
-                    size: 30.0,
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return Scaffold(
+          body: TabBarView(
+            controller: _tabController,
+            children: <Widget>[
+              HomePage(model),
+              WalletPage(widget._model),
+            ],
+          ),
+          floatingActionButton: OptionsFAB(),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          bottomNavigationBar: BottomAppBar(
+            shape: CircularNotchedRectangle(),
+            // notchMargin: 10.0,
+            child: Material(
+              color: Theme.of(context).primaryColor,
+              child: TabBar(
+                controller: _tabController,
+                tabs: <Widget>[
+                  Tab(
+                    icon: Icon(
+                      Icons.home,
+                      size: 30.0,
+                    ),
                   ),
-                ),
-                Tab(
-                  icon: Icon(
-                    Icons.account_balance_wallet,
-                    size: 30.0,
+                  Tab(
+                    icon: Icon(
+                      Icons.account_balance_wallet,
+                      size: 30.0,
+                    ),
                   ),
-                ),
-                //  Tab(
-                //   icon: Icon(
-                //     Icons.update,
-                //     size: 30.0,
-                //   ),
-                // ),
-                Tab(
-                  icon: Icon(
-                    Icons.settings,
-                    size: 30.0,
+                  Tab(
+                    icon: Icon(
+                      Icons.settings,
+                      size: 30.0,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ));
+        );
+      },
+    );
   }
 }
 

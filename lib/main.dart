@@ -137,7 +137,7 @@ class _MyAppState extends State<MyApp> {
         routes: <String, WidgetBuilder>{
           '/': (BuildContext context) => AuthPage(),
           '/tabs': (BuildContext context) => TabsPage(_model),
-          '/home': (BuildContext context) => HomePage(),
+          // '/home': (BuildContext context) => HomePage(_model),
           '/add-offers': (BuildContext context) => OfferFormPage(),
           '/profile': (BuildContext context) => ProfilePage(),
           '/loan': (BuildContext context) => FundsLoanPage(_model),

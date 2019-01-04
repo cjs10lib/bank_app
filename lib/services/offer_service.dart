@@ -4,6 +4,10 @@ class OfferService {
   final _db = Firestore.instance;
   final _serverTimestamp = FieldValue.serverTimestamp();
 
+  Future<QuerySnapshot> fetchOffers() {
+    return _db.collection('offers').getDocuments();
+  }
+
   Future<DocumentReference> createOffer(String uid, String title,
       String description, double amount, DateTime startDate, DateTime endDate) {
     return _db.collection('offers').add({

@@ -5,8 +5,22 @@ import 'package:bank_app/widgets/home/offer_options.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class HomePage extends StatelessWidget {
- 
+class HomePage extends StatefulWidget {
+  final MainModel model;
+
+  HomePage(this.model);
+
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+    void initState() {
+      widget.model.fetchOffers();
+      super.initState();
+    }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(

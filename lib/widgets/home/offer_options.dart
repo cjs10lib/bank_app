@@ -12,9 +12,13 @@ class OfferOptions extends StatelessWidget {
               Container(
                 height: 50.0,
                 width: 50.0,
-                child: Icon(Icons.local_offer, color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
+                child: Icon(Icons.local_offer,
+                    color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
               ),
-              Text('Offers', style: TextStyle(color: Color.fromRGBO(59, 70, 80, 1), fontWeight: FontWeight.bold))
+              Text('Offers',
+                  style: TextStyle(
+                      color: Color.fromRGBO(59, 70, 80, 1),
+                      fontWeight: FontWeight.bold))
             ],
           ),
         ),
@@ -25,9 +29,13 @@ class OfferOptions extends StatelessWidget {
               Container(
                 height: 50,
                 width: 50,
-                child:  Icon(Icons.event_note, color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
+                child: Icon(Icons.event_note,
+                    color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
               ),
-              Text('News', style: TextStyle(color: Color.fromRGBO(59, 70, 80, 1), fontWeight: FontWeight.bold))
+              Text('News',
+                  style: TextStyle(
+                      color: Color.fromRGBO(59, 70, 80, 1),
+                      fontWeight: FontWeight.bold))
             ],
           ),
         )
