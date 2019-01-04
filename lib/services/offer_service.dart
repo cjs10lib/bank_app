@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class OfferService {
   final _db = Firestore.instance;
-  final _serverDate = FieldValueType.serverTimestamp;
+  final _serverTimestamp = FieldValue.serverTimestamp();
 
   Future<DocumentReference> createOffer(String uid, String title,
       String description, double amount, DateTime startDate, DateTime endDate) {
@@ -13,8 +13,8 @@ class OfferService {
       'amount': amount,
       'startDate': startDate,
       'enddate': endDate,
-      'created': _serverDate,
-      'lastupdate': _serverDate
+      'created': _serverTimestamp,
+      'lastupdate': _serverTimestamp
     });
   }
 }

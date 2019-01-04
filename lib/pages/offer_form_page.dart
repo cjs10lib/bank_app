@@ -1,4 +1,6 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class OfferFormPage extends StatefulWidget {
   @override
@@ -184,12 +186,14 @@ class OfferFormPageState extends State<OfferFormPage> {
     );
   }
 
-  Widget _buildFormControl(BuildContext context) {
+  Widget _buildFormControl(BuildContext context, MainModel model) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         GestureDetector(
-          onTap: _submitForm,
+          onTap: () {
+            _submitForm(model);
+          },
           child: Container(
             height: 50.0,
             width: 160.0,
@@ -207,47 +211,60 @@ class OfferFormPageState extends State<OfferFormPage> {
     );
   }
 
-  _submitForm() {
+  _submitForm(MainModel model) {
     _formKey.currentState.save();
-    print(_formData.values);
+    // print(_formData.values);
+
+    model.createOffer(
+      _formData['title'],
+      _formData['description'],
+      _formData['amount'],
+      _startDate,
+      _endDate,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
-      child: Scaffold(
-          appBar: AppBar(title: Text('Add Offers')),
-          drawer: _buildSideDrawer(context),
-          body: SafeArea(
-            child: Container(
-              padding: EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: AssetImage('assets/login/login-background.jpg'))),
-              child: Form(
-                key: _formKey,
-                child: ListView(
-                  children: <Widget>[
-                    _buildTitleFormField(context),
-                    SizedBox(height: 20.0),
-                    _buildDescriptionFormField(context),
-                    SizedBox(height: 20.0),
-                    _buildAmountTextfield(context),
-                    // SizedBox(height: 20.0),
-                    _buildOfferStartDate(),
-                    SizedBox(height: 20.0),
-                    _buildOfferEndDate(),
-                    SizedBox(height: 20.0),
-                    _buildFormControl(context)
-                  ],
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        return GestureDetector(
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+          },
+          child: Scaffold(
+              appBar: AppBar(title: Text('Add Offers')),
+              drawer: _buildSideDrawer(context),
+              body: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
+                  decoration: BoxDecoration(
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image:
+                              AssetImage('assets/login/login-background.jpg'))),
+                  child: Form(
+                    key: _formKey,
+                    child: ListView(
+                      children: <Widget>[
+                        _buildTitleFormField(context),
+                        SizedBox(height: 20.0),
+                        _buildDescriptionFormField(context),
+                        SizedBox(height: 20.0),
+                        _buildAmountTextfield(context),
+                        // SizedBox(height: 20.0),
+                        _buildOfferStartDate(),
+                        SizedBox(height: 20.0),
+                        _buildOfferEndDate(),
+                        SizedBox(height: 20.0),
+                        _buildFormControl(context, model)
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          )),
+              )),
+        );
+      },
     );
   }
 }
