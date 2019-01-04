@@ -87,7 +87,7 @@ class OfferFormPageState extends State<OfferFormPage> {
 
   Widget _buildTitleFormField(BuildContext context) {
     return TextFormField(
-      maxLength: 25,
+      maxLength: 20,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
           labelText: 'Title',

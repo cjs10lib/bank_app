@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bank_app/pages/funds_deposit_page.dart';
 import 'package:bank_app/pages/funds_transfer_page.dart';
 import 'package:bank_app/pages/funds_withdrawal_page.dart';
+import 'package:bank_app/pages/offer_details.dart';
 import 'package:bank_app/pages/offer_form_page.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -139,6 +140,7 @@ class _MyAppState extends State<MyApp> {
           '/tabs': (BuildContext context) => TabsPage(_model),
           // '/home': (BuildContext context) => HomePage(_model),
           '/add-offers': (BuildContext context) => OfferFormPage(),
+          '/offer-details': (BuildContext context) => OfferDetails(),
           '/profile': (BuildContext context) => ProfilePage(),
           '/loan': (BuildContext context) => FundsLoanPage(_model),
           '/transfer': (BuildContext context) => FundsTransferPage(_model),

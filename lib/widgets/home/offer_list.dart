@@ -82,17 +82,22 @@ class OfferList extends StatelessWidget {
             ],
           ),
         ),
-        Container(
-          height: 40.0,
-          width: 80.0,
-          // color: Color.fromRGBO(0, 25, 45, .40),
-          color: Color.fromRGBO(59, 70, 80, 1),
-          alignment: Alignment.center,
-          child: Text('Details',
-              style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16.0,
-                  fontWeight: FontWeight.bold)),
+        GestureDetector(
+          onTap: () {
+            Navigator.of(context).pushNamed('/offer-details');
+          },
+          child: Container(
+            height: 40.0,
+            width: 80.0,
+            // color: Color.fromRGBO(0, 25, 45, .40),
+            color: Color.fromRGBO(59, 70, 80, 1),
+            alignment: Alignment.center,
+            child: Text('Details',
+                style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold)),
+          ),
         ),
       ],
     );
@@ -116,10 +121,10 @@ class OfferList extends StatelessWidget {
                 Container(
                   height: 150.0,
                   width: 150.0,
-                  padding: EdgeInsets.all(20.0),
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage(offerImage), fit: BoxFit.cover),
+                  child: Hero(
+                    tag: 'offer-image',
+                    child: Image.asset(offerImage,
+                        height: 150.0, width: 150.0, fit: BoxFit.cover),
                   ),
                 ),
                 Container(
