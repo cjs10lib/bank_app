@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class OfferFormPage extends StatefulWidget {
@@ -85,15 +88,65 @@ class OfferFormPageState extends State<OfferFormPage> {
     );
   }
 
+  Widget _buildOfferBasicDetailsContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          children: <Widget>[
+            Text('OFFER DETAILS',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('Basic Information',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildTitleFormField(context),
+            SizedBox(height: 20.0),
+            _buildDescriptionFormField(context),
+            SizedBox(height: 20.0),
+            _buildAmountTextfield(context)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildOfferDatesContainer() {
+    return Material(
+      elevation: 1.0,
+      color: Theme.of(context).cardColor,
+      child: Container(
+        padding: EdgeInsets.all(20.0),
+        child: ListView(
+          // crossAxisAlignment: CrossAxisAlignment.start,
+          shrinkWrap: true,
+          physics: ClampingScrollPhysics(),
+          children: <Widget>[
+            Text('OFFER DETAILS',
+                style:
+                    TextStyle(color: Colors.grey, fontWeight: FontWeight.bold)),
+            Divider(color: Colors.grey),
+            Text('Offer Dates Information',
+                style: TextStyle(fontSize: 15.0, fontWeight: FontWeight.bold)),
+            _buildOfferStartDate(),
+            SizedBox(height: 20.0),
+            _buildOfferEndDate(),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildTitleFormField(BuildContext context) {
     return TextFormField(
       maxLength: 20,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
-      decoration: InputDecoration(
-          labelText: 'Title',
-          hintText: 'Enter Title',
-          filled: true,
-          fillColor: Theme.of(context).cardColor),
+      decoration: InputDecoration(labelText: 'Title', hintText: 'Enter Title'),
       validator: (String value) {
         if (value.isEmpty) {
           return 'Offer title is required!';
@@ -108,14 +161,10 @@ class OfferFormPageState extends State<OfferFormPage> {
   Widget _buildDescriptionFormField(BuildContext context) {
     return TextFormField(
       maxLines: 3,
-      maxLength: 100,
       keyboardType: TextInputType.multiline,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
-          labelText: 'Description',
-          hintText: 'Enter Description',
-          filled: true,
-          fillColor: Theme.of(context).cardColor),
+          labelText: 'Description', hintText: 'Enter Description'),
       validator: (String value) {
         if (value.isEmpty || value.length < 30) {
           return 'Description is required and should be 30+ characters';
@@ -133,11 +182,7 @@ class OfferFormPageState extends State<OfferFormPage> {
       keyboardType: TextInputType.number,
       style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
       decoration: InputDecoration(
-          labelText: 'Amount',
-          hintText: 'Enter Amount',
-          prefix: Text('GHC '),
-          filled: true,
-          fillColor: Theme.of(context).cardColor),
+          labelText: 'Amount', hintText: 'Enter Amount', prefix: Text('GHC ')),
       validator: (String value) {
         if (value.isEmpty || double.parse(value) <= 0) {
           return 'Amount is required!';
@@ -163,9 +208,7 @@ class OfferFormPageState extends State<OfferFormPage> {
           decoration: InputDecoration(
               labelText: 'Start Date',
               hintText: 'Select Start Date',
-              prefixIcon: Icon(Icons.calendar_today),
-              filled: true,
-              fillColor: Theme.of(context).cardColor),
+              prefixIcon: Icon(Icons.calendar_today)),
           validator: (String value) {
             if (value.isEmpty ||
                 _offerStartDateController.text.isEmpty ||
@@ -192,9 +235,7 @@ class OfferFormPageState extends State<OfferFormPage> {
           decoration: InputDecoration(
               labelText: 'End Date',
               hintText: 'Select End Date',
-              prefixIcon: Icon(Icons.calendar_today),
-              filled: true,
-              fillColor: Theme.of(context).cardColor),
+              prefixIcon: Icon(Icons.calendar_today)),
           validator: (String value) {
             if (value.isEmpty ||
                 _offerEndDateController.text.isEmpty ||
@@ -217,19 +258,23 @@ class OfferFormPageState extends State<OfferFormPage> {
               : () {
                   _submitForm(model);
                 },
-          child: Container(
-            height: 50.0,
-            width: 160.0,
-            padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
-            color: Theme.of(context).primaryColor,
-            alignment: Alignment.center,
-            child: model.isLoading
-                ? CircularProgressIndicator()
-                : Text('Save Offer',
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16.0,
-                        fontWeight: FontWeight.bold)),
+          child: Material(
+            elevation: 2.0,
+            child: Container(
+              height: 50.0,
+              width: 160.0,
+              padding: EdgeInsets.symmetric(vertical: 5.0, horizontal: 5.0),
+              // color: Theme.of(context).primaryColor,
+              color: Color.fromRGBO(59, 70, 80, 1),
+              alignment: Alignment.center,
+              child: model.isLoading
+                  ? CircularProgressIndicator()
+                  : Text('Save Offer',
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.bold)),
+            ),
           ),
         )
       ],
@@ -259,6 +304,86 @@ class OfferFormPageState extends State<OfferFormPage> {
     Navigator.of(context).pushReplacementNamed('/tabs');
   }
 
+  File _imageFile;
+
+  void _openImagePicker(BuildContext context) {
+    showModalBottomSheet(
+        context: context,
+        builder: (BuildContext context) {
+          return ScopedModelDescendant(
+              builder: (BuildContext context, Widget child, MainModel model) {
+            return Container(
+              height: 250.0,
+              padding: EdgeInsets.all(30.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  Text(
+                    'Select an option',
+                    style: TextStyle(fontSize: 20.0),
+                  ),
+                  SizedBox(height: 20.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      GestureDetector(
+                        child: Material(
+                          elevation: 2.0,
+                          child: Container(
+                            padding: EdgeInsets.all(10.0),
+                            width: 120.0,
+                            height: 120,
+                            child: Icon(Icons.camera,
+                                size: 100.0,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ),
+                        onTap: () {
+                          _getImage(ImageSource.camera, model);
+                        },
+                      ),
+                      SizedBox(width: 20.0),
+                      GestureDetector(
+                        child: Material(
+                          elevation: 2.0,
+                          child: Container(
+                            padding: EdgeInsets.all(10.0),
+                            width: 120.0,
+                            height: 120.0,
+                            child: Icon(Icons.image,
+                                size: 100.0,
+                                color: Theme.of(context).primaryColor),
+                          ),
+                        ),
+                        onTap: () {
+                          _getImage(ImageSource.gallery, model);
+                        },
+                      )
+                    ],
+                  )
+                ],
+              ),
+            );
+          });
+        });
+  }
+
+  void _getImage(ImageSource source, MainModel model) {
+    model.getAuthenticatedUser();
+
+    ImagePicker.pickImage(source: source, maxWidth: 200.0, maxHeight: 200.0)
+        .then((File image) {
+      if (image != null) {
+        setState(() {
+          _imageFile = image;
+          model.selectProfileImage(image);
+        });
+      }
+
+      Navigator.of(context).pop();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
@@ -268,35 +393,68 @@ class OfferFormPageState extends State<OfferFormPage> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Scaffold(
-              appBar: AppBar(title: Text('Add Offers')),
               drawer: _buildSideDrawer(context),
-              body: SafeArea(
-                child: Container(
-                  padding: EdgeInsets.only(top: 20.0, right: 20.0, left: 20.0),
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          fit: BoxFit.cover,
-                          image:
-                              AssetImage('assets/login/login-background.jpg'))),
-                  child: Form(
-                    key: _formKey,
-                    child: ListView(
-                      children: <Widget>[
-                        _buildTitleFormField(context),
-                        SizedBox(height: 20.0),
-                        _buildDescriptionFormField(context),
-                        SizedBox(height: 20.0),
-                        _buildAmountTextfield(context),
-                        // SizedBox(height: 20.0),
-                        _buildOfferStartDate(),
-                        SizedBox(height: 20.0),
-                        _buildOfferEndDate(),
-                        SizedBox(height: 20.0),
-                        _buildFormControl(context, model)
-                      ],
+              body: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    expandedHeight: 350.0,
+                    // snap: true,
+                    // floating: true,
+                    actions: <Widget>[
+                      IconButton(
+                        icon: Icon(
+                          Icons.add_a_photo,
+                          size: 30.0,
+                        ),
+                        onPressed: () {
+                          _openImagePicker(context);
+                        },
+                      )
+                    ],
+                    flexibleSpace: FlexibleSpaceBar(
+                      title: Text('Offer Image'),
+                      background: Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image:
+                                AssetImage('assets/login/login-background.jpg'),
+                          ),
+                        ),
+                        child: _imageFile == null
+                            ? Image.asset('assets/login/login-background.jpg',
+                                fit: BoxFit.cover)
+                            : Image.file(_imageFile, fit: BoxFit.cover),
+                      ),
                     ),
                   ),
-                ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      Form(
+                        key: _formKey,
+                        child: Container(
+                          padding: EdgeInsets.only(
+                              top: 20.0, right: 20.0, left: 20.0),
+                          color: Theme.of(context).primaryColor,
+                          child: ListView(
+                            shrinkWrap: true,
+                            physics: ClampingScrollPhysics(),
+                            children: <Widget>[
+                              _buildOfferBasicDetailsContainer(),
+                              SizedBox(height: 20.0),
+                              _buildOfferDatesContainer(),
+                              SizedBox(height: 20.0),
+                              _buildFormControl(context, model),
+                              SizedBox(height: 20.0),
+                            ],
+                          ),
+                        ),
+                        // ),
+                      ),
+                    ]),
+                  )
+                ],
               )),
         );
       },
