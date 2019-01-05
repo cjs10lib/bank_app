@@ -34,6 +34,8 @@ class _HomePageState extends State<HomePage> {
     if (!model.isLoading && model.offers.length > 0) {
       return model.offers.map((Offer offer) {
         return OfferList(
+          model: model,
+          offerId: offer.id,
           offerTitle: offer.title,
           offerDescription: offer.description,
           amount: offer.amount,

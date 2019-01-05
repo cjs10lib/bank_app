@@ -1,5 +1,8 @@
+import 'package:bank_app/models/offer.dart';
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/offer_details/offer_mini_carousel.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class OfferDetails extends StatelessWidget {
   final offerDescription =
@@ -22,7 +25,7 @@ class OfferDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildOfferTitle(BuildContext context) {
+  Widget _buildOfferTitle(BuildContext context, Offer offer) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
@@ -30,14 +33,14 @@ class OfferDetails extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'Lorem ipsum dolor sit',
+              '${offer.title}',
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              'Lorem ipsum dolor sit amet',
+              'Location',
               style: TextStyle(
                   color: Colors.grey,
                   fontSize: 16.0,
@@ -69,7 +72,7 @@ class OfferDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildOfferAmount() {
+  Widget _buildOfferAmount(Offer offer) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
@@ -101,7 +104,7 @@ class OfferDetails extends StatelessWidget {
               ),
               SizedBox(width: 5.0),
               Text(
-                '20000.0',
+                '${offer.amount}',
                 style: TextStyle(color: Colors.grey, fontSize: 30.0),
               ),
             ],
@@ -111,11 +114,11 @@ class OfferDetails extends StatelessWidget {
     );
   }
 
-  Widget _buildOfferDescription() {
+  Widget _buildOfferDescription(Offer offer) {
     return Container(
       padding: EdgeInsets.all(20.0),
       child: Text(
-        offerDescription,
+        '${offer.description}',
         textAlign: TextAlign.justify,
         style: TextStyle(color: Colors.white, fontSize: 18.0),
       ),
@@ -124,37 +127,43 @@ class OfferDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: CustomScrollView(
-        slivers: <Widget>[
-          _buildSliverAppBar(),
-          SliverList(
-            delegate: SliverChildListDelegate([
-              Container(
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColor,
-                  borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(45.0),
-                      topLeft: Radius.circular(45.0)),
-                ),
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      padding: EdgeInsets.only(
-                          top: 50.0, right: 20.0, left: 20.0, bottom: 5.0),
-                      child: _buildOfferTitle(context),
+    return ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        Offer selectedOffer = model.selectedOffer;
+
+        return Scaffold(
+          body: CustomScrollView(
+            slivers: <Widget>[
+              _buildSliverAppBar(),
+              SliverList(
+                delegate: SliverChildListDelegate([
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Theme.of(context).primaryColor,
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(45.0),
+                          topLeft: Radius.circular(45.0)),
                     ),
-                    _buildOfferAmount(),
-                    SizedBox(height: 30.0),
-                    OfferMiniCarousel(),
-                    _buildOfferDescription()
-                  ],
-                ),
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(
+                              top: 50.0, right: 20.0, left: 20.0, bottom: 5.0),
+                          child: _buildOfferTitle(context, selectedOffer),
+                        ),
+                        _buildOfferAmount(selectedOffer),
+                        SizedBox(height: 30.0),
+                        OfferMiniCarousel(),
+                        _buildOfferDescription(selectedOffer)
+                      ],
+                    ),
+                  )
+                ]),
               )
-            ]),
-          )
-        ],
-      ),
+            ],
+          ),
+        );
+      },
     );
   }
 }

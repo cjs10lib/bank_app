@@ -1,12 +1,16 @@
+import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 
 class OfferList extends StatelessWidget {
-  final String offerImage, offerTitle, offerDescription;
+  final MainModel model;
+  final String offerId, offerImage, offerTitle, offerDescription;
   final double amount;
   final bool isFavorite;
 
   OfferList(
-      {@required this.offerImage,
+      {this.model,
+      @required this.offerId,
+        @required this.offerImage,
       @required this.offerTitle,
       @required this.offerDescription,
       @required this.amount,
@@ -84,6 +88,7 @@ class OfferList extends StatelessWidget {
         ),
         GestureDetector(
           onTap: () {
+            model.selectOffer(offerId);
             Navigator.of(context).pushNamed('/offer-details');
           },
           child: Container(

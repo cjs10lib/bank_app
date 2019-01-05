@@ -7,9 +7,19 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
 
-  List<Offer> _bankOffers = [];
+  List<Offer> _bankOffers;
+  String _selectedOfferId;
 
   List<Offer> get offers => List.from(_bankOffers);
+  
+  Offer get selectedOffer => _bankOffers.firstWhere((Offer offer) {
+    return offer.id == _selectedOfferId;
+  });
+
+  void selectOffer(String offerId) {
+    _selectedOfferId = offerId;
+    notifyListeners();
+  }
 
   fetchOffers() async {
     isLoading = true;
