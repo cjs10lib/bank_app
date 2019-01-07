@@ -8,6 +8,12 @@ class OfferOptions extends StatefulWidget {
 class OfferOptionsState extends State<OfferOptions> {
   bool isOffers = true;
 
+  @override
+  initState() {
+    isOffers = true;
+    super.initState();
+  }
+
   Widget _buildOptionRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
