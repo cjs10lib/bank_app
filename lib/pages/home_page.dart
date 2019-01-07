@@ -32,6 +32,7 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (!model.isLoading && model.offers.length > 0) {
+      print(model.offers.length);
       return model.offers.map((Offer offer) {
         return OfferList(
           model: model,
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> {
         );
       }).toList();
     } else if (model.isLoading) {
+      print('loading');
       return <Widget>[
         Container(
           padding: EdgeInsets.all(50.0),
@@ -51,6 +53,7 @@ class _HomePageState extends State<HomePage> {
         )
       ];
     } else {
+      print('else');
       return <Widget>[
         Column(
           mainAxisAlignment: MainAxisAlignment.center,

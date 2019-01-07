@@ -19,10 +19,13 @@ class OfferFormPageState extends State<OfferFormPage> {
     'amount': 0
   };
 
+  File _imageFile;
   DateTime _startDate;
   DateTime _endDate;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
   TextEditingController _offerStartDateController = TextEditingController();
   TextEditingController _offerEndDateController = TextEditingController();
 
@@ -282,29 +285,42 @@ class OfferFormPageState extends State<OfferFormPage> {
   }
 
   _submitForm(MainModel model) async {
+    if (_imageFile == null) {
+      final snackbar =
+          SnackBar(content: Text('Select an offer image before proceeding!'));
+      _scaffoldKey.currentState.showSnackBar(snackbar);
+      return;
+    }
+
     if (!_formKey.currentState.validate()) {
       return;
     }
+
     _formKey.currentState.save();
 
-    await model.createOffer(
-      _formData['title'],
-      _formData['description'],
-      _formData['amount'],
-      _startDate,
-      _endDate,
-    );
+    Map<String, dynamic> _imageSuccessMessage =
+        await model.uploadOfferImage(_imageFile);
 
-    _formKey.currentState.reset();
-    _offerStartDateController.text = '';
-    _offerEndDateController.text = '';
-    _startDate = null;
-    _endDate = null;
+    if (_imageSuccessMessage['success']) {
+      Map<String, dynamic> _successMessage = await model.createOffer(
+          _formData['title'],
+          _formData['description'],
+          _formData['amount'],
+          _startDate,
+          _endDate,
+          _imageSuccessMessage['donwloadUrl']);
 
-    Navigator.of(context).pushReplacementNamed('/tabs');
+      _formKey.currentState.reset();
+      _offerStartDateController.text = '';
+      _offerEndDateController.text = '';
+      _startDate = null;
+      _endDate = null;
+
+      Navigator.of(context).pushReplacementNamed('/tabs');
+    } else {
+      print(_imageSuccessMessage['downloadUrl']); // error message
+    }
   }
-
-  File _imageFile;
 
   void _openImagePicker(BuildContext context) {
     showModalBottomSheet(
@@ -393,6 +409,7 @@ class OfferFormPageState extends State<OfferFormPage> {
             FocusScope.of(context).requestFocus(FocusNode());
           },
           child: Scaffold(
+              key: _scaffoldKey,
               drawer: _buildSideDrawer(context),
               body: CustomScrollView(
                 slivers: <Widget>[

@@ -25,6 +25,7 @@ dependencies:
   intl: ^0.15.7
   flutter_local_notifications: ^0.4.2+1
   image_picker: ^0.4.10
+  uuid: ^1.0.3
   firebase_auth: ^0.6.6
   cloud_firestore: ^0.8.2+3
   firebase_storage: ^1.0.4

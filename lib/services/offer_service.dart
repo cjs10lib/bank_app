@@ -9,7 +9,7 @@ class OfferService {
   }
 
   Future<DocumentReference> createOffer(String uid, String title,
-      String description, double amount, DateTime startDate, DateTime endDate) {
+      String description, double amount, DateTime startDate, DateTime endDate, String offerImageUrl) {
     return _db.collection('offers').add({
       'createdBy': uid,
       'title': title,
@@ -17,6 +17,7 @@ class OfferService {
       'amount': amount,
       'startDate': startDate,
       'enddate': endDate,
+      'offerImageUrl': offerImageUrl,
       'created': _serverTimestamp,
       'lastupdate': _serverTimestamp
     });

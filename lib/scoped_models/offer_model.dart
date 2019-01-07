@@ -7,14 +7,14 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
 
-  List<Offer> _bankOffers;
+  List<Offer> _bankOffers = [];
   String _selectedOfferId;
 
   List<Offer> get offers => List.from(_bankOffers);
-  
+
   Offer get selectedOffer => _bankOffers.firstWhere((Offer offer) {
-    return offer.id == _selectedOfferId;
-  });
+        return offer.id == _selectedOfferId;
+      });
 
   void selectOffer(String offerId) {
     _selectedOfferId = offerId;
@@ -27,8 +27,11 @@ mixin OfferModel implements GeneralModel {
 
     return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
       if (snapshot.documents.length < 1) {
+        isLoading = false;
+        notifyListeners();
         return;
       }
+      print('offersssss ${snapshot.documents.length}');
       List<Offer> _offers = [];
       snapshot.documents.forEach((DocumentSnapshot snap) {
         final offer = Offer(
@@ -49,31 +52,39 @@ mixin OfferModel implements GeneralModel {
       });
 
       _bankOffers = _offers;
+      notifyListeners();
 
       isLoading = false;
       notifyListeners();
     }).catchError((error) {
-      print(error);
+      print(error.message);
     });
   }
 
-  Future<void> createOffer(String title, String description, double amount,
-      DateTime startDate, DateTime endDate) async {
+  Future<Map<String, dynamic>> createOffer(
+      String title,
+      String description,
+      double amount,
+      DateTime startDate,
+      DateTime endDate,
+      String offerImageUrl) async {
     try {
       isLoading = true;
       notifyListeners();
 
       final doc = await _offerService.createOffer(authenticatedUser.uid, title,
-          description, amount, startDate, endDate);
+          description, amount, startDate, endDate, offerImageUrl);
 
       isLoading = false;
       notifyListeners();
 
       print(doc.documentID);
+      return {'success': true, 'message': doc.documentID};
     } catch (error) {
-      print(error);
       isLoading = false;
       notifyListeners();
+      print('Upload Completed and unsuccessful ${error.message}');
+      return {'success': false, 'message': error.message};
     }
   }
 }
