@@ -50,12 +50,36 @@ class OfferList extends StatelessWidget {
     );
   }
 
-  Widget _buildOfferDescriptionRow() {
+  Widget _buildOfferDescriptionRow(BuildContext context) {
     return Container(
       height: 50.0,
-      child: Text(
-        offerDescription,
-        style: TextStyle(fontSize: 12.0),
+      child: Column(
+        children: <Widget>[
+          Text(
+            offerDescription.length > 60
+                ? '${offerDescription.substring(0, 60)}...'
+                : offerDescription.substring(0, offerDescription.length),
+            style: TextStyle(fontSize: 12.0),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: <Widget>[
+              GestureDetector(
+                onTap: () {
+                  model.selectOffer(offerId);
+                  Navigator.of(context).pushNamed('/offer-details');
+                },
+                child: Text(
+                  'show more',
+                  style: TextStyle(
+                      color: Colors.blueAccent,
+                      fontSize: 12.0,
+                      fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -145,7 +169,7 @@ class OfferList extends StatelessWidget {
                     children: <Widget>[
                       _buildOfferTitleRow(),
                       SizedBox(height: 10.0),
-                      _buildOfferDescriptionRow(),
+                      _buildOfferDescriptionRow(context),
                       SizedBox(height: 20.0),
                       _buildOfferControlsRow(context)
                     ],
