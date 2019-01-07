@@ -8,15 +8,16 @@ class OfferDetails extends StatelessWidget {
   final offerDescription =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum tincidunt arcu placerat, efficitur ex ut, porta nulla. Quisque vehicula id nisi nec suscipit. Phasellus ut nunc turpis.';
 
-  Widget _buildSliverAppBar() {
+  Widget _buildSliverAppBar(Offer offer) {
     return SliverAppBar(
       pinned: true,
       expandedHeight: 450.0,
       flexibleSpace: FlexibleSpaceBar(
         background: Hero(
-          tag: 'offer-image',
-          child: Image.asset(
-            'assets/home/chair.jpg',
+          tag: offer.id,
+          child: FadeInImage(
+            image: NetworkImage(offer.imageUrl),
+            placeholder: AssetImage('assets/loading/loader.gif'),
             fit: BoxFit.cover,
           ),
         ),
@@ -134,16 +135,12 @@ class OfferDetails extends StatelessWidget {
         return Scaffold(
           body: CustomScrollView(
             slivers: <Widget>[
-              _buildSliverAppBar(),
+              _buildSliverAppBar(selectedOffer),
               SliverList(
                 delegate: SliverChildListDelegate([
                   Container(
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor,
-                      borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(45.0),
-                          topLeft: Radius.circular(45.0)),
-                    ),
+                    decoration:
+                        BoxDecoration(color: Theme.of(context).primaryColor),
                     child: Column(
                       children: <Widget>[
                         Container(

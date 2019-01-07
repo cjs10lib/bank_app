@@ -39,6 +39,7 @@ class _HomePageState extends State<HomePage> {
           offerId: offer.id,
           offerTitle: offer.title,
           offerDescription: offer.description,
+          offerImageUrl: offer.imageUrl,
           amount: offer.amount,
           offerImage: 'assets/home/chair.jpg',
           isFavorite: true,

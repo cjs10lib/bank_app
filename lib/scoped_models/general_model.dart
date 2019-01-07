@@ -1,4 +1,5 @@
 import 'package:bank_app/models/account.dart';
+import 'package:bank_app/models/offer.dart';
 import 'package:bank_app/models/wallet.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -17,6 +18,8 @@ mixin GeneralModel implements Model {
   Wallet profileWallet;
   Account profileAccountStatus;
   List<WalletTransaction> profileWalletTransactions;
+
+  List<Offer> bankOffers = [];
   // Map<String, int> walletTransactionQueries;
   // int walletTransactionQueriesMonth;
   // int walletTransactionQueriesYear;

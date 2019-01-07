@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 
 class OfferList extends StatelessWidget {
   final MainModel model;
-  final String offerId, offerImage, offerTitle, offerDescription;
+  final String offerId, offerImage, offerTitle, offerDescription, offerImageUrl;
   final double amount;
   final bool isFavorite;
 
   OfferList(
       {this.model,
       @required this.offerId,
-        @required this.offerImage,
+      @required this.offerImage,
       @required this.offerTitle,
       @required this.offerDescription,
+      @required this.offerImageUrl,
       @required this.amount,
       @required this.isFavorite});
 
@@ -120,17 +121,22 @@ class OfferList extends StatelessWidget {
           elevation: 1.0,
           color: Colors.white,
           child: Container(
+            // width: _targetWidth,
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
                 Container(
                   height: 150.0,
                   width: 150.0,
                   child: Hero(
-                    tag: 'offer-image',
-                    child: Image.asset(offerImage,
-                        height: 150.0, width: 150.0, fit: BoxFit.cover),
-                  ),
+                      tag: offerId,
+                      child: FadeInImage(
+                        image: NetworkImage(offerImageUrl),
+                        placeholder: AssetImage('assets/loading/loader.gif'),
+                        height: 150.0,
+                        width: 150.0,
+                        fit: BoxFit.cover,
+                      )),
                 ),
                 Container(
                   width: 200.0,

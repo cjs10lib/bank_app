@@ -6,13 +6,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
-
-  List<Offer> _bankOffers = [];
+  
   String _selectedOfferId;
 
-  List<Offer> get offers => List.from(_bankOffers);
+  List<Offer> get offers => List.from(bankOffers);
 
-  Offer get selectedOffer => _bankOffers.firstWhere((Offer offer) {
+  Offer get selectedOffer => bankOffers.firstWhere((Offer offer) {
         return offer.id == _selectedOfferId;
       });
 
@@ -40,6 +39,7 @@ mixin OfferModel implements GeneralModel {
           title: snap.data['title'],
           description: snap.data['description'],
           amount: snap.data['amount'],
+          imageUrl: snap.data['offerImageUrl'],
           startDate: snap.data['startDate'],
           endDate: snap.data['endDate'],
           created: snap.data['created'],
@@ -51,7 +51,7 @@ mixin OfferModel implements GeneralModel {
         print('Offer data ${snap.data.values}');
       });
 
-      _bankOffers = _offers;
+      bankOffers = _offers;
       notifyListeners();
 
       isLoading = false;

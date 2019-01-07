@@ -6,6 +6,7 @@ class Offer {
   String title;
   String description;
   double amount;
+  String imageUrl;
   DateTime startDate;
   DateTime endDate;
   DateTime created;
@@ -17,6 +18,7 @@ class Offer {
       @required this.title,
       @required this.description,
       @required this.amount,
+      @required this.imageUrl,
       @required this.startDate,
       @required this.endDate,
       this.created,

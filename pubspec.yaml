@@ -54,6 +54,7 @@ flutter:
     - assets/logo/white-cu-logo.png
     - assets/avatar/avatar.png
     - assets/avatar/placeholder.png
+    - assets/loading/loader.gif
     - assets/home/card.png
     - assets/home/desk.png
     - assets/home/wardrobe.png
