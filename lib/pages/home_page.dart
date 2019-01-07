@@ -34,6 +34,7 @@ class _HomePageState extends State<HomePage> {
     if (!model.isLoading && model.offers.length > 0) {
       print(model.offers.length);
       return model.offers.map((Offer offer) {
+        print(offer.id);
         return OfferList(
           model: model,
           offerId: offer.id,
@@ -42,7 +43,7 @@ class _HomePageState extends State<HomePage> {
           offerImageUrl: offer.imageUrl,
           amount: offer.amount,
           offerImage: 'assets/home/chair.jpg',
-          isFavorite: true,
+          isFavorite: offer.isFavorite,
         );
       }).toList();
     } else if (model.isLoading) {

@@ -7,6 +7,7 @@ class Offer {
   String description;
   double amount;
   String imageUrl;
+  bool isFavorite;
   DateTime startDate;
   DateTime endDate;
   DateTime created;
@@ -19,6 +20,7 @@ class Offer {
       @required this.description,
       @required this.amount,
       @required this.imageUrl,
+      this.isFavorite = false,
       @required this.startDate,
       @required this.endDate,
       this.created,

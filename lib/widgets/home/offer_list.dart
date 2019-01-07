@@ -1,5 +1,6 @@
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class OfferList extends StatelessWidget {
   final MainModel model;
@@ -30,21 +31,28 @@ class OfferList extends StatelessWidget {
                 fontWeight: FontWeight.bold),
           ),
         ),
-        Material(
-          elevation: isFavorite ? 1.0 : 0.0,
-          borderRadius: BorderRadius.circular(20.0),
-          child: Container(
-            height: 40.0,
-            width: 40.0,
-            child: IconButton(
-              icon: Icon(
-                isFavorite ? Icons.favorite : Icons.favorite_border,
-                color: Colors.red,
+        ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return Material(
+              elevation: isFavorite ? 1.0 : 0.0,
+              borderRadius: BorderRadius.circular(20.0),
+              child: Container(
+                height: 40.0,
+                width: 40.0,
+                child: IconButton(
+                  icon: Icon(
+                    isFavorite ? Icons.favorite : Icons.favorite_border,
+                    color: Colors.red,
+                  ),
+                  // iconSize: 30.0,
+                  onPressed: () {
+                    model.selectOffer(offerId);
+                    model.toggleIsFavoriteStatus();
+                  },
+                ),
               ),
-              // iconSize: 30.0,
-              onPressed: () {},
-            ),
-          ),
+            );
+          },
         )
       ],
     );

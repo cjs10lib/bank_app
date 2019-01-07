@@ -2,16 +2,18 @@ import 'package:bank_app/models/offer.dart';
 import 'package:bank_app/scoped_models/general_model.dart';
 
 import 'package:bank_app/services/offer_service.dart';
+import 'package:bank_app/services/offer_favorite_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
-  
+  final _offerFavoriteService = OfferFavoriteService();
+
   String _selectedOfferId;
 
   List<Offer> get offers => List.from(bankOffers);
 
-  Offer get selectedOffer => bankOffers.firstWhere((Offer offer) {
+  Offer get selectedOffer => offers.firstWhere((Offer offer) {
         return offer.id == _selectedOfferId;
       });
 
@@ -30,9 +32,9 @@ mixin OfferModel implements GeneralModel {
         notifyListeners();
         return;
       }
-      print('offersssss ${snapshot.documents.length}');
+      
       List<Offer> _offers = [];
-      snapshot.documents.forEach((DocumentSnapshot snap) {
+      snapshot.documents.forEach((DocumentSnapshot snap) async {
         final offer = Offer(
           id: snap.documentID,
           createdBy: snap.data['createdBy'],
@@ -48,7 +50,33 @@ mixin OfferModel implements GeneralModel {
 
         _offers.add(offer);
 
-        print('Offer data ${snap.data.values}');
+        Offer offerData = _offers.firstWhere((Offer data) {
+          return data.id == offer.id;
+        });
+
+        int index = _offers.indexWhere((Offer data) {
+          return data.id == offer.id;
+        });
+
+        bool isFavorited = await _offerFavoriteService.isFavorited(
+            offer.id, authenticatedUser.uid);
+
+        offerData = Offer(
+          id: snap.documentID,
+          createdBy: snap.data['createdBy'],
+          title: snap.data['title'],
+          description: snap.data['description'],
+          amount: snap.data['amount'],
+          imageUrl: snap.data['offerImageUrl'],
+          startDate: snap.data['startDate'],
+          endDate: snap.data['endDate'],
+          created: snap.data['created'],
+          lastUpdate: snap.data['lastUpdate'],
+          isFavorite: isFavorited ? true : false
+        );
+
+        _offers[index] = offerData;
+        notifyListeners();
       });
 
       bankOffers = _offers;
@@ -59,6 +87,65 @@ mixin OfferModel implements GeneralModel {
     }).catchError((error) {
       print(error.message);
     });
+  }
+
+  void toggleIsFavoriteStatus() {
+    final bool isCurrentlyFavorite = selectedOffer.isFavorite;
+    final bool newFavoriteStatus = !isCurrentlyFavorite;
+
+    final Offer updatedOfferStatus = Offer(
+      id: selectedOffer.id,
+      createdBy: selectedOffer.createdBy,
+      title: selectedOffer.title,
+      description: selectedOffer.description,
+      amount: selectedOffer.amount,
+      imageUrl: selectedOffer.imageUrl,
+      startDate: selectedOffer.startDate,
+      endDate: selectedOffer.endDate,
+      created: selectedOffer.created,
+      lastUpdate: selectedOffer.lastUpdate,
+      isFavorite: newFavoriteStatus,
+    );
+
+    final int _offerIndex = bankOffers.indexWhere((Offer offer) {
+      return offer.id == _selectedOfferId;
+    });
+
+    bankOffers[_offerIndex] = updatedOfferStatus;
+    notifyListeners();
+
+    try {
+      if (newFavoriteStatus) {
+        _offerFavoriteService.addToFavorite(
+            _selectedOfferId, authenticatedUser.uid);
+        print('added');
+      } else {
+        _offerFavoriteService.removeFromFavorite(
+            _selectedOfferId, authenticatedUser.uid);
+        print('removed');
+      }
+
+      _selectedOfferId = null;
+    } catch (error) {
+      print(error);
+      final Offer updatedOfferStatus = Offer(
+        id: selectedOffer.id,
+        createdBy: selectedOffer.createdBy,
+        title: selectedOffer.title,
+        description: selectedOffer.description,
+        amount: selectedOffer.amount,
+        imageUrl: selectedOffer.imageUrl,
+        startDate: selectedOffer.startDate,
+        endDate: selectedOffer.endDate,
+        created: selectedOffer.created,
+        lastUpdate: selectedOffer.lastUpdate,
+        isFavorite: !newFavoriteStatus,
+      );
+
+      _selectedOfferId = null;
+      bankOffers[_offerIndex] = updatedOfferStatus;
+      notifyListeners();
+    }
   }
 
   Future<Map<String, dynamic>> createOffer(
