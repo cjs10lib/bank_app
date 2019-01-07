@@ -42,42 +42,17 @@ mixin OfferModel implements GeneralModel {
     isLoading = true;
     notifyListeners();
 
-    return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
-      if (snapshot.documents.length < 1) {
-        isLoading = false;
-        notifyListeners();
-        return;
-      }
+    try {
+      return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
+        if (snapshot.documents.length < 1) {
+          isLoading = false;
+          notifyListeners();
+          return;
+        }
 
-      List<Offer> _offers = [];
-      snapshot.documents.forEach((DocumentSnapshot snap) async {
-        final offer = Offer(
-          id: snap.documentID,
-          createdBy: snap.data['createdBy'],
-          title: snap.data['title'],
-          description: snap.data['description'],
-          amount: snap.data['amount'],
-          imageUrl: snap.data['offerImageUrl'],
-          startDate: snap.data['startDate'],
-          endDate: snap.data['endDate'],
-          created: snap.data['created'],
-          lastUpdate: snap.data['lastUpdate'],
-        );
-
-        _offers.add(offer);
-
-        Offer offerData = _offers.firstWhere((Offer data) {
-          return data.id == offer.id;
-        });
-
-        int index = _offers.indexWhere((Offer data) {
-          return data.id == offer.id;
-        });
-
-        bool isFavorited = await _offerFavoriteService.isFavorited(
-            offer.id, authenticatedUser.uid);
-
-        offerData = Offer(
+        List<Offer> _offers = [];
+        snapshot.documents.forEach((DocumentSnapshot snap) async {
+          final offer = Offer(
             id: snap.documentID,
             createdBy: snap.data['createdBy'],
             title: snap.data['title'],
@@ -88,20 +63,49 @@ mixin OfferModel implements GeneralModel {
             endDate: snap.data['endDate'],
             created: snap.data['created'],
             lastUpdate: snap.data['lastUpdate'],
-            isFavorite: isFavorited ? true : false);
+          );
 
-        _offers[index] = offerData;
+          _offers.add(offer);
+
+          Offer offerData = _offers.firstWhere((Offer data) {
+            return data.id == offer.id;
+          });
+
+          int index = _offers.indexWhere((Offer data) {
+            return data.id == offer.id;
+          });
+
+          bool isFavorited = await _offerFavoriteService.isFavorited(
+              offer.id, authenticatedUser.uid);
+
+          offerData = Offer(
+              id: snap.documentID,
+              createdBy: snap.data['createdBy'],
+              title: snap.data['title'],
+              description: snap.data['description'],
+              amount: snap.data['amount'],
+              imageUrl: snap.data['offerImageUrl'],
+              startDate: snap.data['startDate'],
+              endDate: snap.data['endDate'],
+              created: snap.data['created'],
+              lastUpdate: snap.data['lastUpdate'],
+              isFavorite: isFavorited ? true : false);
+
+          _offers[index] = offerData;
+          notifyListeners();
+        });
+
+        bankOffers = _offers;
         notifyListeners();
+
+        isLoading = false;
+        notifyListeners();
+      }).catchError((error) {
+        print(error.message);
       });
-
-      bankOffers = _offers;
-      notifyListeners();
-
-      isLoading = false;
-      notifyListeners();
-    }).catchError((error) {
+    } catch (error) {
       print(error.message);
-    });
+    }
   }
 
   void toggleIsFavoriteStatus() {
