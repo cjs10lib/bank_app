@@ -1,42 +1,77 @@
 import 'package:flutter/material.dart';
 
-class OfferOptions extends StatelessWidget {
+class OfferOptions extends StatefulWidget {
+  @override
+  OfferOptionsState createState() => OfferOptionsState();
+}
+
+class OfferOptionsState extends State<OfferOptions> {
+  bool isOffers = true;
+
   Widget _buildOptionRow() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Container(
-          height: 70.0,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 50.0,
-                width: 50.0,
-                child: Icon(Icons.local_offer,
-                    color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
-              ),
-              Text('Offers',
-                  style: TextStyle(
-                      color: Color.fromRGBO(59, 70, 80, 1),
-                      fontWeight: FontWeight.bold))
-            ],
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isOffers = true;
+            });
+          },
+          child: Container(
+            height: 70.0,
+            width: 100.0,
+            color: isOffers ? Color.fromRGBO(59, 70, 80, 1) : Colors.white,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 50.0,
+                  width: 50.0,
+                  child: Icon(Icons.local_offer,
+                      color: isOffers
+                          ? Colors.white
+                          : Color.fromRGBO(59, 70, 80, 1),
+                      size: isOffers ? 50 : 45.0),
+                ),
+                Text('Offers',
+                    style: TextStyle(
+                        color: isOffers
+                            ? Colors.white
+                            : Color.fromRGBO(59, 70, 80, 1),
+                        fontWeight: FontWeight.bold))
+              ],
+            ),
           ),
         ),
-        Container(
-          height: 70.0,
-          child: Column(
-            children: <Widget>[
-              Container(
-                height: 50,
-                width: 50,
-                child: Icon(Icons.event_note,
-                    color: Color.fromRGBO(59, 70, 80, 1), size: 45.0),
-              ),
-              Text('News',
-                  style: TextStyle(
-                      color: Color.fromRGBO(59, 70, 80, 1),
-                      fontWeight: FontWeight.bold))
-            ],
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              isOffers = false;
+            });
+          },
+          child: Container(
+            height: 70.0,
+            width: 100.0,
+            color: !isOffers ? Color.fromRGBO(59, 70, 80, 1) : Colors.white,
+            child: Column(
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  width: 50,
+                  child: Icon(Icons.event_note,
+                      color: !isOffers
+                          ? Colors.white
+                          : Color.fromRGBO(59, 70, 80, 1),
+                      size: !isOffers ? 50.0 : 45.0),
+                ),
+                Text('News',
+                    style: TextStyle(
+                        color: !isOffers
+                            ? Colors.white
+                            : Color.fromRGBO(59, 70, 80, 1),
+                        fontWeight: FontWeight.bold))
+              ],
+            ),
           ),
         )
       ],
