@@ -8,6 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 mixin OfferModel implements GeneralModel {
   final _offerService = OfferService();
   final _offerFavoriteService = OfferFavoriteService();
+  // 0557432320
+  // 0541161854
+  // 0504992202
 
   String _selectedOfferId;
   bool _showFavorite = false;
@@ -42,7 +45,7 @@ mixin OfferModel implements GeneralModel {
     isLoading = true;
     notifyListeners();
 
-    try {
+    // try {
       return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
         if (snapshot.documents.length < 1) {
           isLoading = false;
@@ -103,9 +106,14 @@ mixin OfferModel implements GeneralModel {
       }).catchError((error) {
         print(error.message);
       });
-    } catch (error) {
-      print(error.message);
-    }
+      // .timeout(const Duration(seconds: 5), onTimeout: onTimeout);
+    // } catch (error) {
+    //   throw (error.message);
+    // }
+  }
+
+  void onTimeout() {
+    print('Fetch timed out');
   }
 
   void toggleIsFavoriteStatus() {

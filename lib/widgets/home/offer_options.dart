@@ -27,7 +27,7 @@ class OfferOptionsState extends State<OfferOptions> {
           child: Container(
             height: 70.0,
             width: 100.0,
-            color: isOffers ? Color.fromRGBO(59, 70, 80, 1) : Colors.white,
+            color: isOffers ? Theme.of(context).primaryColor : Colors.white,
             child: Column(
               children: <Widget>[
                 Container(
@@ -58,7 +58,7 @@ class OfferOptionsState extends State<OfferOptions> {
           child: Container(
             height: 70.0,
             width: 100.0,
-            color: !isOffers ? Color.fromRGBO(59, 70, 80, 1) : Colors.white,
+            color: !isOffers ? Theme.of(context).primaryColor : Colors.white,
             child: Column(
               children: <Widget>[
                 Container(

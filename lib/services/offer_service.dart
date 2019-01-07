@@ -8,8 +8,14 @@ class OfferService {
     return _db.collection('offers').getDocuments();
   }
 
-  Future<DocumentReference> createOffer(String uid, String title,
-      String description, double amount, DateTime startDate, DateTime endDate, String offerImageUrl) {
+  Future<DocumentReference> createOffer(
+      String uid,
+      String title,
+      String description,
+      double amount,
+      DateTime startDate,
+      DateTime endDate,
+      String offerImageUrl) {
     return _db.collection('offers').add({
       'createdBy': uid,
       'title': title,

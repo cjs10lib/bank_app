@@ -114,7 +114,7 @@ class HeaderStack extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          height: 270.0,
+          height: 250.0,
           width: double.infinity,
           color: Theme.of(context).primaryColor,
         ),

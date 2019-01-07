@@ -71,7 +71,7 @@ class _HomePageState extends State<HomePage> {
       slivers: <Widget>[
         SliverAppBar(
           pinned: true,
-          expandedHeight: 350.0,
+          expandedHeight: 370.0,
           snap: true,
           floating: true,
           flexibleSpace: FlexibleSpaceBar(
