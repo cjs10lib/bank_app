@@ -10,15 +10,31 @@ mixin OfferModel implements GeneralModel {
   final _offerFavoriteService = OfferFavoriteService();
 
   String _selectedOfferId;
+  bool _showFavorite = false;
 
-  List<Offer> get offers => List.from(bankOffers);
+  List<Offer> get offers {
+    if (_showFavorite) {
+      return bankOffers
+          .where((Offer offer) => offer.isFavorite == true)
+          .toList();
+    }
+
+    return List.from(bankOffers);
+  }
 
   Offer get selectedOffer => offers.firstWhere((Offer offer) {
         return offer.id == _selectedOfferId;
       });
 
+  bool get displayFavoritesOnly => _showFavorite;
+
   void selectOffer(String offerId) {
     _selectedOfferId = offerId;
+    notifyListeners();
+  }
+
+  void toggleDisplayMode() {
+    _showFavorite = !_showFavorite;
     notifyListeners();
   }
 
@@ -32,7 +48,7 @@ mixin OfferModel implements GeneralModel {
         notifyListeners();
         return;
       }
-      
+
       List<Offer> _offers = [];
       snapshot.documents.forEach((DocumentSnapshot snap) async {
         final offer = Offer(
@@ -62,18 +78,17 @@ mixin OfferModel implements GeneralModel {
             offer.id, authenticatedUser.uid);
 
         offerData = Offer(
-          id: snap.documentID,
-          createdBy: snap.data['createdBy'],
-          title: snap.data['title'],
-          description: snap.data['description'],
-          amount: snap.data['amount'],
-          imageUrl: snap.data['offerImageUrl'],
-          startDate: snap.data['startDate'],
-          endDate: snap.data['endDate'],
-          created: snap.data['created'],
-          lastUpdate: snap.data['lastUpdate'],
-          isFavorite: isFavorited ? true : false
-        );
+            id: snap.documentID,
+            createdBy: snap.data['createdBy'],
+            title: snap.data['title'],
+            description: snap.data['description'],
+            amount: snap.data['amount'],
+            imageUrl: snap.data['offerImageUrl'],
+            startDate: snap.data['startDate'],
+            endDate: snap.data['endDate'],
+            created: snap.data['created'],
+            lastUpdate: snap.data['lastUpdate'],
+            isFavorite: isFavorited ? true : false);
 
         _offers[index] = offerData;
         notifyListeners();

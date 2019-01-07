@@ -1,5 +1,6 @@
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class HeaderStack extends StatelessWidget {
   final MainModel _model;
@@ -55,18 +56,36 @@ class HeaderStack extends StatelessWidget {
             ),
           ),
         ),
-        Container(
-          child: IconButton(
-            icon: Icon(
-              Icons.add_a_photo,
-              color: Colors.white,
-            ),
-            iconSize: 30.0,
-            onPressed: () {
-              Navigator.of(context).pushReplacementNamed('/add-offers');
-            },
-          ),
-        ),
+        ScopedModelDescendant<MainModel>(
+          builder: (BuildContext context, Widget child, MainModel model) {
+            return ButtonBar(
+              children: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.add_a_photo,
+                    color: Colors.white,
+                  ),
+                  iconSize: 30.0,
+                  onPressed: () {
+                    Navigator.of(context).pushReplacementNamed('/add-offers');
+                  },
+                ),
+                IconButton(
+                  icon: Icon(
+                    _model.displayFavoritesOnly
+                        ? Icons.favorite
+                        : Icons.favorite_border,
+                    color: Colors.red,
+                  ),
+                  iconSize: 30.0,
+                  onPressed: () {
+                    model.toggleDisplayMode();
+                  },
+                ),
+              ],
+            );
+          },
+        )
       ],
     );
   }
@@ -95,7 +114,7 @@ class HeaderStack extends StatelessWidget {
     return Stack(
       children: <Widget>[
         Container(
-          height: 250.0,
+          height: 270.0,
           width: double.infinity,
           color: Theme.of(context).primaryColor,
         ),
