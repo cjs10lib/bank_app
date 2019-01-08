@@ -1,7 +1,6 @@
 import 'package:bank_app/models/offer.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/offer_details/offer_description.dart';
-import 'package:bank_app/widgets/offer_details/offer_mini_carousel.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 

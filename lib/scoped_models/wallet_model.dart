@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bank_app/models/wallet.dart';
 import 'package:bank_app/scoped_models/general_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

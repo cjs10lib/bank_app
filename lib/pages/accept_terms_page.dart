@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';

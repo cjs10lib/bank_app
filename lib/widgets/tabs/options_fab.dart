@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_fab_dialer/flutter_fab_dialer.dart';
 
@@ -7,16 +6,7 @@ class OptionsFAB extends StatefulWidget {
   _OptionsFABState createState() => _OptionsFABState();
 }
 
-class _OptionsFABState extends State<OptionsFAB> with TickerProviderStateMixin {
-  AnimationController _controller;
-
-  @override
-  void initState() {
-    _controller =
-        AnimationController(vsync: this, duration: Duration(milliseconds: 400));
-    super.initState();
-  }
-
+class _OptionsFABState extends State<OptionsFAB> {
   void _navigateToLoan() {
     Navigator.of(context).pushNamed('/loan');
   }
@@ -78,7 +68,8 @@ class _OptionsFABState extends State<OptionsFAB> with TickerProviderStateMixin {
           true),
     ];
 
-    return FabDialer(_fabMiniMenuItemList, Theme.of(context).primaryColor, new Icon(Icons.add));
+    return FabDialer(_fabMiniMenuItemList, Theme.of(context).primaryColor,
+        new Icon(Icons.add));
   }
 }
 

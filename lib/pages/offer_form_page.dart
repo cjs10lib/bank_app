@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:bank_app/scoped_models/main_model.dart';
@@ -302,7 +303,8 @@ class OfferFormPageState extends State<OfferFormPage> {
         await model.uploadOfferImage(_imageFile);
 
     if (_imageSuccessMessage['success']) {
-      Map<String, dynamic> _successMessage = await model.createOffer(
+      // Map<String, dynamic> _successMessage = 
+      await model.createOffer(
           _formData['title'],
           _formData['description'],
           _formData['amount'],

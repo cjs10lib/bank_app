@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:bank_app/widgets/shared/confirm_transaction_bottom_modal.dart';
 import 'package:bank_app/widgets/shared/transaction_success_alert.dart';

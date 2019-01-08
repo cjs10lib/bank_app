@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bank_app/models/offer.dart';
 import 'package:bank_app/scoped_models/general_model.dart';
 

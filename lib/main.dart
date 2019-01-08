@@ -11,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
-import 'package:bank_app/pages/home_page.dart';
 import 'package:bank_app/pages/auth_page.dart';
 import 'package:bank_app/pages/tabs_page.dart';
 import 'package:bank_app/pages/profile_page.dart';
