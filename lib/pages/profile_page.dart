@@ -109,7 +109,7 @@ class ProfilePage extends StatelessWidget {
                 onPressed: () {
                   model.signOut().then((_) {
                     Navigator.of(context).pop();
-                    Navigator.of(context).pushReplacementNamed('/');
+                    Navigator.of(context).pushReplacementNamed('/auth');
                   });
                 })
           ]),

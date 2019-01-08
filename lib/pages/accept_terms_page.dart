@@ -85,7 +85,7 @@ class AcceptTermsPage extends StatelessWidget {
     if (successInformation['success']) {
       model.isLoading = true;
       model.signOut().then((_) {
-        Navigator.of(context).pushReplacementNamed('/');
+        Navigator.of(context).pushReplacementNamed('/auth');
       });
       model.isLoading = false;
     } else {

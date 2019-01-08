@@ -5,6 +5,7 @@ import 'package:bank_app/pages/funds_transfer_page.dart';
 import 'package:bank_app/pages/funds_withdrawal_page.dart';
 import 'package:bank_app/pages/offer_details.dart';
 import 'package:bank_app/pages/offer_form_page.dart';
+import 'package:bank_app/pages/splash_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:bank_app/scoped_models/main_model.dart';
@@ -135,10 +136,10 @@ class _MyAppState extends State<MyApp> {
             primaryColor: Color.fromRGBO(0, 17, 34, 1),
             accentColor: Color.fromRGBO(3, 48, 92, 1),
             errorColor: Colors.red),
+        home: SplashScreenPage(),
         routes: <String, WidgetBuilder>{
-          '/': (BuildContext context) => AuthPage(),
+          '/auth': (BuildContext context) => AuthPage(),
           '/tabs': (BuildContext context) => TabsPage(_model),
-          // '/home': (BuildContext context) => HomePage(_model),
           '/add-offers': (BuildContext context) => OfferFormPage(),
           '/offer-details': (BuildContext context) => OfferDetails(),
           '/profile': (BuildContext context) => ProfilePage(),
