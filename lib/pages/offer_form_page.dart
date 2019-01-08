@@ -303,7 +303,7 @@ class OfferFormPageState extends State<OfferFormPage> {
         await model.uploadOfferImage(_imageFile);
 
     if (_imageSuccessMessage['success']) {
-      // Map<String, dynamic> _successMessage = 
+      // Map<String, dynamic> _successMessage =
       await model.createOffer(
           _formData['title'],
           _formData['description'],
@@ -406,75 +406,78 @@ class OfferFormPageState extends State<OfferFormPage> {
   Widget build(BuildContext context) {
     return ScopedModelDescendant<MainModel>(
       builder: (BuildContext context, Widget child, MainModel model) {
-        return GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(FocusNode());
-          },
-          child: Scaffold(
-              key: _scaffoldKey,
-              drawer: _buildSideDrawer(context),
-              body: CustomScrollView(
-                slivers: <Widget>[
-                  SliverAppBar(
-                    pinned: true,
-                    expandedHeight: 350.0,
-                    // snap: true,
-                    // floating: true,
-                    actions: <Widget>[
-                      IconButton(
-                        icon: Icon(
-                          Icons.add_a_photo,
-                          size: 30.0,
-                        ),
-                        onPressed: () {
-                          _openImagePicker(context);
-                        },
-                      )
-                    ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      title: Text('Offer Image'),
-                      background: Container(
-                        decoration: BoxDecoration(
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/login/login-background.jpg'),
+        return WillPopScope(
+          onWillPop: () async => false,
+          child: GestureDetector(
+            onTap: () {
+              FocusScope.of(context).requestFocus(FocusNode());
+            },
+            child: Scaffold(
+                key: _scaffoldKey,
+                drawer: _buildSideDrawer(context),
+                body: CustomScrollView(
+                  slivers: <Widget>[
+                    SliverAppBar(
+                      pinned: true,
+                      expandedHeight: 350.0,
+                      // snap: true,
+                      // floating: true,
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.add_a_photo,
+                            size: 30.0,
                           ),
+                          onPressed: () {
+                            _openImagePicker(context);
+                          },
+                        )
+                      ],
+                      flexibleSpace: FlexibleSpaceBar(
+                        title: Text('Offer Image'),
+                        background: Container(
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: AssetImage(
+                                  'assets/login/login-background.jpg'),
+                            ),
+                          ),
+                          child: _imageFile == null
+                              ? Image.asset('assets/login/login-background.jpg',
+                                  fit: BoxFit.cover)
+                              : Image.file(_imageFile, fit: BoxFit.cover),
                         ),
-                        child: _imageFile == null
-                            ? Image.asset('assets/login/login-background.jpg',
-                                fit: BoxFit.cover)
-                            : Image.file(_imageFile, fit: BoxFit.cover),
                       ),
                     ),
-                  ),
-                  SliverList(
-                    delegate: SliverChildListDelegate([
-                      Form(
-                        key: _formKey,
-                        child: Container(
-                          padding: EdgeInsets.only(
-                              top: 20.0, right: 20.0, left: 20.0),
-                          color: Theme.of(context).primaryColor,
-                          child: ListView(
-                            shrinkWrap: true,
-                            physics: ClampingScrollPhysics(),
-                            children: <Widget>[
-                              _buildOfferBasicDetailsContainer(),
-                              SizedBox(height: 20.0),
-                              _buildOfferDatesContainer(),
-                              SizedBox(height: 20.0),
-                              _buildFormControl(context, model),
-                              SizedBox(height: 20.0),
-                            ],
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        Form(
+                          key: _formKey,
+                          child: Container(
+                            padding: EdgeInsets.only(
+                                top: 20.0, right: 20.0, left: 20.0),
+                            color: Theme.of(context).primaryColor,
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              children: <Widget>[
+                                _buildOfferBasicDetailsContainer(),
+                                SizedBox(height: 20.0),
+                                _buildOfferDatesContainer(),
+                                SizedBox(height: 20.0),
+                                _buildFormControl(context, model),
+                                SizedBox(height: 20.0),
+                              ],
+                            ),
                           ),
+                          // ),
                         ),
-                        // ),
-                      ),
-                    ]),
-                  )
-                ],
-              )),
+                      ]),
+                    )
+                  ],
+                )),
+          ),
         );
       },
     );
