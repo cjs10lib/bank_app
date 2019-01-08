@@ -253,7 +253,7 @@ class _AuthPageState extends State<AuthPage> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Image.asset('assets/logo/white-cu-logo.png',
+                          Image.asset('assets/logo/logo.png',
                               height: 100.0, width: 100.0),
                           SizedBox(width: 10.0),
                           Column(
