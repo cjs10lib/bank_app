@@ -50,7 +50,7 @@ mixin WalletModel implements GeneralModel {
         notifyListeners();
         return;
       }
-      
+
       final List<WalletTransaction> transactions = [];
 
       snap.documents.forEach((DocumentSnapshot document) {
@@ -67,7 +67,6 @@ mixin WalletModel implements GeneralModel {
       });
 
       if (filterByMonthYear) {
-
         // walletTransactionQueriesMonth = transactionMonth;
         // walletTransactionQueriesYear = transactionYear;
 
@@ -78,11 +77,12 @@ mixin WalletModel implements GeneralModel {
           return transaction.lastUpdate.year == transactionYear &&
               transaction.lastUpdate.month == transactionMonth;
         }).toList();
+        notifyListeners();
       } else {
         profileWalletTransactions = transactions;
+        notifyListeners();
       }
 
-      notifyListeners();
       isLoading = false;
       notifyListeners();
 

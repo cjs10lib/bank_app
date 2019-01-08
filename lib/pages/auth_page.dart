@@ -122,6 +122,8 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Future _submitForm(MainModel model) async {
+    FocusScope.of(context).requestFocus(FocusNode());
+
     if (!_formKey.currentState.validate()) {
       return;
     }

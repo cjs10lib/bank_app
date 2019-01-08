@@ -217,7 +217,7 @@ class _WalletPageState extends State<WalletPage> {
       ),
     );
 
-    if (!model.isLoading && model.walletTransactions.length > 0) {
+    if (!model.isLoading && model.walletTransactions.isNotEmpty) {
       return model.walletTransactions.map((WalletTransaction doc) {
         Map<String, dynamic> transactionDetails = {
           'transaction': doc.transaction,
