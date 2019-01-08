@@ -149,3 +149,43 @@ exports.onFundsTransactionRequest = functions.firestore.document('wallets/{walle
 
     })
 });
+
+exports.onNewOffers = functions.firestore.document('offers/{offersId}').onCreate((snapshot, context) => {
+    var msgTitle;
+    var msgData;
+
+    const offer = snapshot.data();
+    msgTitle = offer.title;
+    msgData = offer.description;
+
+    return admin.firestore().collection('pushtokens').get().then((snapshots) => {
+        if (snapshots.docs.length < 1) {
+            console.log('No device token found!');
+            return;
+        } else {
+            console.log('Device token found!');
+
+            return snapshots.docs.forEach((doc) => {
+                var token = doc.data().token;
+
+
+                var payload = {
+                    "notification": {
+                        "title": msgTitle,
+                        "body": msgData,
+                        "notification": "default"
+                    },
+                    "data": {
+                        "sendername": "KAMCCU CORP CREDIT UNION",
+                        "message": msgData
+                    }
+                }
+
+                return admin.messaging().sendToDevice(token, payload).then((response) => {
+                    console.log(`Pushed ${msgTitle} message`);
+                }).catch((error) => console.log(`Pushing error ${error}`));
+
+            }).catch((error) => console.log(`Iterating error ${error}`));
+        }
+    })
+});

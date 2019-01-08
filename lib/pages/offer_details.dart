@@ -144,7 +144,7 @@ class OfferDetails extends StatelessWidget {
                         ),
                         _buildOfferAmount(selectedOffer),
                         SizedBox(height: 30.0),
-                        OfferMiniCarousel(),
+                        // OfferMiniCarousel(),
                         _buildOfferDescription(selectedOffer)
                       ],
                     ),
