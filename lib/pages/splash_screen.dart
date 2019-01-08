@@ -54,7 +54,7 @@ class _SplashScreenPageState extends State<SplashScreenPage> {
                   children: <Widget>[
                     CircularProgressIndicator(),
                     SizedBox(height: 20.0),
-                    Text('Banking',
+                    Text('Bank',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 20.0,

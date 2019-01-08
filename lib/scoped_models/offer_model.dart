@@ -47,7 +47,7 @@ mixin OfferModel implements GeneralModel {
     isLoading = true;
     notifyListeners();
 
-    // try {
+    try {
       return _offerService.fetchOffers().then((QuerySnapshot snapshot) {
         if (snapshot.documents.length < 1) {
           isLoading = false;
@@ -71,6 +71,7 @@ mixin OfferModel implements GeneralModel {
           );
 
           _offers.add(offer);
+          notifyListeners();
 
           Offer offerData = _offers.firstWhere((Offer data) {
             return data.id == offer.id;
@@ -109,9 +110,9 @@ mixin OfferModel implements GeneralModel {
         print(error.message);
       });
       // .timeout(const Duration(seconds: 5), onTimeout: onTimeout);
-    // } catch (error) {
-    //   throw (error.message);
-    // }
+    } catch (error) {
+      print(error.message);
+    }
   }
 
   void onTimeout() {

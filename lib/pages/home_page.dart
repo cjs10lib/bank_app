@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
       ),
     );
 
-    if (!model.isLoading && model.offers.length > 0) {
+    if (!model.isLoading && model.offers.isNotEmpty) {
       return model.offers.map((Offer offer) {
         return OfferList(
           model: model,

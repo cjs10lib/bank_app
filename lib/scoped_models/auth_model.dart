@@ -57,7 +57,7 @@ mixin AuthModel implements GeneralModel {
     profileWalletTransactions = null;
     authenticatedUser = null;
 
-    bankOffers = null;
+    bankOffers.clear();
     // notifyListeners();
   }
 }
