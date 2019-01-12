@@ -33,6 +33,8 @@ class _MyAppState extends State<MyApp> {
   FlutterLocalNotificationsPlugin _localNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  final navigatorKey = GlobalKey<NavigatorState>();
+
   @override
   void initState() {
     _messaging.configure(onMessage: (Map<String, dynamic> message) {
@@ -79,49 +81,47 @@ class _MyAppState extends State<MyApp> {
       print('payload: $payload');
     }
 
-    // Future.delayed(Duration.zero, () {
-    //   showDialog(
-    //       context: context,
-    //       barrierDismissible: true,
-    //       builder: (_) {
-    //         return AlertDialog();
-    //       });
-    // });
+    final context = navigatorKey.currentState.overlay.context;
+    final dialog = _buildNotificationDialog(payload: payload, context: context);
+    showDialog(context: context, builder: (x) => dialog);
+  }
 
-    //       return Dialog(
-    //         shape: RoundedRectangleBorder(
-    //             borderRadius: BorderRadius.circular(20.0)),
-    //         child: Container(
-    //           height: 300.0,
-    //           width: 200.0,
-    //           decoration:
-    //               BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
-    //           child: Column(
-    //             children: <Widget>[
-    //               Container(
-    //                 height: 100.0,
-    //                 alignment: Alignment.center,
-    //                 child: Text('KAMCCU CORP CREDIT UNION',
-    //                     style: TextStyle(fontSize: 20.0)),
-    //               ),
-    //               SizedBox(height: 20),
-    //               Container(
-    //                 height: 100.0,
-    //                 child: Text(payload, style: TextStyle(fontSize: 15.0)),
-    //               ),
-    //               SizedBox(height: 20),
-    //               Row(
-    //                 children: <Widget>[
-    //                   RaisedButton(
-    //                       child: Text('Okay'),
-    //                       onPressed: () => Navigator.of(context).pop())
-    //                 ],
-    //               )
-    //             ],
-    //           ),
-    //         ),
-    //       );
-    //     });
+  Widget _buildNotificationDialog({@required String payload, @required BuildContext context}) {
+    return Dialog(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+      child: Container(
+        height: 280.0,
+        width: 200.0,
+        padding: EdgeInsets.only(top: 40.0, right: 20.0, left: 20.0, bottom: 20.0),
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(20.0)),
+        child: Column(
+          children: <Widget>[
+            Container(
+              alignment: Alignment.center,
+              child: Text('KAMCCU CORP CREDIT UNION',
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+            ),
+            SizedBox(height: 20.0),
+            Container(
+              child: Text(payload, style: TextStyle(fontSize: 15.0)),
+            ),
+            SizedBox(height: 20.0),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                RaisedButton(
+                    color: Theme.of(context).primaryColor,
+                    textColor: Colors.white,
+                    child: Text('Okay'),
+                    onPressed: () => Navigator.of(context).pop())
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   @override
@@ -129,7 +129,8 @@ class _MyAppState extends State<MyApp> {
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
-        title: 'Bank Application',
+        navigatorKey: navigatorKey,
+        title: 'KAMCCU',
         theme: ThemeData(
             fontFamily: 'Quicksand',
             primaryColor: Color.fromRGBO(0, 17, 34, 1),

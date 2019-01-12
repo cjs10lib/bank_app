@@ -154,28 +154,34 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
   }
 
   Widget _buildRecipientAccountTextField(MainModel model) {
-    return AbsorbPointer(
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        initialValue: model.wallet != null
-            ? model.wallet.accountNumber
-            : 'No Account Number',
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
-        decoration: InputDecoration(
-            prefixIcon: Icon(Icons.account_balance),
-            suffixStyle: TextStyle(
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold)),
-        validator: (String value) {
-          if (value.isEmpty || value.length != 9) {
-            return 'Invalid account number!';
-          }
-        },
-        onSaved: (String value) {
-          _formData['accountNumber'] = value;
-          _formData['fromAccount'] = value;
-          _formData['toAccount'] = value;
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          initialValue: model.wallet != null
+              ? model.wallet.accountNumber
+              : 'No Account Number',
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+          decoration: InputDecoration(
+              prefixIcon: Icon(Icons.account_balance),
+              suffixStyle: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold)),
+          validator: (String value) {
+            if (value.isEmpty || value.length != 9) {
+              return 'Invalid account number!';
+            }
+          },
+          onSaved: (String value) {
+            _formData['accountNumber'] = value;
+            _formData['fromAccount'] = value;
+            _formData['toAccount'] = value;
+          },
+        ),
       ),
     );
   }
@@ -183,6 +189,7 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
   Widget _buildPayBackDate() {
     return GestureDetector(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         _selectPayBackDate(context);
       },
       child: AbsorbPointer(
@@ -209,7 +216,11 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+            
+            Navigator.of(context).pop();
+          },
           child: Container(
             height: 40.0,
             width: 80.0,
@@ -225,6 +236,8 @@ class _FundsLoanPageState extends State<FundsLoanPage> {
         ),
         GestureDetector(
           onTap: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+
             if (!_formKey.currentState.validate()) {
               return;
             }

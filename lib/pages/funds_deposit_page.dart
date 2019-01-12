@@ -57,7 +57,11 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(_transactionDetails, submitForm, requestingForm: 'DEPOSIT',);
+          return ConfirmTransactionBottomModal(
+            _transactionDetails,
+            submitForm,
+            requestingForm: 'DEPOSIT',
+          );
         });
   }
 
@@ -104,30 +108,36 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
   }
 
   Widget _buildDepositFundFormField(MainModel model) {
-    return AbsorbPointer(
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        initialValue: model.wallet != null
-            ? model.wallet.accountNumber
-            : 'No Account Selected!',
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
-        decoration: InputDecoration(
-            hintText: 'Recieving Account',
-            prefixIcon: Icon(Icons.account_balance),
-            suffixStyle: TextStyle(
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold),
-            suffix: Text(' Current Balance'),
-            filled: true,
-            fillColor: Theme.of(context).cardColor),
-        validator: (String value) {
-          if (value.isEmpty || value.length != 9) {
-            return 'Sorry! Your account number is invalid!';
-          }
-        },
-        onSaved: (String value) {
-          _formData['accountNumber'] = value;
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          initialValue: model.wallet != null
+              ? model.wallet.accountNumber
+              : 'No Account Selected!',
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+          decoration: InputDecoration(
+              hintText: 'Recieving Account',
+              prefixIcon: Icon(Icons.account_balance),
+              suffixStyle: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold),
+              suffix: Text(' Current Balance'),
+              filled: true,
+              fillColor: Theme.of(context).cardColor),
+          validator: (String value) {
+            if (value.isEmpty || value.length != 9) {
+              return 'Sorry! Your account number is invalid!';
+            }
+          },
+          onSaved: (String value) {
+            _formData['accountNumber'] = value;
+          },
+        ),
       ),
     );
   }
@@ -180,6 +190,7 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
   _buildTransactionDateFormField() {
     return GestureDetector(
       onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
         _selectTransactionDate(context);
       },
       child: AbsorbPointer(
@@ -222,6 +233,8 @@ class _FundsDepositPageState extends State<FundsDepositPage> {
         ),
         GestureDetector(
           onTap: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+            
             if (!_formKey.currentState.validate()) {
               return;
             }

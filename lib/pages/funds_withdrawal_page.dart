@@ -35,7 +35,11 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
     return showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return ConfirmTransactionBottomModal(_transactionDetails, submitForm, requestingForm: 'WITHDRAW',);
+          return ConfirmTransactionBottomModal(
+            _transactionDetails,
+            submitForm,
+            requestingForm: 'WITHDRAW',
+          );
         });
   }
 
@@ -99,29 +103,34 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
   }
 
   Widget _buildRecipientAccountTextField(MainModel model) {
-    return AbsorbPointer(
-        child: TextFormField(
-      maxLength: 10,
-      keyboardType: TextInputType.number,
-      initialValue: model.profile != null
-          ? '0${model.profile.mobilePhone}'
-          : 'Invalid MOMO Number',
-      style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
-      decoration: InputDecoration(
-          prefixIcon: Icon(Icons.account_balance),
-          suffixStyle: TextStyle(
-              color: Theme.of(context).accentColor,
-              fontWeight: FontWeight.bold),
-          suffix: Text('MOMO Transaction')),
-      validator: (String value) {
-        if (value.isEmpty || value.length != 10) {
-          return 'Sorry! Your account number is invalid!';
-        }
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
       },
-      onSaved: (String value) {
-        _formData['accountNumber'] = value;
-      },
-    ));
+      child: AbsorbPointer(
+          child: TextFormField(
+        maxLength: 10,
+        keyboardType: TextInputType.number,
+        initialValue: model.profile != null
+            ? '0${model.profile.mobilePhone}'
+            : 'Invalid MOMO Number',
+        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+        decoration: InputDecoration(
+            prefixIcon: Icon(Icons.account_balance),
+            suffixStyle: TextStyle(
+                color: Theme.of(context).accentColor,
+                fontWeight: FontWeight.bold),
+            suffix: Text('MOMO Transaction')),
+        validator: (String value) {
+          if (value.isEmpty || value.length != 10) {
+            return 'Sorry! Your account number is invalid!';
+          }
+        },
+        onSaved: (String value) {
+          _formData['accountNumber'] = value;
+        },
+      )),
+    );
   }
 
   Widget _buildFormControls(MainModel model) {
@@ -145,6 +154,8 @@ class FundsWithdrawalPageState extends State<FundsWithdrawalPage> {
         ),
         GestureDetector(
           onTap: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+
             if (!_formKey.currentState.validate()) {
               return;
             }

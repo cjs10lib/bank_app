@@ -152,28 +152,36 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
   }
 
   Widget _buildFromAccountTextField(MainModel model) {
-    return AbsorbPointer(
-      child: TextFormField(
-        maxLength: 9,
-        initialValue: model.wallet != null
-            ? model.wallet.accountNumber
-            : 'No Account Number',
-        keyboardType: TextInputType.number,
-        style: TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
-        decoration: InputDecoration(
-            prefixIcon: Icon(Icons.account_balance),
-            suffixStyle: TextStyle(
-                color: Theme.of(context).accentColor,
-                fontWeight: FontWeight.bold),
-            suffix: Text(' Current Balance')),
-        validator: (String value) {
-          if (value.isEmpty || value == 'No Account Number' || value.length != 9) {
-            return 'Account number is required!';
-          }
-        },
-        onSaved: (String value) {
-          _formData['fromAccount'] = value;
-        },
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).requestFocus(FocusNode());
+      },
+      child: AbsorbPointer(
+        child: TextFormField(
+          maxLength: 9,
+          initialValue: model.wallet != null
+              ? model.wallet.accountNumber
+              : 'No Account Number',
+          keyboardType: TextInputType.number,
+          style:
+              TextStyle(color: Theme.of(context).primaryColor, fontSize: 20.0),
+          decoration: InputDecoration(
+              prefixIcon: Icon(Icons.account_balance),
+              suffixStyle: TextStyle(
+                  color: Theme.of(context).accentColor,
+                  fontWeight: FontWeight.bold),
+              suffix: Text(' Current Balance')),
+          validator: (String value) {
+            if (value.isEmpty ||
+                value == 'No Account Number' ||
+                value.length != 9) {
+              return 'Account number is required!';
+            }
+          },
+          onSaved: (String value) {
+            _formData['fromAccount'] = value;
+          },
+        ),
       ),
     );
   }
@@ -206,7 +214,11 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         GestureDetector(
-          onTap: () => Navigator.of(context).pop(),
+          onTap: () {
+            FocusScope.of(context).requestFocus(FocusNode());
+
+            Navigator.of(context).pop();
+          },
           child: Container(
             height: 40.0,
             width: 80.0,
@@ -222,6 +234,8 @@ class _FundsTransferPageState extends State<FundsTransferPage> {
         ),
         GestureDetector(
           onTap: () async {
+            FocusScope.of(context).requestFocus(FocusNode());
+
             if (!_formKey.currentState.validate()) {
               return;
             }
